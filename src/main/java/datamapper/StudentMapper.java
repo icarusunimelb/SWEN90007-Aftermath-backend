@@ -69,7 +69,7 @@ public class StudentMapper extends DataMapper{
         return isRegisterOrNot;
     }
 
-    private static final String authenticateStatement = "SELECT s.password s.studentid FROM oes.students s " +
+    private static final String authenticateStatement = "SELECT s.password, s.studentid FROM oes.students s " +
             "WHERE s.email = ? limit 1";
     public String authenticate(String email, String password) {
         boolean match = false;
