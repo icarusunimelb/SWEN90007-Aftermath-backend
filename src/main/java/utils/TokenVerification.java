@@ -9,12 +9,15 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class tokenVerification {
+public class TokenVerification {
     private static final String SECRET_KEY = "Aftermath";
     private static final long TTEXPIRE = 7200000;
-    public static String createJWT(String user_id, String is_instructor) {
+    private static volatile List<String> tokens = new ArrayList<String>();
+    public static String createJWT(String email, String userType) {
 
         //The JWT signature algorithm we will be using to sign the token
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -27,8 +30,8 @@ public class tokenVerification {
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         //Let's set the JWT Claims
-        JwtBuilder builder = Jwts.builder().setId(user_id)
-                .setSubject(is_instructor)
+        JwtBuilder builder = Jwts.builder().setId(email)
+                .setSubject(userType)
                 .setIssuedAt(now)
                 .signWith(signatureAlgorithm, signingKey);
 
@@ -46,12 +49,26 @@ public class tokenVerification {
         Claims claims = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
                 .parseClaimsJws(token).getBody();
-        System.out.println("ID: " + claims.getId());
-        System.out.println("is_instructor: " + claims.getSubject());
-        System.out.println("Issuer: " + claims.getIssuer());
+        System.out.println("email: " + claims.getId());
+        System.out.println("userType: " + claims.getSubject());
         System.out.println("Expiration: " + claims.getExpiration());
         return claims.getId()+"::"+claims.getSubject();
     }
 
+    public static void addToken(String token){
+        if (!tokens.contains(token)){
+            tokens.add(token);
+        }
+    }
+
+    public static void removeToken(String token){
+        if (!tokens.contains(token)){
+            tokens.remove(token);
+        }
+    }
+
+    public static boolean validToken(String token){
+        return tokens.contains(token);
+    }
 
 }

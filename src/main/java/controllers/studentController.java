@@ -52,7 +52,7 @@ public class studentController extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
-        if (StudentMapper.getSingletonInstance().authenticate(email, password)) {
+        if (!StudentMapper.getSingletonInstance().authenticate(email, password).isEmpty()) {
             out.print("Success");
         }else {
             out.print("Wrong email or password");

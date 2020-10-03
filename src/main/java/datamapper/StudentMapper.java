@@ -69,9 +69,9 @@ public class StudentMapper extends DataMapper{
         return isRegisterOrNot;
     }
 
-    private static final String authenticateStatement = "SELECT s.password FROM oes.students s " +
+    private static final String authenticateStatement = "SELECT s.password s.studentid FROM oes.students s " +
             "WHERE s.email = ? limit 1";
-    public boolean authenticate(String email, String password) {
+    public String authenticate(String email, String password) {
         boolean match = false;
         try {
             PreparedStatement findStatement = DBConnection.prepare(authenticateStatement);
@@ -79,8 +79,9 @@ public class StudentMapper extends DataMapper{
             ResultSet rs = findStatement.executeQuery();
             if (rs.next()) {
                 String dbPassword = rs.getString(1);
+                String dataID = rs.getString(2);
                 if (password.equals(dbPassword)) {
-                    match = true;
+                    return dataID;
                 }
             }
 
@@ -88,7 +89,7 @@ public class StudentMapper extends DataMapper{
             System.out.println(e.getMessage());
         }
 
-        return match;
+        return "";
     }
 
     private static final String insertStudentStatement =

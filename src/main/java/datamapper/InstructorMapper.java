@@ -70,26 +70,25 @@ public class InstructorMapper extends DataMapper{
         return isRegisterOrNot;
     }
 
-    private static final String authenticateStatement = "SELECT i.password FROM oes.instructors i " +
+    private static final String authenticateStatement = "SELECT i.password, i.instructorid FROM oes.instructors i " +
             "WHERE i.email = ? limit 1";
-    public boolean authenticate(String email, String password) {
-        boolean match = false;
+    public String authenticate(String email, String password) {
         try {
             PreparedStatement findStatement = DBConnection.prepare(authenticateStatement);
             findStatement.setString(1, email);
             ResultSet rs = findStatement.executeQuery();
             if (rs.next()) {
                 String dbPassword = rs.getString(1);
+                String dataID = rs.getString(2);
                 if (password.equals(dbPassword)) {
-                    match = true;
+                    return dataID;
                 }
             }
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
-        return match;
+        return "";
     }
 
     private static final String insertInstructorStatement =

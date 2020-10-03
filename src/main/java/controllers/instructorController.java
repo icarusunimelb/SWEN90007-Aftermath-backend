@@ -38,7 +38,7 @@ public class instructorController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        if (InstructorMapper.getSingletonInstance().authenticate(email, password)) {
+        if (!InstructorMapper.getSingletonInstance().authenticate(email, password).isEmpty()) {
             out.print("Success");
         }else {
             out.print("Wrong email or password");
