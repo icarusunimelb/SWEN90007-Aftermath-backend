@@ -7,9 +7,9 @@ import java.sql.SQLException;
 
 public class DBConnection {
 
-	private static final String DB_CONNECTION = "jdbc:postgresql://localhost:5432/myDB";
+	/*private static final String DB_CONNECTION = "jdbc:postgresql://localhost:5432/myDB";
 	private static final String DB_USER = "postgres";
-	private static final String DB_PASSWORD = "123456";
+	private static final String DB_PASSWORD = "123456";*/
 
 
 	public static PreparedStatement prepare(String stm) throws SQLException {
@@ -36,8 +36,10 @@ public class DBConnection {
 		try {
 			DriverManager.registerDriver(new org.postgresql.Driver());
 
+			String dbUrl = System.getenv("JDBC_DATABASE_URL");
+
 			Connection dbConnection = DriverManager.getConnection(
-					DB_CONNECTION, DB_USER,DB_PASSWORD);
+					dbUrl);
 			return dbConnection;
 
 		} catch (SQLException e) {
