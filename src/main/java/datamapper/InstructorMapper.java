@@ -86,7 +86,7 @@ public class InstructorMapper extends DataMapper{
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("1: "+e.getMessage());
         }
         return "";
     }
