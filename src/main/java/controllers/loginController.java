@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 import  org.json.*;
 import com.google.gson.Gson;
 
-@WebServlet("/api/user/logIn")
+@WebServlet("/api/user/login")
 public class loginController extends HttpServlet {
 
     /**

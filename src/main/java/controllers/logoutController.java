@@ -20,7 +20,7 @@ import org.apache.commons.io.IOUtils;
 import  org.json.*;
 import com.google.gson.Gson;
 
-@WebServlet("/api/user/logOut")
+@WebServlet("/api/user/logout")
 public class logoutController extends HttpServlet {
 
     /**
