@@ -33,6 +33,15 @@ public class loginController extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        // Read from request
+        StringBuilder buffer = new StringBuilder();
+        BufferedReader reader = request.getReader();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            buffer.append(line);
+        }
+        String data = buffer.toString();
+        System.out.println(data);
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         System.out.println(email+password);
@@ -41,9 +50,9 @@ public class loginController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        String userType = null;
-        String dataID = null;
-        String token = null;
+        String userType = "";
+        String dataID = "";
+        String token = "";
         String instructorID = InstructorMapper.getSingletonInstance().authenticate(email, password);
         String studentID = StudentMapper.getSingletonInstance().authenticate(email,password);
         if (!instructorID.isEmpty()) {
