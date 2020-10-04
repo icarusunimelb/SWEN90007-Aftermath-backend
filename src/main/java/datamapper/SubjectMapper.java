@@ -73,6 +73,7 @@ public class SubjectMapper extends DataMapper{
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }
+        System.out.println("this is in SubjectMapper. subjects size = "+ subjects.size());
         return subjects;
     }
 
@@ -84,7 +85,7 @@ public class SubjectMapper extends DataMapper{
     public List<Subject> findWithStudentID(String studentID) {
         List<Subject> subjects = new ArrayList<>();
         try{
-            PreparedStatement findStatement = DBConnection.prepare(findWithInstructorIDStatement);
+            PreparedStatement findStatement = DBConnection.prepare(findWithStudentIDStatement);
             findStatement.setString(1, studentID);
             ResultSet rs = findStatement.executeQuery();
             while (rs.next()) {

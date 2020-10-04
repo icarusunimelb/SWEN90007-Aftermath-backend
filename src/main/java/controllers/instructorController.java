@@ -4,6 +4,7 @@ import datamapper.InstructorMapper;
 import datamapper.StudentMapper;
 import domain.Instructor;
 import domain.Name;
+import org.json.JSONObject;
 import utils.KeyGenerator;
 import utils.UnitOfWork;
 
@@ -122,7 +123,10 @@ public class instructorController extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
-        out.print("Success");
+        JSONObject jsonObject = new JSONObject(String.format(
+                "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+        out.print(jsonObject);
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         out.flush();
     }
 

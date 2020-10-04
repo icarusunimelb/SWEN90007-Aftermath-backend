@@ -135,7 +135,10 @@ public class studentController extends HttpServlet {
         UnitOfWork.getCurrent().registerDeleted(student);
         UnitOfWork.getCurrent().commit();
 
-        out.print("Success");
+        JSONObject jsonObject = new JSONObject(String.format(
+                "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+        out.print(jsonObject);
+        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
         out.flush();
     }

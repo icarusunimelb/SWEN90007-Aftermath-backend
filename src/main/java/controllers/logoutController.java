@@ -20,7 +20,7 @@ import org.apache.commons.io.IOUtils;
 import  org.json.*;
 import com.google.gson.Gson;
 
-@WebServlet("/user-logout")
+@WebServlet("/api/user/logOut")
 public class logoutController extends HttpServlet {
 
     /**
@@ -40,35 +40,22 @@ public class logoutController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        Enumeration<String> headerNames = request.getHeaderNames();
+        String token = TokenVerification.getTokenFromHeader(request);
 
-        while (headerNames.hasMoreElements()) {
-
-            String headerName = headerNames.nextElement();
-            if(headerName.equals("token")){
-                Enumeration<String> headers = request.getHeaders(headerName);
-                while (headers.hasMoreElements()) {
-
-                    String headerValue = headers.nextElement();
-
-                    TokenVerification.removeToken(headerValue);
-                        JSONObject jsonObject = new JSONObject(String.format(
-                                "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
-                    out.print(jsonObject);
-                    response.setStatus(HttpServletResponse.SC_OK);
-                    out.flush();
-                    return;
-
-                }
-            }
+        if(!token.isEmpty()){
+            TokenVerification.removeToken(token);
+            JSONObject jsonObject = new JSONObject(String.format(
+                    "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
+            out.print(jsonObject);
+            response.setStatus(HttpServletResponse.SC_OK);
+            out.flush();
+            return;
         }
+
         JSONObject jsonObject = new JSONObject(String.format(
                 "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
         out.print(jsonObject);
         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         out.flush();
     }
-
-
-
 }

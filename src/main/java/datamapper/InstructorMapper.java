@@ -1,15 +1,14 @@
 package datamapper;
 
 import datasource.DBConnection;
-import domain.DomainObject;
-import domain.ExamAnswer;
-import domain.Instructor;
-import domain.Name;
+import domain.*;
 import utils.IdentityMap;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InstructorMapper extends DataMapper{
 
@@ -86,7 +85,7 @@ public class InstructorMapper extends DataMapper{
             }
 
         } catch (SQLException e) {
-            System.out.println("1: "+e.getMessage());
+            System.out.println(e.getMessage());
         }
         return "";
     }
@@ -141,5 +140,34 @@ public class InstructorMapper extends DataMapper{
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public List<Subject> getMarkingSubjects(String instructorId){
+
+        List<Subject> allSubjects = SubjectMapper.getSingletonInstance().findWithInstructorID(instructorId);
+        for(int i = 0; i < allSubjects.size(); i++){
+            List<Exam> examOfSubject = ExamMapper.getSingletonInstance().findWithSubjectCode(allSubjects.get(i).getId());
+            List<Exam> validExams = new ArrayList<Exam>();
+            for(int j = 0; j < examOfSubject.size(); j++){
+                if(examOfSubject.get(j).getStatus().equals("CLOSED") || examOfSubject.get(j).getStatus().equals("MARKED")){
+                    List<ExamAnswer> examAnswers = ExamAnswerMapper.getSingletonInstance().findTableViewExamAnswer(examOfSubject.get(j).getId());
+                    examOfSubject.get(j).setExamAnswers(examAnswers);
+                    validExams.add(examOfSubject.get(j));
+                }
+            }
+            allSubjects.get(i).setExams(validExams);
+        }
+        return allSubjects;
+    }
+
+    public List<Subject> getManagingSubjects(String instructorId) {
+
+        List<Subject> subjects = SubjectMapper.getSingletonInstance().findWithInstructorID(instructorId);
+        System.out.println("this is subject in instructor mapper size = " + subjects.size());
+        for(int i = 0; i < subjects.size(); i++){
+            List<Exam> examOfSubject = ExamMapper.getSingletonInstance().findWithSubjectCode(subjects.get(i).getId());
+            subjects.get(i).setExams(examOfSubject);
+        }
+        return subjects;
     }
 }

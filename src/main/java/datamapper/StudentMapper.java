@@ -1,15 +1,14 @@
 package datamapper;
 
 import datasource.DBConnection;
-import domain.DomainObject;
-import domain.Instructor;
-import domain.Name;
-import domain.Student;
+import domain.*;
 import utils.IdentityMap;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StudentMapper extends DataMapper{
     private static volatile StudentMapper instance = null;
@@ -86,7 +85,7 @@ public class StudentMapper extends DataMapper{
             }
 
         } catch (SQLException e) {
-            System.out.println("2: "+e.getMessage());
+            System.out.println(e.getMessage());
         }
 
         return "";
@@ -141,5 +140,23 @@ public class StudentMapper extends DataMapper{
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+
+    public List<Subject> getTakingSubjects(String studentId){
+        List<Subject> subjects = SubjectMapper.getSingletonInstance().findWithStudentID(studentId);
+
+        for(int i = 0; i < subjects.size(); i++){
+            List<Exam> examOfSubject = ExamMapper.getSingletonInstance().findWithSubjectCode(subjects.get(i).getId());
+
+            List<Exam> validExams = new ArrayList<Exam>();
+            for(int j = 0; j < examOfSubject.size(); j++){
+                if(examOfSubject.get(j).getStatus().equals("PUBLISHED") || examOfSubject.get(j).getStatus().equals("ONGOING")){
+                    validExams.add(examOfSubject.get(j));
+                }
+            }
+            subjects.get(i).setExams(validExams);
+        }
+        return subjects;
     }
 }

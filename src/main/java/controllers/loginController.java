@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 import  org.json.*;
 import com.google.gson.Gson;
 
-@WebServlet("/user-login")
+@WebServlet("/api/user/logIn")
 public class loginController extends HttpServlet {
 
     /**
@@ -64,8 +64,8 @@ public class loginController extends HttpServlet {
             out.flush();
             return;
         }
-        token = TokenVerification.createJWT(email, userType);
-        System.out.println(email+password+token);
+        token = TokenVerification.createJWT(dataID, userType);
+        System.out.println(dataID+password+token);
         try {
             TokenVerification.addToken(token);
             JSONObject jsonObject = new JSONObject(String.format(
