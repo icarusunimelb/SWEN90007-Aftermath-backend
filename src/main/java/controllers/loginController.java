@@ -75,7 +75,7 @@ public class loginController extends HttpServlet {
             out.flush();
 
         }catch (JSONException err){
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
             out.print(jsonObject);
