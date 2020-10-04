@@ -18,7 +18,7 @@ import java.io.PrintWriter;
 import  org.json.*;
 import com.google.gson.Gson;
 
-@WebServlet("/api/user/login")
+@WebServlet("/api/user/logIn")
 public class loginController extends HttpServlet {
 
     /**
@@ -33,26 +33,21 @@ public class loginController extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        // Read from request
-        StringBuilder buffer = new StringBuilder();
         BufferedReader reader = request.getReader();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            buffer.append(line);
-        }
-        String data = buffer.toString();
-        System.out.println(data);
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        Gson gson = new Gson();
+        User user = gson.fromJson(reader, User.class);
+
+        String email = user.getEmail();
+        String password = user.getPassword();
         System.out.println(email+password);
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        String userType = "";
-        String dataID = "";
-        String token = "";
+        String userType = null;
+        String dataID = null;
+        String token = null;
         String instructorID = InstructorMapper.getSingletonInstance().authenticate(email, password);
         String studentID = StudentMapper.getSingletonInstance().authenticate(email,password);
         if (!instructorID.isEmpty()) {
