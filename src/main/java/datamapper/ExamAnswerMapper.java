@@ -98,6 +98,25 @@ public class ExamAnswerMapper extends  DataMapper{
         }
     }
 
+    private static final String checkStatement =
+            "SELECT EXISTS(SELECT 1 FROM oes.examAnswer e " +
+                    "WHERE e.examID = ? AND e.studentID = ? limit 1)";
+
+    public boolean checkIfStudentAnswer(String examID, String studentID){
+        try {
+            PreparedStatement stmt = DBConnection.prepare(checkStatement);
+            stmt.setString(1, examID);
+            stmt.setString(2, studentID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getBoolean(1);
+            }
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
     private static final String updateExamAnswerStatement =
             "UPDATE oes.examAnswer e SET e.finalMark = ? WHERE e.examAnswerID = ?";
     @Override

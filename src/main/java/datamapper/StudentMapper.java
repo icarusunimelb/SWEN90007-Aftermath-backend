@@ -142,6 +142,36 @@ public class StudentMapper extends DataMapper{
         }
     }
 
+    private static final String findWithSubjectIDStatement =
+            "SELECT s.studentID, s.firstName, s.lastName, s.email, s.password "
+                    + "FROM oes.students s "
+                    + "LEFT JOIN oes.subjectStudentMap m ON s.studentID = m.studentID "
+                    + "WHERE m.subjectID = ?";
+    public List<Student> findWithSubjectID(String subjectID) {
+        List<Student> students = new ArrayList<>();
+        try{
+            PreparedStatement findStatement = DBConnection.prepare(findWithSubjectIDStatement);
+            findStatement.setString(1, subjectID);
+            ResultSet rs = findStatement.executeQuery();
+            if(rs.next()){
+                Student student = new Student();
+                String id = rs.getString(1);
+                String firstName = rs.getString(2);
+                String lastName = rs.getString(3);
+                String email = rs.getString(4);
+                String password = rs.getString(5);
+                student.setId(id);
+                student.setEmail(email);
+                student.setName(new Name(firstName, lastName));
+                student.setPassword(password);
+                students.add(student);
+            }
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return students;
+    }
+
 
     public List<Subject> getTakingSubjects(String studentId){
         List<Subject> subjects = SubjectMapper.getSingletonInstance().findWithStudentID(studentId);
@@ -158,5 +188,15 @@ public class StudentMapper extends DataMapper{
             subjects.get(i).setExams(validExams);
         }
         return subjects;
+    }
+
+    public List<Student> getNotSubmittedStudents(List<Student> students, String examId){
+        List<Student> notSubmittedStudents = new ArrayList<Student>();
+        for(Student student: students){
+            if(!ExamAnswerMapper.getSingletonInstance().checkIfStudentAnswer(student.getId(),examId)){
+                notSubmittedStudents.add(student);
+            }
+        }
+        return notSubmittedStudents;
     }
 }

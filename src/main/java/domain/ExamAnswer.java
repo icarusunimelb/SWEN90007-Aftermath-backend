@@ -12,12 +12,12 @@ public class ExamAnswer extends DomainObject{
     private String examID = null;
     private String studentID = null;
     private List<Answer> answers = null;
-    private double finalMark = Integer.MIN_VALUE;
+    private double finalMark = -1;
 
-    public ExamAnswer(){super();};
+    public ExamAnswer(){super();}
 
     public double getFinalMark() {
-        if(finalMark == Integer.MIN_VALUE) load();
+        if(finalMark == -1) load();
         return finalMark;
     }
 

@@ -9,6 +9,7 @@ import utils.IdentityMap;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,7 +83,7 @@ public class ExamMapper extends DataMapper{
     }
 
     private static final String insertExamStatement =
-            "INSERT INTO oes.exams (examID, subjectID, examName, status) VALUES (?, ?, ?, ?::EXAM_STATUS)";
+            "INSERT INTO oes.exams (examID, subjectID, examName, status) VALUES (?, ?, ?, ?)";
     @Override
     public void insert(DomainObject object) {
         Exam examObj = (Exam) object;
@@ -99,7 +100,7 @@ public class ExamMapper extends DataMapper{
     }
 
     private static final String updateExamStatement =
-            "UPDATE oes.exam e SET e.examName = ?, e.status = CAST(? AS EXAM_STATUS) WHERE e.examID = ?";
+            "UPDATE oes.exams SET examName = ?, status = ? WHERE examID = ?";
     @Override
     public void update(DomainObject object) {
         Exam examObj = (Exam) object;
@@ -110,12 +111,13 @@ public class ExamMapper extends DataMapper{
             updateStatement.setString(3, examObj.getId());
             updateStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("sql message" + e.getMessage());
+            System.out.println("exam object get status" + examObj.getStatus());
         }
     }
 
     private static final String deleteExamStatement =
-            "DELETE FROM oes.exam e WHERE e.examID = ?";
+            "DELETE FROM oes.exams e WHERE e.examID = ?";
     @Override
     public void delete(DomainObject object) {
         Exam examObj = (Exam) object;

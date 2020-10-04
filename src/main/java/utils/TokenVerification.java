@@ -49,13 +49,14 @@ public class TokenVerification {
     }
 
     public static String verifyToken(String token){
-
+        String realToken = token.substring(7,token.length());
         Claims claims = Jwts.parser()
                 .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
-                .parseClaimsJws(token).getBody();
+                .parseClaimsJws(realToken).getBody();
         System.out.println("userId: " + claims.getId());
         System.out.println("userType: " + claims.getSubject());
         System.out.println("Expiration: " + claims.getExpiration());
+        System.out.println("token: " + realToken);
         return claims.getId()+","+claims.getSubject();
     }
 
@@ -83,11 +84,13 @@ public class TokenVerification {
         while (headerNames.hasMoreElements()) {
 
             String headerName = headerNames.nextElement();
-            if(headerName.equals("token")){
+
+            if(headerName.equals("authorization")){
                 Enumeration<String> headers = request.getHeaders(headerName);
                 while (headers.hasMoreElements()) {
 
                     String headerValue = headers.nextElement();
+
                     return headerValue;
 
                 }

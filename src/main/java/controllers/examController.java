@@ -1,6 +1,11 @@
 package controllers;
 
+import com.google.gson.Gson;
+import datamapper.StudentMapper;
 import domain.Exam;
+import domain.ExamAnswer;
+import domain.Student;
+import domain.User;
 import org.json.JSONObject;
 
 import utils.KeyGenerator;
@@ -12,13 +17,17 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.security.Key;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet("/api/exam-controller")
 public class examController extends HttpServlet {
     private static final long serialVersionUID = 2L;
-    private enum EXAMSTATUS {PUBLISH, CLOSE, UPDATE};
+    private enum EXAMSTATUS {publish, close, update};
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -65,13 +74,44 @@ public class examController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        if(status.equals(EXAMSTATUS.PUBLISH.toString())){
-            // change the exam status from publish to opening
-        } else if (status.equals(EXAMSTATUS.CLOSE.toString())){
+        Exam exam = new Exam();
+        exam.setId(examId);
+        System.out.println("this is your data id" + examId);
+        exam.load();
+
+        UnitOfWork.newCurrent();
+
+        if(status.equals(EXAMSTATUS.publish.toString())){
+            // change the exam status from unpublished to published
+            if(exam.getStatus().equals("UNPUBLISHED")){
+                exam.setStatus("PUBLISHED");
+            }
+
+        } else if (status.equals(EXAMSTATUS.close.toString())){
+            exam.setStatus("CLOSED");
+            String subjectId = exam.getSubjectID();
+            List<Student> allStudents = StudentMapper.getSingletonInstance().findWithSubjectID(subjectId);
+            List<Student> notSubmittedStudents = StudentMapper.getSingletonInstance().getNotSubmittedStudents(allStudents, exam.getId());
+
+            for (int i = 0; i < notSubmittedStudents.size(); i++){
+                ExamAnswer examAnswer = new ExamAnswer();
+                examAnswer.setExamID(exam.getId());
+                examAnswer.setStudentID(notSubmittedStudents.get(i).getId());
+                examAnswer.setId(KeyGenerator.getSingletonInstance().getKey(examAnswer));
+
+                UnitOfWork.getCurrent().registerNew(examAnswer);
+
+            }
+
             // change the exam status from opening to closed
             // find all students who're taking this exam and not submitted yet
             // change their submissions to empty submission.
-        } else if (status.equals(EXAMSTATUS.UPDATE.toString())){
+        } else if (status.equals(EXAMSTATUS.update.toString())){
+            String requestData = request.getReader().lines().collect(Collectors.joining());
+            JSONObject examJson = new JSONObject(requestData);
+
+            // todo confirm with front end about the format of request
+
             // read json req, update corresponding field to db
         } else {
             // wrong status
@@ -80,7 +120,17 @@ public class examController extends HttpServlet {
             out.print(jsonObject);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.flush();
+            return;
         }
+
+        UnitOfWork.getCurrent().registerDirty(exam);
+        UnitOfWork.getCurrent().commit();
+
+        JSONObject jsonObject = new JSONObject(String.format(
+                "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
+        out.print(jsonObject);
+        response.setStatus(HttpServletResponse.SC_OK);
+        out.flush();
 
 //        Exam exam = new Exam();
 //        exam.setSubjectID(subjectId);
@@ -91,34 +141,32 @@ public class examController extends HttpServlet {
 //        UnitOfWork.getCurrent().registerNew(exam);
 //        UnitOfWork.getCurrent().commit();
 
-
-        out.print("Success");
-        out.flush();
-
     }
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String examID =request.getParameter("exam_id");
-        String subjectId = request.getParameter("subject_id");
-        String examName = request.getParameter("examName");
 
+
+        BufferedReader reader = request.getReader();
         Exam exam = new Exam();
-        exam.setSubjectID(subjectId);
-        exam.setExamName(examName);
-        exam.setId(examID);
+        String key = KeyGenerator.getSingletonInstance().getKey(exam);
+        exam.setId(key);
 
         UnitOfWork.newCurrent();
-        UnitOfWork.getCurrent().registerDirty(exam);
+        UnitOfWork.getCurrent().registerNew(exam);
         UnitOfWork.getCurrent().commit();
 
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
-        out.print("Success");
+
+        JSONObject jsonObject = new JSONObject(String.format(
+                "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
+        out.print(jsonObject);
+        response.setStatus(HttpServletResponse.SC_OK);
         out.flush();
 
     }

@@ -8,25 +8,25 @@ import java.lang.reflect.Type;
 public class DataMapperFactory {
     public static DataMapper getMapper(String className) throws NoSuchMapperTypeException{
         switch (className) {
-            case "Choice":
+            case "domain.Choice":
                 return ChoiceMapper.getSingletonInstance();
-            case "ExamAnswer":
+            case "domain.ExamAnswer":
                 return ExamAnswerMapper.getSingletonInstance();
-            case "Exam":
+            case "domain.Exam":
                 return ExamMapper.getSingletonInstance();
-            case "Instructor":
+            case "domain.Instructor":
                 return InstructorMapper.getSingletonInstance();
-            case "MultipleChoiceQuestionAnswer":
+            case "domain.MultipleChoiceQuestionAnswer":
                 return MultipleChoiceQuestionAnswerMapper.getSingletonInstance();
-            case "MultipleChoiceQuestion":
+            case "domain.MultipleChoiceQuestion":
                 return MultipleChoiceQuestionMapper.getSingletonInstance();
-            case "ShortAnswerQuestionAnswer":
+            case "domain.ShortAnswerQuestionAnswer":
                 return ShortAnswerQuestionAnswerMapper.getSingletonInstance();
-            case "ShortAnswerQuestion":
+            case "domain.ShortAnswerQuestion":
                 return ShortAnswerQuestionMapper.getSingletonInstance();
-            case "Student":
+            case "domain.Student":
                 return StudentMapper.getSingletonInstance();
-            case "Subject":
+            case "domain.Subject":
                 return SubjectMapper.getSingletonInstance();
             default:
                 throw new NoSuchMapperTypeException("No suitable mapper found for "+ className);
