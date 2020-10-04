@@ -33,12 +33,8 @@ public class loginController extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        BufferedReader reader = request.getReader();
-        Gson gson = new Gson();
-        User user = gson.fromJson(reader, User.class);
-
-        String email = user.getEmail();
-        String password = user.getPassword();
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
         System.out.println(email+password);
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
