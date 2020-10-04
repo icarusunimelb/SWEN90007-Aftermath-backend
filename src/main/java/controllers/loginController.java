@@ -27,7 +27,7 @@ public class loginController extends HttpServlet {
     public loginController() {
         super();
     }
-    private enum USERTYPE {STUDENT, INSTRUCTOR,ADMIN};
+    private enum USERTYPE {STUDENT, LECTURER,ADMIN};
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
@@ -51,7 +51,7 @@ public class loginController extends HttpServlet {
         String instructorID = InstructorMapper.getSingletonInstance().authenticate(email, password);
         String studentID = StudentMapper.getSingletonInstance().authenticate(email,password);
         if (!instructorID.isEmpty()) {
-            userType = USERTYPE.INSTRUCTOR.toString();
+            userType = USERTYPE.LECTURER.toString();
             dataID = instructorID;
         }else if (!studentID.isEmpty()){
             userType = USERTYPE.STUDENT.toString();
