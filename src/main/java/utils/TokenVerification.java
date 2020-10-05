@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
-public class tokenVerification {
+public class TokenVerification {
     private static final String SECRET_KEY = "Aftermath";
     private static final long TTEXPIRE = 7200000;
     private static volatile List<String> tokens = new ArrayList<String>();

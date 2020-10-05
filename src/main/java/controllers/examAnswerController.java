@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import utils.KeyGenerator;
-import utils.tokenVerification;
+import utils.TokenVerification;
 import utils.UnitOfWork;
 
 import javax.servlet.ServletException;
@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
-import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -69,7 +68,7 @@ public class examAnswerController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        if(tokenVerification.validLecturer(request, response) == tokenVerification.ERRORFLAG){
+        if(TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG){
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
             out.print(jsonObject);
@@ -178,7 +177,7 @@ public class examAnswerController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        if(tokenVerification.validLecturer(request, response) != tokenVerification.STUDENTFLAG){
+        if(TokenVerification.validLecturer(request, response) != TokenVerification.STUDENTFLAG){
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
             out.print(jsonObject);
@@ -189,8 +188,8 @@ public class examAnswerController extends HttpServlet {
 
         UnitOfWork.newCurrent();
 
-        String token = tokenVerification.getTokenFromHeader(request);
-        String userIdAndUserType = tokenVerification.verifyToken(token);
+        String token = TokenVerification.getTokenFromHeader(request);
+        String userIdAndUserType = TokenVerification.verifyToken(token);
 
         String userId = userIdAndUserType.split(",", 2)[0];
 
