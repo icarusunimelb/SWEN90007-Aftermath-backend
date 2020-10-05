@@ -11,7 +11,7 @@ import domain.Subject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import utils.TokenVerification;
+import utils.tokenVerification;
 
 
 import javax.servlet.ServletException;
@@ -45,7 +45,7 @@ public class examsController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        String token = TokenVerification.getTokenFromHeader(request);
+        String token = tokenVerification.getTokenFromHeader(request);
         String userIdAndUserType = "";
         System.out.println("token: " + token);
         if(token.equals("")){
@@ -56,7 +56,7 @@ public class examsController extends HttpServlet {
             out.flush();
             return;
         } else {
-            userIdAndUserType = TokenVerification.verifyToken(token);
+            userIdAndUserType = tokenVerification.verifyToken(token);
             System.out.println("userId and User Type");
             if(userIdAndUserType.equals("")){
                 JSONObject jsonObject = new JSONObject(String.format(
@@ -216,6 +216,11 @@ public class examsController extends HttpServlet {
             subjectsJsonString = "[]";
         }
         return subjectsJsonString;
+    }
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.addHeader("Access-Control-Allow-Origin", "*");
     }
 }
 

@@ -25,7 +25,7 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
         return instance;
     }
 
-    private static final String findWithID = "SELECT m.questionID, m.examAnswerID, m.mark, m.answerChoiceID "
+    private static final String findWithID = "SELECT m.questionID, m.examAnswerID, m.mark, m.answerIndex "
             + "FROM oes.multipleChoiceQuestionAnswers m "
             + "WHERE m.multipleChoiceQuestionAnswerID = ?";
     public MultipleChoiceQuestionAnswer findWithID(String id){
@@ -38,10 +38,10 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
                 String questionID = rs.getString(1);
                 String examAnswerID = rs.getString(2);
                 double mark = rs.getDouble(3);
-                String chosenAnswerID = rs.getString(4);
+                int answerIndex = rs.getInt(4);
                 answer.setExamAnswerID(examAnswerID);
                 answer.setId(id);
-                answer.setChosenAnswerID(chosenAnswerID);
+                answer.setAnswerIndex(answerIndex);
                 answer.setMark(mark);
                 answer.setQuestionID(questionID);
                 IdentityMap.getInstance(answer).put(id, answer);
@@ -54,7 +54,7 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
 
 
     private static final String findAnswerStatement = "SELECT m.multipleChoiceQuestionAnswerID, " +
-            "m.questionID, m.mark, m.answerChoiceID "
+            "m.questionID, m.mark, m.answerIndex "
             + "FROM oes.multipleChoiceQuestionAnswers m "
             + "WHERE m.examAnswerID = ?";
     public List<MultipleChoiceQuestionAnswer> findAllAnswers(String examAnswerID) {
@@ -68,10 +68,10 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
                 String multipleChoiceQuestionAnswerID = rs.getString(1);
                 String questionID = rs.getString(2);
                 double mark = rs.getDouble(3);
-                String chosenAnswerID = rs.getString(4);
+                int answerIndex = rs.getInt(4);
                 answer.setExamAnswerID(examAnswerID);
                 answer.setId(multipleChoiceQuestionAnswerID);
-                answer.setChosenAnswerID(chosenAnswerID);
+                answer.setAnswerIndex(answerIndex);
                 answer.setMark(mark);
                 answer.setQuestionID(questionID);
                 IdentityMap.getInstance(answer).put(multipleChoiceQuestionAnswerID, answer);
@@ -85,7 +85,7 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
     }
 
     private static final String insertAnswerStatement =
-            "INSERT INTO oes.multipleChoiceQuestionAnswers (multipleChoiceQuestionAnswerID, questionID, examAnswerId, mark, answerChoiceID) " +
+            "INSERT INTO oes.multipleChoiceQuestionAnswers (multipleChoiceQuestionAnswerID, questionID, examAnswerId, mark, answerIndex) " +
                     "VALUES (?, ?, ?, ?, ?)";
 
     @Override
@@ -97,7 +97,7 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
             insertStatement.setString(2, multipleChoiceQuestionAnswerObj.getQuestionID());
             insertStatement.setString(3, multipleChoiceQuestionAnswerObj.getExamAnswerID());
             insertStatement.setDouble(4, multipleChoiceQuestionAnswerObj.getMark());
-            insertStatement.setString(5, multipleChoiceQuestionAnswerObj.getChosenAnswerID());
+            insertStatement.setInt(5, multipleChoiceQuestionAnswerObj.getAnswerIndex());
             insertStatement.execute();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -105,14 +105,14 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
     }
 
     private static final String updateMCQAStatement =
-            "UPDATE oes.multipleChoiceQuestionAnswers m SET m.answerChoiceID = ?, m.mark = ? " +
+            "UPDATE oes.multipleChoiceQuestionAnswers m SET m.answerIndex = ?, m.mark = ? " +
                     "WHERE m.multipleChoiceQuestionAnswerID = ?";
     @Override
     public void update(DomainObject object) {
         MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswerObj = (MultipleChoiceQuestionAnswer) object;
         try {
             PreparedStatement updateStatement = DBConnection.prepare(updateMCQAStatement);
-            updateStatement.setString(1, multipleChoiceQuestionAnswerObj.getChosenAnswerID());
+            updateStatement.setInt(1, multipleChoiceQuestionAnswerObj.getAnswerIndex());
             updateStatement.setDouble(2, multipleChoiceQuestionAnswerObj.getMark());
             updateStatement.setString(3, multipleChoiceQuestionAnswerObj.getId());
             updateStatement.executeUpdate();

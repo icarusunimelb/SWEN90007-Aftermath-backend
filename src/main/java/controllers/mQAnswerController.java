@@ -42,7 +42,6 @@ public class mQAnswerController extends HttpServlet {
         String examAnswerID = request.getParameter("exam_answer_id");
         double mark = Double.parseDouble(request.getParameter("mark"));
         multipleChoiceQuestionAnswer.setId(id);
-        multipleChoiceQuestionAnswer.setChosenAnswerID(chosenAnswerID);
         multipleChoiceQuestionAnswer.setMark(mark);
         multipleChoiceQuestionAnswer.setQuestionID(questionID);
         multipleChoiceQuestionAnswer.setExamAnswerID(examAnswerID);
@@ -69,7 +68,7 @@ public class mQAnswerController extends HttpServlet {
         String examAnswerID = request.getParameter("exam_answer_id");
         double mark = Double.parseDouble(request.getParameter("mark"));
         multipleChoiceQuestionAnswer.setId(id);
-        multipleChoiceQuestionAnswer.setChosenAnswerID(chosenAnswerID);
+
         multipleChoiceQuestionAnswer.setMark(mark);
         multipleChoiceQuestionAnswer.setQuestionID(questionID);
         multipleChoiceQuestionAnswer.setExamAnswerID(examAnswerID);
@@ -101,6 +100,12 @@ public class mQAnswerController extends HttpServlet {
         response.addHeader("Access-Control-Allow-Origin", "*");
         out.print("Success");
         out.flush();
+    }
+
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.addHeader("Access-Control-Allow-Origin", "*");
     }
 
 }

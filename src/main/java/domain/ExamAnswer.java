@@ -17,7 +17,6 @@ public class ExamAnswer extends DomainObject{
     public ExamAnswer(){super();}
 
     public double getFinalMark() {
-        if(finalMark == -1) load();
         return finalMark;
     }
 
@@ -61,6 +60,6 @@ public class ExamAnswer extends DomainObject{
         ExamAnswer record = ExamAnswerMapper.getSingletonInstance().findWithID(getId());
         if (examID == null) this.examID = record.getExamID();
         if (studentID == null) this.studentID = record.getStudentID();
-        if (finalMark == Integer.MIN_VALUE) this.finalMark = record.getFinalMark();
+        if (finalMark == -1 ) this.finalMark = record.getFinalMark();
     }
 }

@@ -7,18 +7,19 @@ import datamapper.MultipleChoiceQuestionMapper;
 
 public class MultipleChoiceQuestionAnswer extends Answer{
     private MultipleChoiceQuestion multipleChoiceQuestion = null;
-    private Choice chosenAnswer = null;
-    private String chosenAnswerID = null;
+
+
+
+    private int answerIndex = -1;
 
     public MultipleChoiceQuestionAnswer(){super();};
 
-    public String getChosenAnswerID() {
-        if (chosenAnswerID == null) load();
-        return chosenAnswerID;
+    public int getAnswerIndex() {
+        return answerIndex;
     }
 
-    public void setChosenAnswerID(String chosenAnswerID) {
-        this.chosenAnswerID = chosenAnswerID;
+    public void setAnswerIndex(int answerIndex) {
+        this.answerIndex = answerIndex;
     }
 
     public MultipleChoiceQuestion getMultipleChoiceQuestion() {
@@ -33,17 +34,7 @@ public class MultipleChoiceQuestionAnswer extends Answer{
         this.multipleChoiceQuestion = multipleChoiceQuestion;
     }
 
-    public Choice getChosenAnswer() {
-        if (chosenAnswer == null) {
-            Choice record = ChoiceMapper.getSingletonInstance().findWithChoiceID(getChosenAnswerID());
-            setChosenAnswer(record);
-        }
-        return chosenAnswer;
-    }
 
-    public void setChosenAnswer(Choice chosenAnswer) {
-        this.chosenAnswer = chosenAnswer;
-    }
 
     @Override
     public String getQuestionID() {
@@ -59,7 +50,7 @@ public class MultipleChoiceQuestionAnswer extends Answer{
 
     @Override
     public double getMark() {
-        if (super.getMark() == Integer.MIN_VALUE) load();
+        if (super.getMark() == 0.01) load();
         return super.getMark();
     }
 
@@ -67,7 +58,7 @@ public class MultipleChoiceQuestionAnswer extends Answer{
         MultipleChoiceQuestionAnswer record = MultipleChoiceQuestionAnswerMapper.getSingletonInstance().findWithID(getId());
         if (super.getQuestionID() == null) setQuestionID(record.getQuestionID());
         if (super.getExamAnswerID() == null) setExamAnswerID(record.getExamAnswerID());
-        if (super.getMark() == Integer.MIN_VALUE) setMark(record.getMark());
-        if (chosenAnswerID == null) chosenAnswerID = record.getChosenAnswerID();
+        if (super.getMark() == 0.01) setMark(record.getMark());
+        if (this.answerIndex == -1)setMark(record.getAnswerIndex());
     }
 }

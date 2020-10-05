@@ -1,9 +1,19 @@
 package domain;
 
 public class Question extends DomainObject{
-    private double totalMark = Integer.MIN_VALUE;
+    private double totalMark = 0;
     private String questionBody = null;
     private String examID = null;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    private String title = null;
 
     public Question(){super();};
 

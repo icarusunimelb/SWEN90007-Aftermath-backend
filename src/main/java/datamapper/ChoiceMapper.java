@@ -25,7 +25,7 @@ public class ChoiceMapper extends DataMapper{
         return instance;
     }
 
-    private static final String findWithChoiceIDStatement = "SELECT c.choice, c.questionID "
+    private static final String findWithChoiceIDStatement = "SELECT c.choice, c.questionID, c.index"
             + "FROM oes.choices c "
             + "WHERE c.choiceID = ?";
 
@@ -39,9 +39,11 @@ public class ChoiceMapper extends DataMapper{
             if (rs.next()) {
                 String choiceContent = rs.getString(1);
                 String questionID = rs.getString(2);
+                int index = rs.getInt(3);
                 choice.setId(choiceID);
                 choice.setQuestionID(questionID);
                 choice.setChoice(choiceContent);
+                choice.setIndex(index);
                 IdentityMap.getInstance(choice).put(choiceID, choice);
             }
         } catch (SQLException e) {
@@ -51,7 +53,7 @@ public class ChoiceMapper extends DataMapper{
         return choice;
     }
 
-    private static final String findWithQuestionIDStatement = "SELECT c.choiceID, c.choice "
+    private static final String findWithQuestionIDStatement = "SELECT c.choiceID, c.choice, c.index "
             + "FROM oes.choices c "
             + "WHERE c.questionID = ?";
     public List<Choice> findWithQuestionID (String questionID) {
@@ -67,6 +69,8 @@ public class ChoiceMapper extends DataMapper{
                 choice.setId(choiceID);
                 String choiceContent = rs.getString(2);
                 choice.setChoice(choiceContent);
+                int index = rs.getInt(3);
+                choice.setIndex(index);
                 IdentityMap.getInstance(choice).put(choiceID, choice);
                 choices.add(choice);
             }
@@ -79,7 +83,7 @@ public class ChoiceMapper extends DataMapper{
 
 
     private static final String insertChoiceStatement =
-            "INSERT INTO oes.choices (choiceID, questionID, choice) VALUES (?, ?, ?)";
+            "INSERT INTO oes.choices (choiceID, questionID, choice, index) VALUES (?, ?, ?, ?)";
     @Override
     public void insert(DomainObject object) {
         Choice choiceObj = (Choice) object;
@@ -88,6 +92,7 @@ public class ChoiceMapper extends DataMapper{
             insertStatement.setString(1, choiceObj.getId());
             insertStatement.setString(2, choiceObj.getQuestionID());
             insertStatement.setString(3, choiceObj.getChoice());
+            insertStatement.setInt(4,choiceObj.getIndex());
             insertStatement.execute();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

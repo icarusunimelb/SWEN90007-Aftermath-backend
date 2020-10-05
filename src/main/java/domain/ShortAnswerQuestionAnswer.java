@@ -44,7 +44,7 @@ public class ShortAnswerQuestionAnswer extends Answer{
 
     @Override
     public double getMark() {
-        if (super.getMark() == Integer.MIN_VALUE) load();
+        if (super.getMark() == 0.01) load();
         return super.getMark();
     }
 
@@ -52,7 +52,7 @@ public class ShortAnswerQuestionAnswer extends Answer{
         ShortAnswerQuestionAnswer record = ShortAnswerQuestionAnswerMapper.getSingletonInstance().findWithID(getId());
         if (super.getQuestionID() == null) setQuestionID(record.getQuestionID());
         if (super.getExamAnswerID() == null) setExamAnswerID(record.getExamAnswerID());
-        if (super.getMark() == Integer.MIN_VALUE) setMark(record.getMark());
+        if (super.getMark() == 0.01) setMark(record.getMark());
         if (answer == null) answer = record.getAnswer();
     }
 }

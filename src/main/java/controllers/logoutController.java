@@ -1,24 +1,16 @@
 package controllers;
 
-import com.google.gson.JsonObject;
-import datamapper.InstructorMapper;
-import datamapper.StudentMapper;
-import domain.Instructor;
-import domain.User;
-import utils.TokenVerification;
+import utils.tokenVerification;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Enumeration;
-import org.apache.commons.io.IOUtils;
+
 import  org.json.*;
-import com.google.gson.Gson;
 
 @WebServlet("/api/user/logout")
 public class logoutController extends HttpServlet {
@@ -40,10 +32,10 @@ public class logoutController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        String token = TokenVerification.getTokenFromHeader(request);
+        String token = tokenVerification.getTokenFromHeader(request);
 
         if(!token.isEmpty()){
-            TokenVerification.removeToken(token);
+            tokenVerification.removeToken(token);
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
             out.print(jsonObject);
@@ -57,5 +49,11 @@ public class logoutController extends HttpServlet {
         out.print(jsonObject);
         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         out.flush();
+    }
+
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.addHeader("Access-Control-Allow-Origin", "*");
     }
 }

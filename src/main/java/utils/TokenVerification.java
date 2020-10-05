@@ -11,16 +11,23 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
-public class TokenVerification {
+public class tokenVerification {
     private static final String SECRET_KEY = "Aftermath";
     private static final long TTEXPIRE = 7200000;
     private static volatile List<String> tokens = new ArrayList<String>();
+    public static final int STUDENTFLAG = 0;
+    public static final int LECTURERFLAG = 1;
+    public static final int ADMINTFLAG = 2;
+    public static final int ERRORFLAG = -1;
+
     public static String createJWT(String userId, String userType) {
 
         //The JWT signature algorithm we will be using to sign the token
@@ -97,6 +104,33 @@ public class TokenVerification {
             }
         }
         return "";
+    }
+    
+    public static int validLecturer(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.addHeader("Access-Control-Allow-Origin", "*");
+
+        String token = getTokenFromHeader(request);
+        String userIdAndUserType = "";
+        System.out.println("token: " + token);
+        if(token.equals("")){
+
+            return ERRORFLAG;
+        } else {
+            try{
+                userIdAndUserType = verifyToken(token);
+            } catch(io.jsonwebtoken.ExpiredJwtException e) {
+                return ERRORFLAG;
+            }
+            if(userIdAndUserType.equals("")){
+                return ERRORFLAG;
+            } else if(userIdAndUserType.contains("STUDENT")){
+                return STUDENTFLAG;
+            }
+        }
+        return LECTURERFLAG;
     }
 
 }

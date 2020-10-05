@@ -2,7 +2,7 @@ package domain;
 
 import datamapper.InstructorMapper;
 
-public class User extends DomainObject{
+public class User extends DomainObject {
     private Name name = null;
     private String email = null;
     private String password = null;

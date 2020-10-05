@@ -1,11 +1,9 @@
 package controllers;
 
-import com.google.gson.JsonObject;
 import datamapper.InstructorMapper;
 import datamapper.StudentMapper;
-import domain.Instructor;
 import domain.User;
-import utils.TokenVerification;
+import utils.tokenVerification;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -64,10 +62,10 @@ public class loginController extends HttpServlet {
             out.flush();
             return;
         }
-        token = TokenVerification.createJWT(dataID, userType);
+        token = tokenVerification.createJWT(dataID, userType);
         System.out.println(dataID+password+token);
         try {
-            TokenVerification.addToken(token);
+            tokenVerification.addToken(token);
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\",\"dataId\":\"%s\",\"userType\":\"%s\",\"token\":\"%s\"}",HttpServletResponse.SC_OK,dataID,userType, token));
             out.print(jsonObject);
@@ -84,6 +82,10 @@ public class loginController extends HttpServlet {
 
     }
 
-
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.addHeader("Access-Control-Allow-Origin", "*");
+    }
 
 }

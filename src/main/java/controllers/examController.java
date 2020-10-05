@@ -1,15 +1,13 @@
 package controllers;
 
-import com.google.gson.Gson;
+import datamapper.ExamMapper;
 import datamapper.StudentMapper;
-import domain.Exam;
-import domain.ExamAnswer;
-import domain.Student;
-import domain.User;
+import domain.*;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import utils.KeyGenerator;
-import utils.TokenVerification;
+import utils.tokenVerification;
 import utils.UnitOfWork;
 
 import javax.servlet.ServletException;
@@ -17,10 +15,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.security.Key;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -74,6 +70,15 @@ public class examController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
+        if(tokenVerification.validLecturer(request, response) != tokenVerification.LECTURERFLAG){
+            JSONObject jsonObject = new JSONObject(String.format(
+                    "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
+            out.print(jsonObject);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            out.flush();
+            return;
+        }
+
         Exam exam = new Exam();
         exam.setId(examId);
         System.out.println("this is your data id" + examId);
@@ -109,6 +114,79 @@ public class examController extends HttpServlet {
         } else if (status.equals(EXAMSTATUS.update.toString())){
             String requestData = request.getReader().lines().collect(Collectors.joining());
             JSONObject examJson = new JSONObject(requestData);
+            examId = examJson.getString("dataId");
+
+            String examName = examJson.getString("examName");
+
+            exam = ExamMapper.getSingletonInstance().findWithID(examId);
+            exam.setExamName(examName);
+
+            UnitOfWork.getCurrent().registerDirty(exam);
+
+            JSONArray questionsArray = examJson.getJSONArray("questions");
+
+            for(int i = 0; i< questionsArray.length(); i++){
+                JSONObject questionJson = (JSONObject) questionsArray.get(i);
+                String questionType = questionJson.getString("type");
+                String questionDescription = questionJson.getString("description");
+                Integer questionMarks = questionJson.getInt("marks");
+                String questionTitle = questionJson.getString("title");
+                String questionId = "";
+
+                if(questionType.equals("QUESTION_MULTIPLE_CHOICE")){
+
+                    try{
+                        questionId = questionJson.getString("dataId");
+                    } catch (org.json.JSONException e){
+                        System.out.println("JSON Exception Error" + e.toString());
+                    }
+                    MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion();
+                    if(questionId.isEmpty()){
+                        questionId = KeyGenerator.getSingletonInstance().getKey(multipleChoiceQuestion);
+                    }
+
+                    multipleChoiceQuestion.setExamID(examId);
+                    multipleChoiceQuestion.setTitle(questionTitle);
+                    multipleChoiceQuestion.setTotalMark(questionMarks);
+                    multipleChoiceQuestion.setQuestionBody(questionDescription);
+                    multipleChoiceQuestion.setId(questionId);
+
+                    UnitOfWork.getCurrent().registerNew(multipleChoiceQuestion);
+
+                    JSONArray questionChoices = questionJson.getJSONArray("choices");
+
+                    for(int j = 0; j< questionChoices.length(); j++){
+                        String choiceJson = (String) questionChoices.get(j);
+                        Choice choice = new Choice();
+                        choice.setQuestionID(questionId);
+                        choice.setChoice(choiceJson);
+                        choice.setId(KeyGenerator.getSingletonInstance().getKey(choice));
+                        UnitOfWork.getCurrent().registerNew(choice);
+
+                        System.out.println("this is your first choice "+ choiceJson);
+                    }
+                } else {
+                    try{
+                        questionId = questionJson.getString("dataId");
+                    } catch (org.json.JSONException e){
+                        System.out.println("JSON Exception Error" + e.toString());
+                    }
+                    ShortAnswerQuestion shortAnswerQuestion = new ShortAnswerQuestion();
+                    if(questionId.isEmpty()){
+                        questionId = KeyGenerator.getSingletonInstance().getKey(shortAnswerQuestion);
+                    }
+                    shortAnswerQuestion.setExamID(examId);
+                    shortAnswerQuestion.setQuestionBody(questionDescription);
+                    shortAnswerQuestion.setId(questionId);
+                    shortAnswerQuestion.setTitle(questionTitle);
+                    shortAnswerQuestion.setTotalMark(questionMarks);
+
+                    UnitOfWork.getCurrent().registerNew(shortAnswerQuestion);
+                }
+
+                System.out.println("this is your exam answer" + questionJson.toString());
+            }
+            UnitOfWork.getCurrent().commit();
 
             // todo confirm with front end about the format of request
 
@@ -147,24 +225,44 @@ public class examController extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-
-        BufferedReader reader = request.getReader();
-        Exam exam = new Exam();
-        String key = KeyGenerator.getSingletonInstance().getKey(exam);
-        exam.setId(key);
-
-        UnitOfWork.newCurrent();
-        UnitOfWork.getCurrent().registerNew(exam);
-        UnitOfWork.getCurrent().commit();
-
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
+        if(tokenVerification.validLecturer(request, response) == tokenVerification.ERRORFLAG){
+            JSONObject jsonObject = new JSONObject(String.format(
+                    "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
+            out.print(jsonObject);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            out.flush();
+            return;
+        }
+
+        String requestData = request.getReader().lines().collect(Collectors.joining());
+        JSONObject examJson = new JSONObject(requestData);
+        String subjectId = examJson.getString("subjectId");
+        String examName = "new-exam";
+        try{
+            examName = examJson.getString("examName");
+        }catch (org.json.JSONException e){
+            System.out.println("JSON Exception Error "+ e.toString());
+        }
+
+        Exam exam = new Exam();
+        String key = KeyGenerator.getSingletonInstance().getKey(exam);
+        exam.setId(key);
+        exam.setSubjectID(subjectId);
+        exam.setExamName(examName);
+        exam.setStatus("UNPUBLISHED");
+
+        UnitOfWork.newCurrent();
+        UnitOfWork.getCurrent().registerNew(exam);
+        UnitOfWork.getCurrent().commit();
+
+
         JSONObject jsonObject = new JSONObject(String.format(
-                "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
+                "{\"code\":\"%s\",\"examId\":\"%s\"}",HttpServletResponse.SC_OK, exam.getId()));
         out.print(jsonObject);
         response.setStatus(HttpServletResponse.SC_OK);
         out.flush();
@@ -172,6 +270,21 @@ public class examController extends HttpServlet {
     }
 
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.addHeader("Access-Control-Allow-Origin", "*");
+
+        if(tokenVerification.validLecturer(request, response) == tokenVerification.ERRORFLAG){
+            JSONObject jsonObject = new JSONObject(String.format(
+                    "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
+            out.print(jsonObject);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            out.flush();
+            return;
+        }
+
         String examID =request.getParameter("dataId");
 
         Exam exam = new Exam();
@@ -181,10 +294,7 @@ public class examController extends HttpServlet {
         UnitOfWork.getCurrent().registerDeleted(exam);
         UnitOfWork.getCurrent().commit();
 
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.addHeader("Access-Control-Allow-Origin", "*");
+
         JSONObject jsonObject = new JSONObject(String.format(
                 "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
         out.print(jsonObject);
@@ -192,6 +302,10 @@ public class examController extends HttpServlet {
         out.flush();
 
     }
-
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.addHeader("Access-Control-Allow-Origin", "*");
+    }
 
 }

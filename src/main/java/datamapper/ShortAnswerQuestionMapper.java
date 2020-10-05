@@ -83,7 +83,7 @@ public class ShortAnswerQuestionMapper extends DataMapper{
     }
 
     private static final String insertShortAnswerQuestionStatement =
-            "INSERT INTO oes.shortAnswerQuestion (questionID, examID, totalMark, questionBody) VALUES (?, ?, ?, ?)";
+            "INSERT INTO oes.shortanswerquestions (questionID, examID, totalMark, questionBody) VALUES (?, ?, ?, ?)";
     @Override
     public void insert(DomainObject object) {
         ShortAnswerQuestion shortAnswerQuestionObj = (ShortAnswerQuestion) object;

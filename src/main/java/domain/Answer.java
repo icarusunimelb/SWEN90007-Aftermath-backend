@@ -1,7 +1,7 @@
 package domain;
 
 public class Answer extends DomainObject{
-    private double mark = Integer.MIN_VALUE;
+    private double mark = 0.01;
     private String questionID = null;
     private String examAnswerID = null;
 
