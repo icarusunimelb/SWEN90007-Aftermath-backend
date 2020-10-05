@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MultipleChoiceQuestionMapper extends DataMapper {
@@ -73,6 +74,8 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
                 question.setExamID(examID);
                 question.setQuestionBody(questionBody);
 
+                List<Choice> choices = ChoiceMapper.getSingletonInstance().findWithQuestionID(questionID);
+                question.setMultipleChoices(choices);
                 IdentityMap.getInstance(question).put(questionID, question);
                 questions.add(question);
             }
@@ -101,8 +104,8 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
     }
 
     private static final String updateMCQStatement =
-            "UPDATE oes.multipleChoiceQuestion m SET m.questionBody = ?, m.totalMark = ? " +
-                    "WHERE m.questionID = ?";
+            "UPDATE oes.multipleChoiceQuestion SET questionBody = ?, totalMark = ? " +
+                    "WHERE questionID = ?";
     @Override
     public void update(DomainObject object) {
         MultipleChoiceQuestion multipleChoiceQuestionObj = (MultipleChoiceQuestion) object;
@@ -118,7 +121,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
     }
 
     private static final String deleteMCQStatement =
-            "DELETE FROM oes.multipleChoiceQuestion m WHERE m.questionID = ?";
+            "DELETE FROM oes.multipleChoiceQuestion WHERE questionID = ?";
     @Override
     public void delete(DomainObject object) {
         MultipleChoiceQuestion multipleChoiceQuestionObj = (MultipleChoiceQuestion) object;

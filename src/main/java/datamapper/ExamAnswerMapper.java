@@ -71,7 +71,7 @@ public class ExamAnswerMapper extends  DataMapper{
                 examAnswer.setFinalMark(finalMark);
                 result.add(examAnswer);
             }
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!"+result.size());
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+result.size());
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -118,7 +118,7 @@ public class ExamAnswerMapper extends  DataMapper{
     }
 
     private static final String updateExamAnswerStatement =
-            "UPDATE oes.examAnswer e SET e.finalMark = ? WHERE e.examAnswerID = ?";
+            "UPDATE oes.examAnswer SET finalMark = ? WHERE examAnswerID = ?";
     @Override
     public void update(DomainObject object) {
         ExamAnswer examAnswerObj = (ExamAnswer) object;

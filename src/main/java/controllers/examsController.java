@@ -4,11 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 
+import com.google.gson.Gson;
 import datamapper.InstructorMapper;
 import datamapper.StudentMapper;
 
 import domain.Subject;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import utils.TokenVerification;
@@ -39,7 +39,7 @@ public class examsController extends HttpServlet {
      */ // /api/exam-controller?status=managing
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String status = request.getParameter("status");
-
+        System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -74,28 +74,34 @@ public class examsController extends HttpServlet {
 //        String userType = userIdAndUserType.split(",", 2)[1];
 
         if(status.equals("managing")){
-            JSONArray jsonArray = manageExams(userId);
+            String jsonArray = manageExams(userId);
             out.print(jsonArray);
+            System.out.println("this is printing JSONArray!!!!!!!!!!!!!!!!!!!");
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
+            return;
         } else if(status.equals("marking")){
-            JSONArray jsonArray = markExams(userId);
+            String jsonArray = markExams(userId);
             out.print(jsonArray);
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
+            return;
         } else if(status.equals("taking")){
             // get exams of a student who can take right now
-            JSONArray jsonArray =  takeExams(userId);
+            String jsonArray =  takeExams(userId);
             out.print(jsonArray);
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
+            return;
         } else {
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
             out.print(jsonObject);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.flush();
+
         }
+        System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
     }
 
     /**
@@ -168,33 +174,36 @@ public class examsController extends HttpServlet {
 
     }
 
-    private JSONArray manageExams(String userId){
+    private String manageExams(String userId){
         List<Subject> subjects = InstructorMapper.getSingletonInstance().getManagingSubjects(userId);
 
-        String jsonString = convertToJson(subjects);
-
-        JSONArray jsonArray = new JSONArray(jsonString);
-
-        return jsonArray;
+//        String jsonString = convertToJson(subjects);
+        System.out.println("you are in manageExams in exams Controller 1111111111111111111111111");
+        String json = new Gson().toJson(subjects);
+        System.out.println(json);
+//        JSONArray jsonArray = new JSONArray(subjects);
+        System.out.println("you are in manageExams in exams Controller 2222222222222222222222222");
+        return json;
     }
 
-    private JSONArray markExams(String userId){
+    private String markExams(String userId){
         List<Subject> subjects = InstructorMapper.getSingletonInstance().getMarkingSubjects(userId);
 
-        String jsonString = convertToJson(subjects);
+//        String jsonString = convertToJson(subjects);
+//        JSONArray jsonArray = new JSONArray(subjects);
+        String json = new Gson().toJson(subjects);
+//        JSONArray jsonArray = new JSONArray(jsonString);
 
-        JSONArray jsonArray = new JSONArray(jsonString);
-
-        return jsonArray;
+        return json;
     }
 
-    private JSONArray takeExams(String userId){
+    private String takeExams(String userId){
         List<Subject> subjects = StudentMapper.getSingletonInstance().getTakingSubjects(userId);
-        String jsonString = convertToJson(subjects);
+//        JSONArray jsonArray = new JSONArray(subjects);
+        String json = new Gson().toJson(subjects);
+//        JSONArray jsonArray = new JSONArray(jsonString);
 
-        JSONArray jsonArray = new JSONArray(jsonString);
-
-        return jsonArray;
+        return json;
     }
 
     private String convertToJson(List<Subject> subjects){

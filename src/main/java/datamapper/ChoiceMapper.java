@@ -9,6 +9,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ChoiceMapper extends DataMapper{
@@ -77,7 +78,7 @@ public class ChoiceMapper extends DataMapper{
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
+        Collections.sort(choices);
         return choices;
     }
 

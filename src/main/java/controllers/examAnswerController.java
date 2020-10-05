@@ -85,27 +85,27 @@ public class examAnswerController extends HttpServlet {
             JSONObject examAnswerJson = (JSONObject) examAnswerArray.get(i);
 
             String examAnswerId = examAnswerJson.getString("dataId");
-            String marks = examAnswerJson.getString("marks");
+            double marks = examAnswerJson.getDouble("marks");
 
             ExamAnswer examAnswer = ExamAnswerMapper.getSingletonInstance().findWithID(examAnswerId);
             examAnswer.load();
-            examAnswer.setFinalMark(Double.parseDouble(marks));
+            examAnswer.setFinalMark(marks);
             UnitOfWork.getCurrent().registerDirty(examAnswer);
             JSONObject answersJsonObject = examAnswerJson.getJSONObject("answers");
             Iterator keys = answersJsonObject.keys();
             while(keys.hasNext()){
-                String questionAnswerId = (String) keys.next();
-                if(answersJsonObject.get(questionAnswerId) instanceof JSONObject){
-                    JSONObject answerJson = (JSONObject) answersJsonObject.get(questionAnswerId);
-                    String answerId = answerJson.getString("dataId");
-                    String mark = answerJson.getString("mark");
-                    ShortAnswerQuestionAnswer shortAnswerQuestionAnswer = ShortAnswerQuestionAnswerMapper.getSingletonInstance().findWithID(answerId);
+                String questionId = (String) keys.next();
+                if(answersJsonObject.get(questionId) instanceof JSONObject){
+                    JSONObject answerJson = (JSONObject) answersJsonObject.get(questionId);
+                    String answer = answerJson.getString("answer");
+                    double mark = answerJson.getDouble("mark");
+                    ShortAnswerQuestionAnswer shortAnswerQuestionAnswer = ShortAnswerQuestionAnswerMapper.getSingletonInstance().findWithID(questionId);
                     if(shortAnswerQuestionAnswer.getId() == null || shortAnswerQuestionAnswer.getId().equals("")){
-                        MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswer = MultipleChoiceQuestionAnswerMapper.getSingletonInstance().findWithID(examAnswerId);
-                        multipleChoiceQuestionAnswer.setMark(Double.parseDouble(mark));
+                        MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswer = MultipleChoiceQuestionAnswerMapper.getSingletonInstance().findWithID(questionId);
+                        multipleChoiceQuestionAnswer.setMark(mark);
                         UnitOfWork.getCurrent().registerDirty(multipleChoiceQuestionAnswer);
                     } else {
-                        shortAnswerQuestionAnswer.setMark(Double.parseDouble(mark));
+                        shortAnswerQuestionAnswer.setMark(mark);
                         UnitOfWork.getCurrent().registerDirty(shortAnswerQuestionAnswer);
                     }
                 }
@@ -239,8 +239,20 @@ public class examAnswerController extends HttpServlet {
 
             // todo find the question
 
-            try {
-                MultipleChoiceQuestion multipleChoiceQuestion = MultipleChoiceQuestionMapper.getSingletonInstance().findWithID(questionId);
+            MultipleChoiceQuestion multipleChoiceQuestion = MultipleChoiceQuestionMapper.getSingletonInstance().findWithID(questionId);
+            ShortAnswerQuestion shortAnswerQuestion = ShortAnswerQuestionMapper.getSingletonInstance().findWithID(questionId);
+
+            if(multipleChoiceQuestion.getId() == null){
+                // it's a short answer question
+                ShortAnswerQuestionAnswer shortAnswerQuestionAnswer= new ShortAnswerQuestionAnswer();
+                shortAnswerQuestionAnswer.setAnswer(answer);
+                shortAnswerQuestionAnswer.setQuestionID(questionId);
+                shortAnswerQuestionAnswer.setMark(mark);
+                shortAnswerQuestionAnswer.setExamAnswerID(examAnswer.getId());
+                shortAnswerQuestionAnswer.setShortAnswerQuestion(shortAnswerQuestion);
+                shortAnswerQuestionAnswer.setId(KeyGenerator.getSingletonInstance().getKey(shortAnswerQuestionAnswer));
+                UnitOfWork.getCurrent().registerNew(shortAnswerQuestionAnswer);
+            } else{
                 MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswer= new MultipleChoiceQuestionAnswer();
 
                 multipleChoiceQuestionAnswer.setAnswerIndex(newAnswer);
@@ -250,20 +262,7 @@ public class examAnswerController extends HttpServlet {
                 multipleChoiceQuestionAnswer.setMultipleChoiceQuestion(multipleChoiceQuestion);
                 multipleChoiceQuestionAnswer.setId(KeyGenerator.getSingletonInstance().getKey(multipleChoiceQuestionAnswer));
                 UnitOfWork.getCurrent().registerNew(multipleChoiceQuestionAnswer);
-
-            } catch (java.lang.NullPointerException e){
-                System.out.println("NullPointerException ERROR: "+ e.toString());
-                ShortAnswerQuestion shortAnswerQuestion = ShortAnswerQuestionMapper.getSingletonInstance().findWithID(questionId);
-                ShortAnswerQuestionAnswer shortAnswerQuestionAnswer= new ShortAnswerQuestionAnswer();
-                shortAnswerQuestionAnswer.setAnswer(answer);
-                shortAnswerQuestionAnswer.setQuestionID(questionId);
-                shortAnswerQuestionAnswer.setMark(mark);
-                shortAnswerQuestionAnswer.setExamAnswerID(examAnswer.getId());
-                shortAnswerQuestionAnswer.setShortAnswerQuestion(shortAnswerQuestion);
-                shortAnswerQuestionAnswer.setId(KeyGenerator.getSingletonInstance().getKey(shortAnswerQuestionAnswer));
-                UnitOfWork.getCurrent().registerNew(shortAnswerQuestionAnswer);
             }
-
 
 //            UnitOfWork.getCurrent().commit();
         }

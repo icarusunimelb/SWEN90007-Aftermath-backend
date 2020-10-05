@@ -2,7 +2,7 @@ package domain;
 
 import datamapper.ChoiceMapper;
 
-public class Choice extends DomainObject{
+public class Choice extends DomainObject implements Comparable{
     private String choice = null;
     private String questionID = null;
 
@@ -40,5 +40,13 @@ public class Choice extends DomainObject{
         if (this.choice == null) this.choice = record.getChoice();
         if (this.questionID == null) this.questionID = record.getQuestionID();
         if (this.index == -1) this.index = record.getIndex();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        int compareage=((Choice) this).getIndex();
+        /* For Ascending order*/
+        return this.index-compareage;
+
     }
 }

@@ -1,8 +1,8 @@
 package controllers;
 
+import com.google.gson.Gson;
 import domain.Exam;
 import domain.Question;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.TokenVerification;
 
@@ -52,15 +52,6 @@ public class questionController extends HttpServlet {
         exam.setId(examId);
         exam.load();
 
-        if(TokenVerification.validLecturer(request, response) != TokenVerification.LECTURERFLAG){
-            JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-            out.print(jsonObject);
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            out.flush();
-            return;
-        }
-
 
         List<Question> questions = exam.getQuestions();
         if(questions.size() == 0){
@@ -70,11 +61,9 @@ public class questionController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             out.flush();
         } else {
-            JSONArray questionsJsonArray = new JSONArray(questions);
 
-            JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
-            out.print(questionsJsonArray);
+            String json = new Gson().toJson(questions);
+            out.print(json);
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
         }

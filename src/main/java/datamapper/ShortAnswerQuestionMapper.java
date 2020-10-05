@@ -100,8 +100,8 @@ public class ShortAnswerQuestionMapper extends DataMapper{
     }
 
     private static final String updateSAQStatement =
-            "UPDATE oes.shortAnswerQuestion s SET s.questionBody = ?, s.totalMark = ? " +
-                    "WHERE s.questionID = ?";
+            "UPDATE oes.shortAnswerQuestions SET questionBody = ?, totalMark = ? " +
+                    "WHERE s = ?";
     @Override
     public void update(DomainObject object) {
         ShortAnswerQuestion shortAnswerQuestionObj = (ShortAnswerQuestion) object;
@@ -117,7 +117,7 @@ public class ShortAnswerQuestionMapper extends DataMapper{
     }
 
     private static final String deleteSAQStatement =
-            "DELETE FROM oes.shortAnswerQuestion s WHERE s.questionID = ?";
+            "DELETE FROM oes.shortAnswerQuestions WHERE questionID = ?";
     @Override
     public void delete(DomainObject object) {
         ShortAnswerQuestion shortAnswerQuestionObj = (ShortAnswerQuestion) object;

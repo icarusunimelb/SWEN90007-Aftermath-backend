@@ -105,8 +105,8 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
     }
 
     private static final String updateMCQAStatement =
-            "UPDATE oes.multipleChoiceQuestionAnswers m SET m.answerIndex = ?, m.mark = ? " +
-                    "WHERE m.multipleChoiceQuestionAnswerID = ?";
+            "UPDATE oes.multipleChoiceQuestionAnswers SET answerIndex = ?, mark = ? " +
+                    "WHERE multipleChoiceQuestionAnswerID = ?";
     @Override
     public void update(DomainObject object) {
         MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswerObj = (MultipleChoiceQuestionAnswer) object;

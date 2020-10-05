@@ -1,7 +1,6 @@
 package controllers;
 
-import datamapper.ExamMapper;
-import datamapper.StudentMapper;
+import datamapper.*;
 import domain.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -121,6 +121,25 @@ public class examController extends HttpServlet {
             exam = ExamMapper.getSingletonInstance().findWithID(examId);
             exam.setExamName(examName);
 
+            // delete exam questions, choices
+
+            List<Question> currentQuestions = new ArrayList<>();
+            currentQuestions.addAll(MultipleChoiceQuestionMapper.getSingletonInstance().findWithExamID(examId));
+
+            for (int i = 0; i < currentQuestions.size(); i++){
+                List<Choice> currentChoices = ChoiceMapper.getSingletonInstance().findWithQuestionID(currentQuestions.get(i).getId());
+                for (int j = 0; j < currentChoices.size(); j++){
+                    UnitOfWork.getCurrent().registerDeleted(currentChoices.get(j));
+                }
+
+            }
+
+            currentQuestions.addAll(ShortAnswerQuestionMapper.getSingletonInstance().findWithExamID(examId));
+            for (int i = 0; i < currentQuestions.size(); i++){
+                UnitOfWork.getCurrent().registerDeleted(currentQuestions.get(i));
+            }
+
+
             UnitOfWork.getCurrent().registerDirty(exam);
 
             JSONArray questionsArray = examJson.getJSONArray("questions");
@@ -160,6 +179,7 @@ public class examController extends HttpServlet {
                         Choice choice = new Choice();
                         choice.setQuestionID(questionId);
                         choice.setChoice(choiceJson);
+                        choice.setIndex(j+1);
                         choice.setId(KeyGenerator.getSingletonInstance().getKey(choice));
                         UnitOfWork.getCurrent().registerNew(choice);
 

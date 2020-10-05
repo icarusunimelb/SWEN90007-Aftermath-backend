@@ -79,6 +79,7 @@ public class ExamMapper extends DataMapper{
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        System.out.println("this is in exam mapper !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return exams;
     }
 
