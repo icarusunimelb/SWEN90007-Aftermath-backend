@@ -110,7 +110,7 @@ public class TokenVerification {
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Origin", "*");
 
         String token = getTokenFromHeader(request);
         String userIdAndUserType = "";
