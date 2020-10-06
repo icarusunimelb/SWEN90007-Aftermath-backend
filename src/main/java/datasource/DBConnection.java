@@ -1,5 +1,7 @@
 package datasource;
 
+import datamapper.InstructorMapper;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,6 +13,7 @@ public class  DBConnection {
 	private static final String DB_USER = "postgres";
 	private static final String DB_PASSWORD = "123456";*/
 
+	private static Connection connection = null;
 
 	public static PreparedStatement prepare(String stm) throws SQLException {
 
@@ -31,6 +34,9 @@ public class  DBConnection {
 	}
 	private static Connection getDBConnection() {
 
+		if (connection != null) {
+			return connection;
+		}
 
 
 		try {
@@ -38,9 +44,9 @@ public class  DBConnection {
 
 			String dbUrl = System.getenv("JDBC_DATABASE_URL");
 
-			Connection dbConnection = DriverManager.getConnection(
+			connection = DriverManager.getConnection(
 					dbUrl);
-			return dbConnection;
+			return connection;
 
 		} catch (SQLException e) {
 
