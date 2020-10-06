@@ -26,7 +26,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
         return instance;
     }
 
-    private static final String findWithIDStatement = "SELECT m.examID, m.totalMark, m.questionBody "
+    private static final String findWithIDStatement = "SELECT m.title, m.examID, m.totalMark, m.questionBody "
             + "FROM oes.multipleChoiceQuestion m "
             + "WHERE m.questionID = ?";
 
@@ -37,15 +37,16 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
             findStatement.setString(1, questionID);
             ResultSet rs = findStatement.executeQuery();
             if (rs.next()) {
-                String examID = rs.getString(1);
-                int totalMark = rs.getInt(2);
-                String questionBody = rs.getString(3);
+                String title = rs.getString(1);
+                String examID = rs.getString(2);
+                int totalMark = rs.getInt(3);
+                String questionBody = rs.getString(4);
+                question.setTitle(title);
                 question.setId(questionID);
                 question.setExamID(examID);
                 question.setTotalMark(totalMark);
                 question.setQuestionBody(questionBody);
 
-                IdentityMap.getInstance(question).put(questionID, question);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -53,7 +54,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
         return question;
     }
 
-    private static final String findWithExamIDStatement = "SELECT m.questionID, m.totalMark, "
+    private static final String findWithExamIDStatement = "SELECT m.title, m.questionID, m.totalMark, "
             + "m.questionBody "
             + "FROM oes.multipleChoiceQuestion m "
             + "WHERE m.examID = ?";
@@ -66,10 +67,12 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
             ResultSet rs = findStatement.executeQuery();
             while (rs.next()) {
                 MultipleChoiceQuestion question = new MultipleChoiceQuestion();
-                String questionID = rs.getString(1);
-                int totalMark = rs.getInt(2);
-                String questionBody = rs.getString(3);
+                String title = rs.getString(1);
+                String questionID = rs.getString(2);
+                int totalMark = rs.getInt(3);
+                String questionBody = rs.getString(4);
                 question.setId(questionID);
+                question.setTitle(title);
                 question.setTotalMark(totalMark);
                 question.setExamID(examID);
                 question.setQuestionBody(questionBody);
@@ -87,7 +90,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
     }
 
     private static final String insertMultipleChoiceQuestionStatement =
-            "INSERT INTO oes.multipleChoiceQuestion (questionID, examID, totalMark, questionBody) VALUES (?, ?, ?, ?)";
+            "INSERT INTO oes.multipleChoiceQuestion (questionID, examID, totalMark, questionBody, title) VALUES (?, ?, ?, ?, ?)";
     @Override
     public void insert(DomainObject object) {
         MultipleChoiceQuestion multipleChoiceQuestionObj = (MultipleChoiceQuestion) object;
@@ -97,6 +100,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
             insertStatement.setString(2, multipleChoiceQuestionObj.getExamID());
             insertStatement.setInt(3, multipleChoiceQuestionObj.getTotalMark());
             insertStatement.setString(4, multipleChoiceQuestionObj.getQuestionBody());
+            insertStatement.setString(5, multipleChoiceQuestionObj.getTitle());
             insertStatement.execute();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -104,16 +108,17 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
     }
 
     private static final String updateMCQStatement =
-            "UPDATE oes.multipleChoiceQuestion SET questionBody = ?, totalMark = ? " +
+            "UPDATE oes.multipleChoiceQuestion SET title = ?, questionBody = ?, totalMark = ? " +
                     "WHERE questionID = ?";
     @Override
     public void update(DomainObject object) {
         MultipleChoiceQuestion multipleChoiceQuestionObj = (MultipleChoiceQuestion) object;
         try {
             PreparedStatement updateStatement = DBConnection.prepare(updateMCQStatement);
-            updateStatement.setString(1, multipleChoiceQuestionObj.getQuestionBody());
-            updateStatement.setInt(2, multipleChoiceQuestionObj.getTotalMark());
-            updateStatement.setString(3, multipleChoiceQuestionObj.getId());
+            updateStatement.setString(1, multipleChoiceQuestionObj.getTitle());
+            updateStatement.setString(2, multipleChoiceQuestionObj.getQuestionBody());
+            updateStatement.setInt(3, multipleChoiceQuestionObj.getTotalMark());
+            updateStatement.setString(4, multipleChoiceQuestionObj.getId());
             updateStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
