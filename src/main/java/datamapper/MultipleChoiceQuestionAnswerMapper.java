@@ -7,13 +7,14 @@ import utils.IdentityMap;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
 
     private static volatile MultipleChoiceQuestionAnswerMapper instance = null;
-
+    private static DecimalFormat df2 = new DecimalFormat("###.##");
     public static MultipleChoiceQuestionAnswerMapper getSingletonInstance() {
         if (instance == null) {
             synchronized (MultipleChoiceQuestionAnswerMapper.class) {
@@ -113,6 +114,7 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
         try {
             PreparedStatement updateStatement = DBConnection.prepare(updateMCQAStatement);
             updateStatement.setInt(1, multipleChoiceQuestionAnswerObj.getAnswerIndex());
+            System.out.println("!!!!!!!!!!!!!!! this is your mark in Mapper" + multipleChoiceQuestionAnswerObj.getId());
             updateStatement.setDouble(2, multipleChoiceQuestionAnswerObj.getMark());
             updateStatement.setString(3, multipleChoiceQuestionAnswerObj.getId());
             updateStatement.executeUpdate();

@@ -9,9 +9,10 @@ import datamapper.InstructorMapper;
 import datamapper.StudentMapper;
 
 import domain.Subject;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
-import utils.TokenVerification;
+import utils.tokenVerification;
 
 
 import javax.servlet.ServletException;
@@ -45,7 +46,7 @@ public class examsController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        String token = TokenVerification.getTokenFromHeader(request);
+        String token = tokenVerification.getTokenFromHeader(request);
         String userIdAndUserType = "";
         System.out.println("token: " + token);
         if(token.equals("")){
@@ -56,7 +57,7 @@ public class examsController extends HttpServlet {
             out.flush();
             return;
         } else {
-            userIdAndUserType = TokenVerification.verifyToken(token);
+            userIdAndUserType = tokenVerification.verifyToken(token);
             System.out.println("userId and User Type");
             if(userIdAndUserType.equals("")){
                 JSONObject jsonObject = new JSONObject(String.format(
@@ -75,21 +76,25 @@ public class examsController extends HttpServlet {
 
         if(status.equals("managing")){
             String jsonArray = manageExams(userId);
-            out.print(jsonArray);
+            String newJsonArray = jsonArray.replace("id", "dataId");
+
+            out.print(newJsonArray);
             System.out.println("this is printing JSONArray!!!!!!!!!!!!!!!!!!!");
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
             return;
         } else if(status.equals("marking")){
             String jsonArray = markExams(userId);
-            out.print(jsonArray);
+            String newJsonArray = jsonArray.replace("id", "dataId");
+            out.print(newJsonArray);
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
             return;
         } else if(status.equals("taking")){
             // get exams of a student who can take right now
             String jsonArray =  takeExams(userId);
-            out.print(jsonArray);
+            String newJsonArray = jsonArray.replace("id", "dataId");
+            out.print(newJsonArray);
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
             return;
@@ -177,33 +182,33 @@ public class examsController extends HttpServlet {
     private String manageExams(String userId){
         List<Subject> subjects = InstructorMapper.getSingletonInstance().getManagingSubjects(userId);
 
-//        String jsonString = convertToJson(subjects);
-        System.out.println("you are in manageExams in exams Controller 1111111111111111111111111");
         String json = new Gson().toJson(subjects);
-        System.out.println(json);
+        String newJsonArray = json.replace("id", "dataId");
 //        JSONArray jsonArray = new JSONArray(subjects);
-        System.out.println("you are in manageExams in exams Controller 2222222222222222222222222");
-        return json;
+
+        return newJsonArray;
     }
 
     private String markExams(String userId){
         List<Subject> subjects = InstructorMapper.getSingletonInstance().getMarkingSubjects(userId);
 
-//        String jsonString = convertToJson(subjects);
-//        JSONArray jsonArray = new JSONArray(subjects);
+
         String json = new Gson().toJson(subjects);
+        String newJsonArray = json.replace("id", "dataId");
 //        JSONArray jsonArray = new JSONArray(jsonString);
 
-        return json;
+        return newJsonArray;
     }
 
     private String takeExams(String userId){
         List<Subject> subjects = StudentMapper.getSingletonInstance().getTakingSubjects(userId);
-//        JSONArray jsonArray = new JSONArray(subjects);
+
         String json = new Gson().toJson(subjects);
+        String newJsonArray = json.replace("id", "dataId");
+
 //        JSONArray jsonArray = new JSONArray(jsonString);
 
-        return json;
+        return newJsonArray;
     }
 
     private String convertToJson(List<Subject> subjects){

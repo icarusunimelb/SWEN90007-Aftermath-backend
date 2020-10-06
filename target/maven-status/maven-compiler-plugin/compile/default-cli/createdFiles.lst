@@ -1,9 +1,0 @@
-controllers\loginController.class
-controllers\examController$EXAMSTATUS.class
-controllers\examAnswerController.class
-controllers\examsController.class
-controllers\examAnswerController$EXAMSTATUS.class
-controllers\loginController$USERTYPE.class
-controllers\logoutController.class
-controllers\questionController.class
-controllers\logoutController$USERTYPE.class
