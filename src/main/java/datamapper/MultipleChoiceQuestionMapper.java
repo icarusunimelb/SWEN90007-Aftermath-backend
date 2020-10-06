@@ -38,7 +38,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
             ResultSet rs = findStatement.executeQuery();
             if (rs.next()) {
                 String examID = rs.getString(1);
-                double totalMark = rs.getDouble(2);
+                int totalMark = rs.getInt(2);
                 String questionBody = rs.getString(3);
                 question.setId(questionID);
                 question.setExamID(examID);
@@ -67,7 +67,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
             while (rs.next()) {
                 MultipleChoiceQuestion question = new MultipleChoiceQuestion();
                 String questionID = rs.getString(1);
-                double totalMark = rs.getDouble(2);
+                int totalMark = rs.getInt(2);
                 String questionBody = rs.getString(3);
                 question.setId(questionID);
                 question.setTotalMark(totalMark);
@@ -95,7 +95,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
             PreparedStatement insertStatement = DBConnection.prepare(insertMultipleChoiceQuestionStatement);
             insertStatement.setString(1, multipleChoiceQuestionObj.getId());
             insertStatement.setString(2, multipleChoiceQuestionObj.getExamID());
-            insertStatement.setDouble(3, multipleChoiceQuestionObj.getTotalMark());
+            insertStatement.setInt(3, multipleChoiceQuestionObj.getTotalMark());
             insertStatement.setString(4, multipleChoiceQuestionObj.getQuestionBody());
             insertStatement.execute();
         } catch (SQLException e) {
@@ -112,7 +112,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
         try {
             PreparedStatement updateStatement = DBConnection.prepare(updateMCQStatement);
             updateStatement.setString(1, multipleChoiceQuestionObj.getQuestionBody());
-            updateStatement.setDouble(2, multipleChoiceQuestionObj.getTotalMark());
+            updateStatement.setInt(2, multipleChoiceQuestionObj.getTotalMark());
             updateStatement.setString(3, multipleChoiceQuestionObj.getId());
             updateStatement.executeUpdate();
         } catch (SQLException e) {

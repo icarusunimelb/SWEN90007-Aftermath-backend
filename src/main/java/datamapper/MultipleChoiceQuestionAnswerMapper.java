@@ -38,7 +38,7 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
             while (rs.next()) {
                 String questionID = rs.getString(1);
                 String examAnswerID = rs.getString(2);
-                double mark = rs.getDouble(3);
+                int mark = rs.getInt(3);
                 int answerIndex = rs.getInt(4);
                 answer.setExamAnswerID(examAnswerID);
                 answer.setId(id);
@@ -68,7 +68,7 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
                 MultipleChoiceQuestionAnswer answer = new MultipleChoiceQuestionAnswer();
                 String multipleChoiceQuestionAnswerID = rs.getString(1);
                 String questionID = rs.getString(2);
-                double mark = rs.getDouble(3);
+                int mark = rs.getInt(3);
                 int answerIndex = rs.getInt(4);
                 answer.setExamAnswerID(examAnswerID);
                 answer.setId(multipleChoiceQuestionAnswerID);
@@ -97,7 +97,7 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
             insertStatement.setString(1, multipleChoiceQuestionAnswerObj.getId());
             insertStatement.setString(2, multipleChoiceQuestionAnswerObj.getQuestionID());
             insertStatement.setString(3, multipleChoiceQuestionAnswerObj.getExamAnswerID());
-            insertStatement.setDouble(4, multipleChoiceQuestionAnswerObj.getMark());
+            insertStatement.setInt(4, multipleChoiceQuestionAnswerObj.getMark());
             insertStatement.setInt(5, multipleChoiceQuestionAnswerObj.getAnswerIndex());
             insertStatement.execute();
         } catch (SQLException e) {
@@ -114,8 +114,8 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
         try {
             PreparedStatement updateStatement = DBConnection.prepare(updateMCQAStatement);
             updateStatement.setInt(1, multipleChoiceQuestionAnswerObj.getAnswerIndex());
-            System.out.println("!!!!!!!!!!!!!!! this is your mark in Mapper" + multipleChoiceQuestionAnswerObj.getId());
-            updateStatement.setDouble(2, multipleChoiceQuestionAnswerObj.getMark());
+            // System.out.println("!!!!!!!!!!!!!!! this is your mark in Mapper" + multipleChoiceQuestionAnswerObj.getId());
+            updateStatement.setInt(2, multipleChoiceQuestionAnswerObj.getMark());
             updateStatement.setString(3, multipleChoiceQuestionAnswerObj.getId());
             updateStatement.executeUpdate();
         } catch (SQLException e) {

@@ -14,8 +14,8 @@ public class ShortAnswerQuestion extends Question{
     }
 
     @Override
-    public double getTotalMark() {
-        if (super.getTotalMark() == Integer.MIN_VALUE) load();
+    public int getTotalMark() {
+        if (super.getTotalMark() == -100) load();
         return super.getTotalMark();
     }
 
@@ -25,10 +25,17 @@ public class ShortAnswerQuestion extends Question{
         return super.getQuestionBody();
     }
 
+    @Override
+    public String getTitle() {
+        if (super.getTitle() == null) load();
+        return super.getTitle();
+    }
+
     public void load(){
         ShortAnswerQuestion record = ShortAnswerQuestionMapper.getSingletonInstance().findWithID(getId());
-        if (super.getTotalMark() == Integer.MIN_VALUE) setTotalMark(record.getTotalMark());
+        if (super.getTotalMark() == -100) setTotalMark(record.getTotalMark());
         if (super.getExamID() == null) setExamID(record.getExamID());
         if (super.getQuestionBody() == null) setQuestionBody(record.getQuestionBody());
+        if (super.getTitle() == null) setTitle(record.getTitle());
     }
 }

@@ -1,7 +1,8 @@
 package domain;
 
 public class Question extends DomainObject{
-    private double totalMark = 0;
+    private String title = null;
+    private int totalMark = -100;
     private String questionBody = null;
     private String examID = null;
 
@@ -13,8 +14,6 @@ public class Question extends DomainObject{
         this.title = title;
     }
 
-    private String title = null;
-
     public Question(){super();};
 
     public String getExamID() {
@@ -25,11 +24,11 @@ public class Question extends DomainObject{
         this.examID = examID;
     }
 
-    public double getTotalMark() {
+    public int getTotalMark() {
         return totalMark;
     }
 
-    public void setTotalMark(double totalMark) {
+    public void setTotalMark(int totalMark) {
         this.totalMark = totalMark;
     }
 

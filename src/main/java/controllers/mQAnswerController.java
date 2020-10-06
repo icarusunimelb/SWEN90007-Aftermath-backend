@@ -40,7 +40,7 @@ public class mQAnswerController extends HttpServlet {
         String chosenAnswerID = request.getParameter("chosen_answer_id");
         String questionID = request.getParameter("question_id");
         String examAnswerID = request.getParameter("exam_answer_id");
-        double mark = Double.parseDouble(request.getParameter("mark"));
+        int mark = Integer.parseInt(request.getParameter("mark"));
         multipleChoiceQuestionAnswer.setId(id);
         multipleChoiceQuestionAnswer.setMark(mark);
         multipleChoiceQuestionAnswer.setQuestionID(questionID);
@@ -66,7 +66,7 @@ public class mQAnswerController extends HttpServlet {
         String chosenAnswerID = request.getParameter("chosen_answer_id");
         String questionID = request.getParameter("question_id");
         String examAnswerID = request.getParameter("exam_answer_id");
-        double mark = Double.parseDouble(request.getParameter("mark"));
+        int mark = Integer.parseInt(request.getParameter("mark"));
         multipleChoiceQuestionAnswer.setId(id);
 
         multipleChoiceQuestionAnswer.setMark(mark);

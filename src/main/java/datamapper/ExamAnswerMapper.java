@@ -36,7 +36,7 @@ public class ExamAnswerMapper extends  DataMapper{
             if (rs.next()) {
                 String examID = rs.getString(1);
                 String studentID = rs.getString(2);
-                double finalMark = rs.getDouble(3);
+                int finalMark = rs.getInt(3);
                 examAnswer.setExamID(examID);
                 examAnswer.setId(examAnswerID);
                 examAnswer.setStudentID(studentID);
@@ -64,7 +64,7 @@ public class ExamAnswerMapper extends  DataMapper{
                 ExamAnswer examAnswer = new ExamAnswer();
                 String examAnswerID = rs.getString(1);
                 String studentID = rs.getString(2);
-                double finalMark = rs.getDouble(3);
+                int finalMark = rs.getInt(3);
                 examAnswer.setExamID(examID);
                 examAnswer.setId(examAnswerID);
                 examAnswer.setStudentID(studentID);
@@ -91,7 +91,7 @@ public class ExamAnswerMapper extends  DataMapper{
             insertStatement.setString(1, examAnswerObj.getId());
             insertStatement.setString(2, examAnswerObj.getExamID());
             insertStatement.setString(3, examAnswerObj.getStudentID());
-            insertStatement.setDouble(4, examAnswerObj.getFinalMark());
+            insertStatement.setInt(4, examAnswerObj.getFinalMark());
             insertStatement.execute();
         }catch (SQLException e){
             System.out.println(e);
@@ -124,7 +124,7 @@ public class ExamAnswerMapper extends  DataMapper{
         ExamAnswer examAnswerObj = (ExamAnswer) object;
         try {
             PreparedStatement updateStatement = DBConnection.prepare(updateExamAnswerStatement);
-            updateStatement.setDouble(1, examAnswerObj.getFinalMark());
+            updateStatement.setInt(1, examAnswerObj.getFinalMark());
             updateStatement.setString(2, examAnswerObj.getId());
             updateStatement.executeUpdate();
         } catch (SQLException e) {

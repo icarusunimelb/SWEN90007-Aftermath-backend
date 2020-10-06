@@ -39,7 +39,7 @@ public class ShortAnswerQuestionAnswerMapper extends DataMapper{
             while (rs.next()) {
                 String questionID = rs.getString(1);
                 String examAnswerID = rs.getString(2);
-                double mark = rs.getDouble(3);
+                int mark = rs.getInt(3);
                 String answerText = rs.getString(4);
                 answer.setExamAnswerID(examAnswerID);
                 answer.setId(id);
@@ -69,7 +69,7 @@ public class ShortAnswerQuestionAnswerMapper extends DataMapper{
                 ShortAnswerQuestionAnswer answer = new ShortAnswerQuestionAnswer();
                 String shortAnswerQuestionAnswerID = rs.getString(1);
                 String questionID = rs.getString(2);
-                double mark = rs.getDouble(3);
+                int mark = rs.getInt(3);
                 String answerText = rs.getString(5);
                 answer.setExamAnswerID(examAnswerID);
                 answer.setId(shortAnswerQuestionAnswerID);
@@ -97,7 +97,7 @@ public class ShortAnswerQuestionAnswerMapper extends DataMapper{
             insertStatement.setString(1, shortAnswerQuestionAnswerObj.getId());
             insertStatement.setString(2, shortAnswerQuestionAnswerObj.getQuestionID());
             insertStatement.setString(3, shortAnswerQuestionAnswerObj.getExamAnswerID());
-            insertStatement.setDouble(4, shortAnswerQuestionAnswerObj.getMark());
+            insertStatement.setInt(4, shortAnswerQuestionAnswerObj.getMark());
             insertStatement.setString(5, shortAnswerQuestionAnswerObj.getAnswer());
             insertStatement.execute();
         } catch (SQLException e) {
@@ -114,7 +114,7 @@ public class ShortAnswerQuestionAnswerMapper extends DataMapper{
         try {
             PreparedStatement updateStatement = DBConnection.prepare(updateSAQAStatement);
             updateStatement.setString(1, shortAnswerQuestionAnswerObj.getAnswer());
-            updateStatement.setDouble(2, shortAnswerQuestionAnswerObj.getMark());
+            updateStatement.setInt(2, shortAnswerQuestionAnswerObj.getMark());
             updateStatement.setString(3, shortAnswerQuestionAnswerObj.getId());
             updateStatement.executeUpdate();
         } catch (SQLException e) {

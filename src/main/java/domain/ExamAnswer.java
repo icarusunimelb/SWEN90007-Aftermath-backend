@@ -12,15 +12,15 @@ public class ExamAnswer extends DomainObject{
     private String examID = null;
     private String studentID = null;
     private List<Answer> answers = null;
-    private double finalMark = -1;
+    private int finalMark = -100;
 
     public ExamAnswer(){super();}
 
-    public double getFinalMark() {
+    public int getFinalMark() {
         return finalMark;
     }
 
-    public void setFinalMark(double finalMark) {
+    public void setFinalMark(int finalMark) {
         this.finalMark = finalMark;
     }
 
@@ -60,6 +60,6 @@ public class ExamAnswer extends DomainObject{
         ExamAnswer record = ExamAnswerMapper.getSingletonInstance().findWithID(getId());
         if (examID == null) this.examID = record.getExamID();
         if (studentID == null) this.studentID = record.getStudentID();
-        if (finalMark == -1 ) this.finalMark = record.getFinalMark();
+        if (finalMark == -100 ) this.finalMark = record.getFinalMark();
     }
 }

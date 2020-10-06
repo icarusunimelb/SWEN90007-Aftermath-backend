@@ -62,8 +62,9 @@ CREATE TABLE exams(
 
 CREATE TABLE shortAnswerQuestions(
                                      questionID VARCHAR(200),
+                                     title VARCHAR(200),
                                      examID  VARCHAR(200),
-                                     totalMark DECIMAL(5,2),
+                                     totalMark INT),
                                      questionBody VARCHAR(10240),
                                      CONSTRAINT foreign_key_examID
                                          FOREIGN KEY(examID)
@@ -74,7 +75,8 @@ CREATE TABLE shortAnswerQuestions(
 CREATE TABLE multipleChoiceQuestion (
                                         questionID VARCHAR(200),
                                         examID  VARCHAR(200),
-                                        totalMark DECIMAL(5,2),
+                                        title VARCHAR(200),
+                                        totalMark INT,
                                         questionBody VARCHAR(10240),
                                         CONSTRAINT foreign_key_examID
                                             FOREIGN KEY(examID)
@@ -97,7 +99,7 @@ CREATE TABLE examAnswer(
                            examAnswerID VARCHAR(200),
                            examID VARCHAR(200),
                            studentID VARCHAR(200),
-                           finalMark DECIMAL(5,2),
+                           finalMark INT,
                            PRIMARY KEY (examAnswerID),
                            CONSTRAINT foreign_key_studentID
                                FOREIGN KEY (studentID)
@@ -111,7 +113,7 @@ CREATE TABLE shortAnswerQuestionAnswers(
                                            shortAnswerQuestionAnswerID VARCHAR(200),
                                            questionID VARCHAR(200),
                                            examAnswerID VARCHAR(200),
-                                           mark DECIMAL(5,2),
+                                           mark INT,
                                            answer VARCHAR(1024),
                                            PRIMARY KEY (shortAnswerQuestionAnswerID),
                                            CONSTRAINT foreign_key_questionID
@@ -126,7 +128,7 @@ CREATE TABLE multipleChoiceQuestionAnswers(
                                               multipleChoiceQuestionAnswerID VARCHAR(200),
                                               questionID VARCHAR(200),
                                               examAnswerID VARCHAR(200),
-                                              mark DECIMAL(5,2),
+                                              mark INT,
                                               answerIndex INT,
                                               PRIMARY KEY (multipleChoiceQuestionAnswerID),
                                               CONSTRAINT foreign_key_questionID

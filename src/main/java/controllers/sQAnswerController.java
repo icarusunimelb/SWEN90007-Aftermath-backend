@@ -40,7 +40,7 @@ public class sQAnswerController extends HttpServlet {
         String answer = request.getParameter("answer");
         String questionID = request.getParameter("question_id");
         String examAnswerID = request.getParameter("exam_answer_id");
-        double mark = Double.parseDouble(request.getParameter("mark"));
+        int mark = Integer.parseInt(request.getParameter("mark"));
         shortAnswerQuestionAnswer.setId(id);
         shortAnswerQuestionAnswer.setAnswer(answer);
         shortAnswerQuestionAnswer.setMark(mark);
@@ -64,7 +64,7 @@ public class sQAnswerController extends HttpServlet {
         String answer = request.getParameter("answer");
         String questionID = request.getParameter("question_id");
         String examAnswerID = request.getParameter("exam_answer_id");
-        double mark = Double.parseDouble(request.getParameter("mark"));
+        int mark = Integer.parseInt(request.getParameter("mark"));
         shortAnswerQuestionAnswer.setId(id);
         shortAnswerQuestionAnswer.setAnswer(answer);
         shortAnswerQuestionAnswer.setMark(mark);

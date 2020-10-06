@@ -85,7 +85,7 @@ public class examAnswerController extends HttpServlet {
             JSONObject examAnswerJson = (JSONObject) examAnswerArray.get(i);
 
             String examAnswerId = examAnswerJson.getString("dataId");
-            double marks = examAnswerJson.getDouble("marks");
+            int marks = examAnswerJson.getInt("marks");
             String examId = examAnswerJson.getString("examId");
 
             Exam exam = ExamMapper.getSingletonInstance().findWithID(examId);
@@ -104,7 +104,7 @@ public class examAnswerController extends HttpServlet {
                 if(answersJsonObject.get(questionAnswerId) instanceof JSONObject){
                     JSONObject answerJson = (JSONObject) answersJsonObject.get(questionAnswerId);
                     String answer = answerJson.getString("answer");
-                    double mark = answerJson.getDouble("mark");
+                    int mark = answerJson.getInt("mark");
 
                     if(questionAnswerId.contains("Multiple")){
                         MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswer = MultipleChoiceQuestionAnswerMapper.getSingletonInstance().findWithID(questionAnswerId);
@@ -231,7 +231,7 @@ public class examAnswerController extends HttpServlet {
 
 
 
-        System.out.println("line 217 !!!!!!!!!!!!!!!!!!!!!");
+        // System.out.println("line 217 !!!!!!!!!!!!!!!!!!!!!");
         for(int i = 0; i< answers.length(); i++){
             JSONObject examAnswerJson = (JSONObject) answers.get(i);
             System.out.println("this is your exam answer" + examAnswerJson.toString());
@@ -244,7 +244,7 @@ public class examAnswerController extends HttpServlet {
                 System.out.println("JSON EXCEPTION ERROR: "+ e.toString());
                 newAnswer = examAnswerJson.getInt("answer");
             }
-            double mark = 999;
+            int mark = -1;
 
             // todo find the question
 

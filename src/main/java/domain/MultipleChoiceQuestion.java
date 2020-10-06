@@ -29,8 +29,8 @@ public class MultipleChoiceQuestion extends Question{
     }
 
     @Override
-    public double getTotalMark() {
-        if (super.getTotalMark() == Integer.MIN_VALUE) load();
+    public int getTotalMark() {
+        if (super.getTotalMark() == -100) load();
         return super.getTotalMark();
     }
 
@@ -40,10 +40,17 @@ public class MultipleChoiceQuestion extends Question{
         return super.getQuestionBody();
     }
 
+    @Override
+    public String getTitle() {
+        if (super.getTitle() == null) load();
+        return super.getTitle();
+    }
+
     public void load(){
         MultipleChoiceQuestion record = MultipleChoiceQuestionMapper.getSingletonInstance().findWithID(getId());
-        if (super.getTotalMark() == Integer.MIN_VALUE) setTotalMark(record.getTotalMark());
+        if (super.getTotalMark() == -100) setTotalMark(record.getTotalMark());
         if (super.getExamID() == null) setExamID(record.getExamID());
         if (super.getQuestionBody() == null) setQuestionBody(record.getQuestionBody());
+        if (super.getTitle() == null) setTitle(record.getTitle());
     }
 }
