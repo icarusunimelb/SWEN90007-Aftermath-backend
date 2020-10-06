@@ -75,7 +75,7 @@ public class examsController extends HttpServlet {
 
         if(status.equals("managing")){
             String jsonArray = manageExams(userId);
-            String newJsonArray = jsonArray.replace("id", "dataId");
+            String newJsonArray = jsonArray.replace("id:", "dataId:");
 
             out.print(newJsonArray);
             System.out.println("this is printing JSONArray!!!!!!!!!!!!!!!!!!!");
@@ -84,7 +84,7 @@ public class examsController extends HttpServlet {
             return;
         } else if(status.equals("marking")){
             String jsonArray = markExams(userId);
-            String newJsonArray = jsonArray.replace("id", "dataId");
+            String newJsonArray = jsonArray.replace("id:", "dataId:");
             out.print(newJsonArray);
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
@@ -92,7 +92,7 @@ public class examsController extends HttpServlet {
         } else if(status.equals("taking")){
             // get exams of a student who can take right now
             String jsonArray =  takeExams(userId);
-            String newJsonArray = jsonArray.replace("id", "dataId");
+            String newJsonArray = jsonArray.replace("id:", "dataId:");
             out.print(newJsonArray);
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
@@ -182,7 +182,7 @@ public class examsController extends HttpServlet {
         List<Subject> subjects = InstructorMapper.getSingletonInstance().getManagingSubjects(userId);
 
         String json = new Gson().toJson(subjects);
-        String newJsonArray = json.replace("id", "dataId");
+        String newJsonArray = json.replace("id:", "dataId:");
 //        JSONArray jsonArray = new JSONArray(subjects);
 
         return newJsonArray;
@@ -193,7 +193,7 @@ public class examsController extends HttpServlet {
 
 
         String json = new Gson().toJson(subjects);
-        String newJsonArray = json.replace("id", "dataId");
+        String newJsonArray = json.replace("id:", "dataId:");
 //        JSONArray jsonArray = new JSONArray(jsonString);
 
         return newJsonArray;
@@ -203,7 +203,7 @@ public class examsController extends HttpServlet {
         List<Subject> subjects = StudentMapper.getSingletonInstance().getTakingSubjects(userId);
 
         String json = new Gson().toJson(subjects);
-        String newJsonArray = json.replace("id", "dataId");
+        String newJsonArray = json.replace("id:", "dataId:");
 
 //        JSONArray jsonArray = new JSONArray(jsonString);
 
