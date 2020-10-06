@@ -55,9 +55,7 @@ public class questionController extends HttpServlet {
 
         List<Question> questions = exam.getQuestions();
         if(questions.size() == 0){
-            JSONObject jsonObject = new JSONObject(
-                    questions);
-            out.print(jsonObject);
+            out.print("[]");
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
         } else {
