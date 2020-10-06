@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import utils.KeyGenerator;
-import utils.tokenVerification;
+import utils.TokenVerification;
 import utils.UnitOfWork;
 
 import javax.servlet.ServletException;
@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Iterator;
-import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -69,7 +68,7 @@ public class examAnswerController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        if(tokenVerification.validLecturer(request, response) == tokenVerification.ERRORFLAG){
+        if(TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG){
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
             out.print(jsonObject);
@@ -87,42 +86,33 @@ public class examAnswerController extends HttpServlet {
 
             String examAnswerId = examAnswerJson.getString("dataId");
             double marks = examAnswerJson.getDouble("marks");
-            String examId = examAnswerJson.getString("examId");
-
-            Exam exam = ExamMapper.getSingletonInstance().findWithID(examId);
-            exam.setStatus("MARKED");
-            UnitOfWork.getCurrent().registerDirty(exam);
 
             ExamAnswer examAnswer = ExamAnswerMapper.getSingletonInstance().findWithID(examAnswerId);
             examAnswer.load();
             examAnswer.setFinalMark(marks);
             UnitOfWork.getCurrent().registerDirty(examAnswer);
-
             JSONObject answersJsonObject = examAnswerJson.getJSONObject("answers");
             Iterator keys = answersJsonObject.keys();
             while(keys.hasNext()){
-                String questionAnswerId = (String) keys.next();
-                if(answersJsonObject.get(questionAnswerId) instanceof JSONObject){
-                    JSONObject answerJson = (JSONObject) answersJsonObject.get(questionAnswerId);
+                String questionId = (String) keys.next();
+                if(answersJsonObject.get(questionId) instanceof JSONObject){
+                    JSONObject answerJson = (JSONObject) answersJsonObject.get(questionId);
                     String answer = answerJson.getString("answer");
                     double mark = answerJson.getDouble("mark");
-
-                    if(questionAnswerId.contains("Multiple")){
-                        MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswer = MultipleChoiceQuestionAnswerMapper.getSingletonInstance().findWithID(questionAnswerId);
+                    ShortAnswerQuestionAnswer shortAnswerQuestionAnswer = ShortAnswerQuestionAnswerMapper.getSingletonInstance().findWithID(questionId);
+                    if(shortAnswerQuestionAnswer.getId() == null || shortAnswerQuestionAnswer.getId().equals("")){
+                        MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswer = MultipleChoiceQuestionAnswerMapper.getSingletonInstance().findWithID(questionId);
                         multipleChoiceQuestionAnswer.setMark(mark);
-                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! multiple choice" + multipleChoiceQuestionAnswer.getId());
                         UnitOfWork.getCurrent().registerDirty(multipleChoiceQuestionAnswer);
                     } else {
-                        ShortAnswerQuestionAnswer shortAnswerQuestionAnswer = ShortAnswerQuestionAnswerMapper.getSingletonInstance().findWithID(questionAnswerId);
                         shortAnswerQuestionAnswer.setMark(mark);
-                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! setting new mark for this question" + mark);
                         UnitOfWork.getCurrent().registerDirty(shortAnswerQuestionAnswer);
                     }
                 }
             }
-
+            UnitOfWork.getCurrent().commit();
         }
-        UnitOfWork.getCurrent().commit();
+
 
         JSONObject jsonObject = new JSONObject(String.format(
                 "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
@@ -179,7 +169,7 @@ public class examAnswerController extends HttpServlet {
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-     */ // student submits an exam answer
+     */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         PrintWriter out = response.getWriter();
@@ -187,7 +177,7 @@ public class examAnswerController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        if(tokenVerification.validLecturer(request, response) != tokenVerification.STUDENTFLAG){
+        if(TokenVerification.validLecturer(request, response) != TokenVerification.STUDENTFLAG){
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
             out.print(jsonObject);
@@ -198,8 +188,8 @@ public class examAnswerController extends HttpServlet {
 
         UnitOfWork.newCurrent();
 
-        String token = tokenVerification.getTokenFromHeader(request);
-        String userIdAndUserType = tokenVerification.verifyToken(token);
+        String token = TokenVerification.getTokenFromHeader(request);
+        String userIdAndUserType = TokenVerification.verifyToken(token);
 
         String userId = userIdAndUserType.split(",", 2)[0];
 
@@ -223,9 +213,9 @@ public class examAnswerController extends HttpServlet {
 
         if(ExamAnswerMapper.getSingletonInstance().checkIfStudentAnswer(examAnswer.getExamID(), userId)){
             JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+                    "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
             out.print(jsonObject);
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             out.flush();
             return;
         }

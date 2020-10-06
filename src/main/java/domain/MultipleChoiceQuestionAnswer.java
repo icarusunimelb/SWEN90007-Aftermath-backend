@@ -50,7 +50,7 @@ public class MultipleChoiceQuestionAnswer extends Answer{
 
     @Override
     public double getMark() {
-        if (super.getMark() == 0.01 || super.getMark() == 999.00) load();
+        if (super.getMark() == 0.01) load();
         return super.getMark();
     }
 
@@ -58,7 +58,7 @@ public class MultipleChoiceQuestionAnswer extends Answer{
         MultipleChoiceQuestionAnswer record = MultipleChoiceQuestionAnswerMapper.getSingletonInstance().findWithID(getId());
         if (super.getQuestionID() == null) setQuestionID(record.getQuestionID());
         if (super.getExamAnswerID() == null) setExamAnswerID(record.getExamAnswerID());
-        if (super.getMark() == 0.01 || super.getMark() == 999.00) setMark(record.getMark());
+        if (super.getMark() == 0.01) setMark(record.getMark());
         if (this.answerIndex == -1)setMark(record.getAnswerIndex());
     }
 }

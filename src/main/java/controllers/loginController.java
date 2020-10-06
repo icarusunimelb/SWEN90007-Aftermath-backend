@@ -3,7 +3,7 @@ package controllers;
 import datamapper.InstructorMapper;
 import datamapper.StudentMapper;
 import domain.User;
-import utils.tokenVerification;
+import utils.TokenVerification;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -62,10 +62,10 @@ public class loginController extends HttpServlet {
             out.flush();
             return;
         }
-        token = tokenVerification.createJWT(dataID, userType);
+        token = TokenVerification.createJWT(dataID, userType);
         System.out.println(dataID+password+token);
         try {
-            tokenVerification.addToken(token);
+            TokenVerification.addToken(token);
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\",\"dataId\":\"%s\",\"userType\":\"%s\",\"token\":\"%s\"}",HttpServletResponse.SC_OK,dataID,userType, token));
             out.print(jsonObject);

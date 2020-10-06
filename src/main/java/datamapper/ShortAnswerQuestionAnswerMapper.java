@@ -9,13 +9,12 @@ import utils.IdentityMap;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ShortAnswerQuestionAnswerMapper extends DataMapper{
     private static volatile ShortAnswerQuestionAnswerMapper instance = null;
-    private static DecimalFormat df2 = new DecimalFormat("###.##");
+
     public static ShortAnswerQuestionAnswerMapper getSingletonInstance() {
         if (instance == null) {
             synchronized (ShortAnswerQuestionAnswerMapper.class) {
@@ -106,8 +105,8 @@ public class ShortAnswerQuestionAnswerMapper extends DataMapper{
     }
 
     private static final String updateSAQAStatement =
-            "UPDATE oes.shortAnswerQuestionAnswers SET answer = ?, mark = ? " +
-                    "WHERE shortAnswerQuestionAnswerID = ?";
+            "UPDATE oes.shortAnswerQuestionAnswers s SET s.answer = ?, s.mark = ? " +
+                    "WHERE s.shortAnswerQuestionAnswerID = ?";
     @Override
     public void update(DomainObject object) {
         ShortAnswerQuestionAnswer shortAnswerQuestionAnswerObj = (ShortAnswerQuestionAnswer) object;
