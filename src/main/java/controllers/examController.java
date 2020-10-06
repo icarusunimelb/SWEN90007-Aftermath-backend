@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import utils.KeyGenerator;
-import utils.TokenVerification;
+import utils.tokenVerification;
 import utils.UnitOfWork;
 
 import javax.servlet.ServletException;
@@ -70,7 +70,7 @@ public class examController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        if(TokenVerification.validLecturer(request, response) != TokenVerification.LECTURERFLAG){
+        if(tokenVerification.validLecturer(request, response) != tokenVerification.LECTURERFLAG){
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
             out.print(jsonObject);
@@ -148,7 +148,7 @@ public class examController extends HttpServlet {
                 JSONObject questionJson = (JSONObject) questionsArray.get(i);
                 String questionType = questionJson.getString("type");
                 String questionDescription = questionJson.getString("description");
-                Integer questionMarks = questionJson.getInt("marks");
+                int questionMarks = questionJson.getInt("marks");
                 String questionTitle = questionJson.getString("title");
                 String questionId = "";
 
@@ -250,7 +250,7 @@ public class examController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        if(TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG){
+        if(tokenVerification.validLecturer(request, response) == tokenVerification.ERRORFLAG){
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
             out.print(jsonObject);
@@ -296,7 +296,7 @@ public class examController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        if(TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG){
+        if(tokenVerification.validLecturer(request, response) == tokenVerification.ERRORFLAG){
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
             out.print(jsonObject);

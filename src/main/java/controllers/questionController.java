@@ -3,8 +3,9 @@ package controllers;
 import com.google.gson.Gson;
 import domain.Exam;
 import domain.Question;
+import org.json.JSONArray;
 import org.json.JSONObject;
-import utils.TokenVerification;
+import utils.tokenVerification;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -37,7 +38,7 @@ public class questionController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        if(TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG){
+        if(tokenVerification.validLecturer(request, response) == tokenVerification.ERRORFLAG){
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
             out.print(jsonObject);
@@ -55,15 +56,16 @@ public class questionController extends HttpServlet {
 
         List<Question> questions = exam.getQuestions();
         if(questions.size() == 0){
-            JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
+            JSONObject jsonObject = new JSONObject(
+                    "{[]}");
             out.print(jsonObject);
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
         } else {
 
             String json = new Gson().toJson(questions);
-            out.print(json);
+            String newJson = json.replace("id", "dataId");
+            out.print(newJson);
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
         }

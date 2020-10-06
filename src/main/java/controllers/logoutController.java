@@ -1,6 +1,6 @@
 package controllers;
 
-import utils.TokenVerification;
+import utils.tokenVerification;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -32,10 +32,10 @@ public class logoutController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        String token = TokenVerification.getTokenFromHeader(request);
+        String token = tokenVerification.getTokenFromHeader(request);
 
         if(!token.isEmpty()){
-            TokenVerification.removeToken(token);
+            tokenVerification.removeToken(token);
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
             out.print(jsonObject);
