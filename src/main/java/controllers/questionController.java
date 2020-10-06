@@ -3,9 +3,8 @@ package controllers;
 import com.google.gson.Gson;
 import domain.Exam;
 import domain.Question;
-import org.json.JSONArray;
 import org.json.JSONObject;
-import utils.tokenVerification;
+import utils.TokenVerification;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -38,7 +37,7 @@ public class questionController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        if(tokenVerification.validLecturer(request, response) == tokenVerification.ERRORFLAG){
+        if(TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG){
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
             out.print(jsonObject);

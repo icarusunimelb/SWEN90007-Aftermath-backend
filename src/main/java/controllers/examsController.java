@@ -9,10 +9,9 @@ import datamapper.InstructorMapper;
 import datamapper.StudentMapper;
 
 import domain.Subject;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
-import utils.tokenVerification;
+import utils.TokenVerification;
 
 
 import javax.servlet.ServletException;
@@ -46,7 +45,7 @@ public class examsController extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         response.addHeader("Access-Control-Allow-Origin", "*");
 
-        String token = tokenVerification.getTokenFromHeader(request);
+        String token = TokenVerification.getTokenFromHeader(request);
         String userIdAndUserType = "";
         System.out.println("token: " + token);
         if(token.equals("")){
@@ -57,7 +56,7 @@ public class examsController extends HttpServlet {
             out.flush();
             return;
         } else {
-            userIdAndUserType = tokenVerification.verifyToken(token);
+            userIdAndUserType = TokenVerification.verifyToken(token);
             System.out.println("userId and User Type");
             if(userIdAndUserType.equals("")){
                 JSONObject jsonObject = new JSONObject(String.format(
