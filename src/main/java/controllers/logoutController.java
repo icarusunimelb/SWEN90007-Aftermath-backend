@@ -26,29 +26,33 @@ public class logoutController extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try{
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Access-Control-Allow-Origin", "*");
 
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "*");
+            String token = TokenVerification.getTokenFromHeader(request);
 
-        String token = TokenVerification.getTokenFromHeader(request);
+            if(!token.isEmpty()){
+                TokenVerification.removeToken(token);
+                JSONObject jsonObject = new JSONObject(String.format(
+                        "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
+                out.print(jsonObject);
+                response.setStatus(HttpServletResponse.SC_OK);
+                out.flush();
+                return;
+            }
 
-        if(!token.isEmpty()){
-            TokenVerification.removeToken(token);
             JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
+                    "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
             out.print(jsonObject);
-            response.setStatus(HttpServletResponse.SC_OK);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.flush();
-            return;
+        }catch (Exception e){
+            System.out.println(e.getMessage());
         }
 
-        JSONObject jsonObject = new JSONObject(String.format(
-                "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
-        out.print(jsonObject);
-        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-        out.flush();
     }
 
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

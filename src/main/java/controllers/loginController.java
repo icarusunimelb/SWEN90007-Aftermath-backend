@@ -30,54 +30,57 @@ public class loginController extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        BufferedReader reader = request.getReader();
-        Gson gson = new Gson();
-        User user = gson.fromJson(reader, User.class);
-
-        String email = user.getEmail();
-        String password = user.getPassword();
-        //System.out.println(email+password);
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "*");
-
-        String userType = null;
-        String dataID = null;
-        String token = null;
-        String instructorID = InstructorMapper.getSingletonInstance().authenticate(email, password);
-        String studentID = StudentMapper.getSingletonInstance().authenticate(email,password);
-        if (!instructorID.isEmpty()) {
-            userType = USERTYPE.LECTURER.toString();
-            dataID = instructorID;
-        }else if (!studentID.isEmpty()){
-            userType = USERTYPE.STUDENT.toString();
-            dataID = studentID;
-        } else {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-            out.print(jsonObject);
-            out.flush();
-            return;
-        }
-        token = TokenVerification.createJWT(dataID, userType);
-        //System.out.println(dataID+password+token);
         try {
-            TokenVerification.addToken(token);
-            JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\",\"dataId\":\"%s\",\"userType\":\"%s\",\"token\":\"%s\"}",HttpServletResponse.SC_OK,dataID,userType, token));
-            out.print(jsonObject);
-            response.setStatus(HttpServletResponse.SC_OK);
-            out.flush();
+            BufferedReader reader = request.getReader();
+            Gson gson = new Gson();
+            User user = gson.fromJson(reader, User.class);
 
-        }catch (JSONException err){
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
-            out.print(jsonObject);
-            out.flush();
+            String email = user.getEmail();
+            String password = user.getPassword();
+            //System.out.println(email+password);
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Access-Control-Allow-Origin", "*");
+
+            String userType = null;
+            String dataID = null;
+            String token = null;
+            String instructorID = InstructorMapper.getSingletonInstance().authenticate(email, password);
+            String studentID = StudentMapper.getSingletonInstance().authenticate(email, password);
+            if (!instructorID.isEmpty()) {
+                userType = USERTYPE.LECTURER.toString();
+                dataID = instructorID;
+            } else if (!studentID.isEmpty()) {
+                userType = USERTYPE.STUDENT.toString();
+                dataID = studentID;
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                JSONObject jsonObject = new JSONObject(String.format(
+                        "{\"code\":\"%s\"}", HttpServletResponse.SC_UNAUTHORIZED));
+                out.print(jsonObject);
+                out.flush();
+                return;
+            }
+            token = TokenVerification.createJWT(dataID, userType);
+            //System.out.println(dataID+password+token);
+            try {
+                TokenVerification.addToken(token);
+                JSONObject jsonObject = new JSONObject(String.format(
+                        "{\"code\":\"%s\",\"dataId\":\"%s\",\"userType\":\"%s\",\"token\":\"%s\"}", HttpServletResponse.SC_OK, dataID, userType, token));
+                out.print(jsonObject);
+                response.setStatus(HttpServletResponse.SC_OK);
+                out.flush();
+
+            } catch (JSONException err) {
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                JSONObject jsonObject = new JSONObject(String.format(
+                        "{\"code\":\"%s\"}", HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+                out.print(jsonObject);
+                out.flush();
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
         }
 
     }

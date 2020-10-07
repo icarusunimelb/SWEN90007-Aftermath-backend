@@ -39,26 +39,30 @@ public class choiceController extends HttpServlet {
      * @see HttpServlet#doPut(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String questionID = request.getParameter("question_id");
-        String choiceString = request.getParameter("choice");
-        Choice choice = new Choice();
-        choice.setChoice(choiceString);
-        choice.setQuestionID(questionID);
-        choice.setId(KeyGenerator.getSingletonInstance().getKey(choice));
+        try {
+            String questionID = request.getParameter("question_id");
+            String choiceString = request.getParameter("choice");
+            Choice choice = new Choice();
+            choice.setChoice(choiceString);
+            choice.setQuestionID(questionID);
+            choice.setId(KeyGenerator.getSingletonInstance().getKey(choice));
 
-        UnitOfWork.newCurrent();
-        UnitOfWork.getCurrent().registerNew(choice);
-        UnitOfWork.getCurrent().commit();
+            UnitOfWork.newCurrent();
+            UnitOfWork.getCurrent().registerNew(choice);
+            UnitOfWork.getCurrent().commit();
 
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        JSONObject reply = new JSONObject();
-        reply.append("Status", "Success");
-        Gson gson = new Gson();
-        out.print(gson.toJson(reply));
-        out.flush();
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            JSONObject reply = new JSONObject();
+            reply.append("Status", "Success");
+            Gson gson = new Gson();
+            out.print(gson.toJson(reply));
+            out.flush();
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
     }
 
@@ -66,27 +70,31 @@ public class choiceController extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String choiceID = request.getParameter("choice_id");
-        String questionID = request.getParameter("question_id");
-        String choiceString = request.getParameter("choice");
-        Choice choice = new Choice();
-        choice.setChoice(choiceString);
-        choice.setQuestionID(questionID);
-        choice.setId(choiceID);
+        try {
+            String choiceID = request.getParameter("choice_id");
+            String questionID = request.getParameter("question_id");
+            String choiceString = request.getParameter("choice");
+            Choice choice = new Choice();
+            choice.setChoice(choiceString);
+            choice.setQuestionID(questionID);
+            choice.setId(choiceID);
 
-        UnitOfWork.newCurrent();
-        UnitOfWork.getCurrent().registerDirty(choice);
-        UnitOfWork.getCurrent().commit();
+            UnitOfWork.newCurrent();
+            UnitOfWork.getCurrent().registerDirty(choice);
+            UnitOfWork.getCurrent().commit();
 
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        JSONObject reply = new JSONObject();
-        reply.append("Status", "Success");
-        Gson gson = new Gson();
-        out.print(gson.toJson(reply));
-        out.flush();
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Access-Control-Allow-Origin", "*");
+            JSONObject reply = new JSONObject();
+            reply.append("Status", "Success");
+            Gson gson = new Gson();
+            out.print(gson.toJson(reply));
+            out.flush();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
 
     }
 
