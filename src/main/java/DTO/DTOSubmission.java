@@ -1,5 +1,6 @@
 package DTO;
 
+import com.google.gson.Gson;
 import domain.Answer;
 import domain.ExamAnswer;
 
@@ -16,7 +17,8 @@ public class DTOSubmission {
         marks = examAnswer.getFinalMark();
         studentId = examAnswer.getStudentID();
         for (Answer ans: examAnswer.getAnswers()) {
-            System.out.println("1");
+            System.out.println("ans id: "+ans.getId());
+            System.out.println("DTOAnswer: "+new Gson().toJson(new DTOAnswer(ans)));
             answers.put(ans.getId(), new DTOAnswer(ans));
         }
     }
