@@ -1,7 +1,9 @@
 package controllers;
 
+import DTO.DTOQuestion;
 import com.google.gson.Gson;
 import domain.Exam;
+import domain.MultipleChoiceQuestion;
 import domain.Question;
 import org.json.JSONObject;
 import utils.TokenVerification;
@@ -13,7 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet("/api/question-controller")
 public class questionController extends HttpServlet {
@@ -59,13 +63,13 @@ public class questionController extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
         } else {
-
-            String json = new Gson().toJson(questions);
-            String newJson = json.replace("\"id\":", "\"dataId\":")
-                    .replace("\"questionBody\":", "\"description\":")
-                    .replace("\"totalMark\":", "\"marks\":")
-                    .replace("\"multipleChoices\":", "\"choices\":");
-            out.print(newJson);
+            List<DTOQuestion> dtoQuestions = questions.stream().map(question -> new DTOQuestion(question)).collect(Collectors.toList());
+            String json = new Gson().toJson(dtoQuestions);
+//            String newJson = json.replace("\"id\":", "\"dataId\":")
+//                    .replace("\"questionBody\":", "\"description\":")
+//                    .replace("\"totalMark\":", "\"marks\":")
+//                    .replace("\"multipleChoices\":", "\"choices\":");
+            out.print(json);
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
         }
