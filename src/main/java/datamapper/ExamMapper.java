@@ -1,9 +1,7 @@
 package datamapper;
 
 import datasource.DBConnection;
-import domain.DomainObject;
-import domain.Exam;
-import domain.ExamAnswer;
+import domain.*;
 import utils.IdentityMap;
 
 import java.sql.PreparedStatement;
@@ -123,6 +121,22 @@ public class ExamMapper extends DataMapper{
         Exam examObj = (Exam) object;
         try {
             PreparedStatement updateStatement = DBConnection.prepare(deleteExamStatement);
+
+            // delete answers and submissions
+            for (ExamAnswer examAnswer : ((Exam) object).getExamAnswers()) {
+                for (Answer answer : examAnswer.getAnswers()) {
+                    MultipleChoiceQuestionAnswerMapper.getSingletonInstance().delete(answer);
+                    ShortAnswerQuestionAnswerMapper.getSingletonInstance().delete(answer);
+                }
+                ExamAnswerMapper.getSingletonInstance().delete(examAnswer);
+            }
+
+            // delete questions
+            for (Question question : ((Exam) object).getQuestions()) {
+                MultipleChoiceQuestionMapper.getSingletonInstance().delete(question);
+                ShortAnswerQuestionMapper.getSingletonInstance().delete(question);
+            }
+
             updateStatement.setString(1, examObj.getId());
             updateStatement.execute();
         } catch (SQLException e) {

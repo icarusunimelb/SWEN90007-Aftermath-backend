@@ -131,6 +131,12 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
     public void delete(DomainObject object) {
         MultipleChoiceQuestion multipleChoiceQuestionObj = (MultipleChoiceQuestion) object;
         try {
+            // delete choices
+
+            for (Choice multipleChoice : ((MultipleChoiceQuestion) object).getMultipleChoices()) {
+                ChoiceMapper.getSingletonInstance().delete(multipleChoice);
+            }
+
             PreparedStatement updateStatement = DBConnection.prepare(deleteMCQStatement);
             updateStatement.setString(1, multipleChoiceQuestionObj.getId());
             updateStatement.execute();
