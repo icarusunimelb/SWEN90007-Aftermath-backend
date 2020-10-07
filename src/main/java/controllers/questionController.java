@@ -61,7 +61,8 @@ public class questionController extends HttpServlet {
         } else {
 
             String json = new Gson().toJson(questions);
-            String newJson = json.replace("\"id\":", "\"dataId\":");
+            String newJson = json.replace("\"id\":", "\"dataId\":")
+                    .replace("\"questionBody\":", "\"description\":");
             out.print(newJson);
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
