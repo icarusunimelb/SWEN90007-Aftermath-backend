@@ -216,14 +216,14 @@ public class examAnswerController extends HttpServlet {
         exam.setStatus("ONGOING");
         UnitOfWork.getCurrent().registerDirty(exam);
 
-        if(ExamAnswerMapper.getSingletonInstance().checkIfStudentAnswer(examAnswer.getExamID(), userId)){
-            JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
-            out.print(jsonObject);
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.flush();
-            return;
-        }
+//        if(ExamAnswerMapper.getSingletonInstance().checkIfStudentAnswer(examAnswer.getExamID(), userId)){
+//            JSONObject jsonObject = new JSONObject(String.format(
+//                    "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+//            out.print(jsonObject);
+//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+//            out.flush();
+//            return;
+//        }
 
 
 
