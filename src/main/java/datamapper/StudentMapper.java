@@ -182,7 +182,9 @@ public class StudentMapper extends DataMapper{
             List<Exam> validExams = new ArrayList<Exam>();
             for(int j = 0; j < examOfSubject.size(); j++){
                 if(examOfSubject.get(j).getStatus().equals("PUBLISHED") || examOfSubject.get(j).getStatus().equals("ONGOING")){
-                    validExams.add(examOfSubject.get(j));
+                    if (ExamAnswerMapper.getSingletonInstance().findWithStudentID(studentId)==null) {
+                        validExams.add(examOfSubject.get(j));
+                    }
                 }
             }
             subjects.get(i).setExams(validExams);

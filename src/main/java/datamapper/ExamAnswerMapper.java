@@ -50,6 +50,34 @@ public class ExamAnswerMapper extends  DataMapper{
         return examAnswer;
     }
 
+    private static final String findWithStudentIDStatement = "SELECT e.examID, e.examAnswerID, e.finalMark "
+            + "FROM oes.examAnswer e "
+            + "WHERE e.studentID = ?";
+
+    public ExamAnswer findWithStudentID(String studentID) {
+        ExamAnswer examAnswer = null;
+        try {
+            PreparedStatement stmt = DBConnection.prepare(findWithIDStatement);
+            stmt.setString(1, studentID);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                examAnswer = new ExamAnswer();
+                String examID = rs.getString(1);
+                String examAnswerID = rs.getString(2);
+                int finalMark = rs.getInt(3);
+                examAnswer.setExamID(examID);
+                examAnswer.setId(examAnswerID);
+                examAnswer.setStudentID(studentID);
+                examAnswer.setFinalMark(finalMark);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return examAnswer;
+    }
+
     private static final String findTableViewExamAnswerStatement = "SELECT e.examAnswerID, e.studentID, e.finalMark "
             + "FROM oes.examAnswer e "
             + "WHERE e.examID = ?";
