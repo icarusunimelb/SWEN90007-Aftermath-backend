@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -194,9 +195,15 @@ public class examsController extends HttpServlet {
 
     private String markExams(String userId){
         List<Subject> subjects = InstructorMapper.getSingletonInstance().getMarkingSubjects(userId);
+        List<DTOSubjectSubmission> dtoSubjectSubmissions = new ArrayList<>();
 
-        List<DTOSubjectSubmission> dtoSubjectSubmissions = subjects.stream().map(DTOSubjectSubmission::new)
-                .collect(Collectors.toList());
+        if (subjects.size()>0) {
+            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            dtoSubjectSubmissions = subjects.stream().map(DTOSubjectSubmission::new)
+                    .collect(Collectors.toList());
+        }else {
+            System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbb");
+        }
 
         String json = new Gson().toJson(dtoSubjectSubmissions);
 //        JSONArray jsonArray = new JSONArray(jsonString);
