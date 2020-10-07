@@ -45,8 +45,8 @@ public class studentController extends HttpServlet {
         String password = object.getString("password");*/
         String email = request.getParameter("username");
         String password = request.getParameter("password");
-        System.out.println(email);
-        System.out.println(password);
+        //System.out.println(email);
+        //System.out.println(password);
 
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");

@@ -109,12 +109,10 @@ public class examAnswerController extends HttpServlet {
                     if(questionAnswerId.contains("Multiple")){
                         MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswer = MultipleChoiceQuestionAnswerMapper.getSingletonInstance().findWithID(questionAnswerId);
                         multipleChoiceQuestionAnswer.setMark(mark);
-                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! multiple choice" + multipleChoiceQuestionAnswer.getId());
                         UnitOfWork.getCurrent().registerDirty(multipleChoiceQuestionAnswer);
                     } else {
                         ShortAnswerQuestionAnswer shortAnswerQuestionAnswer = ShortAnswerQuestionAnswerMapper.getSingletonInstance().findWithID(questionAnswerId);
                         shortAnswerQuestionAnswer.setMark(mark);
-                        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! setting new mark for this question" + mark);
                         UnitOfWork.getCurrent().registerDirty(shortAnswerQuestionAnswer);
                     }
                 }
@@ -203,7 +201,6 @@ public class examAnswerController extends HttpServlet {
         String userId = userIdAndUserType.split(",", 2)[0];
 
         String requestData = request.getReader().lines().collect(Collectors.joining());
-        System.out.println("this is ur exam id: "+ requestData);
         JSONObject examJson = new JSONObject(requestData);
         String examId = examJson.getString("examId");
         JSONArray answers = examJson.getJSONArray("answers");
@@ -231,10 +228,9 @@ public class examAnswerController extends HttpServlet {
 
 
 
-        // System.out.println("line 217 !!!!!!!!!!!!!!!!!!!!!");
         for(int i = 0; i< answers.length(); i++){
             JSONObject examAnswerJson = (JSONObject) answers.get(i);
-            System.out.println("this is your exam answer" + examAnswerJson.toString());
+            // System.out.println("this is your exam answer" + examAnswerJson.toString());
             String questionId = examAnswerJson.getString("questionId");
             String answer = "";
             int newAnswer = -1;

@@ -53,7 +53,6 @@ public class  DBConnection {
 			System.out.println(e.getMessage());
 
 		}
-		System.out.println("Connection problem");
 		return null;
 
 	}

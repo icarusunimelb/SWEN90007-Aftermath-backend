@@ -47,7 +47,7 @@ public class examsController extends HttpServlet {
 
         String token = TokenVerification.getTokenFromHeader(request);
         String userIdAndUserType = "";
-        System.out.println("token: " + token);
+        //System.out.println("token: " + token);
         if(token.equals("")){
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
@@ -57,7 +57,7 @@ public class examsController extends HttpServlet {
             return;
         } else {
             userIdAndUserType = TokenVerification.verifyToken(token);
-            System.out.println("userId and User Type");
+            //System.out.println("userId and User Type");
             if(userIdAndUserType.equals("")){
                 JSONObject jsonObject = new JSONObject(String.format(
                         "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
@@ -78,8 +78,8 @@ public class examsController extends HttpServlet {
             String newJsonArray = jsonArray.replace("\"id\":", "\"dataId\":");
 
             out.print(newJsonArray);
-            System.out.println(newJsonArray);
-            System.out.println("this is printing JSONArray!!!!!!!!!!!!!!!!!!!");
+            //System.out.println(newJsonArray);
+            //System.out.println("this is printing JSONArray!!!!!!!!!!!!!!!!!!!");
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
             return;
@@ -106,7 +106,7 @@ public class examsController extends HttpServlet {
             out.flush();
 
         }
-        System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+        //System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
     }
 
     /**

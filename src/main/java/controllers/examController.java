@@ -183,7 +183,7 @@ public class examController extends HttpServlet {
                         choice.setId(KeyGenerator.getSingletonInstance().getKey(choice));
                         UnitOfWork.getCurrent().registerNew(choice);
 
-                        System.out.println("this is your first choice "+ choiceJson);
+                        //System.out.println("this is your first choice "+ choiceJson);
                     }
                 } else {
                     try{
@@ -204,7 +204,7 @@ public class examController extends HttpServlet {
                     UnitOfWork.getCurrent().registerNew(shortAnswerQuestion);
                 }
 
-                System.out.println("this is your exam answer" + questionJson.toString());
+                //System.out.println("this is your exam answer" + questionJson.toString());
             }
             UnitOfWork.getCurrent().commit();
 

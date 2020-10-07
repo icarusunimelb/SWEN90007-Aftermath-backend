@@ -71,7 +71,7 @@ public class ExamAnswerMapper extends  DataMapper{
                 examAnswer.setFinalMark(finalMark);
                 result.add(examAnswer);
             }
-            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+result.size());
+            //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+result.size());
 
         } catch (SQLException e) {
             System.out.println(e.getMessage());
