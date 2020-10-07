@@ -79,14 +79,16 @@ public class examAnswerController extends HttpServlet {
         UnitOfWork.newCurrent();
 
         String requestData = request.getReader().lines().collect(Collectors.joining());
-        JSONArray examAnswerArray = new JSONArray(requestData);
-//
+
+        JSONObject jsonObject1 = new JSONObject(requestData);
+        String examId = jsonObject1.getString("examId");
+        JSONArray examAnswerArray = jsonObject1.getJSONArray("markings");
+
         for ( int i = 0; i < examAnswerArray.length(); i ++){
             JSONObject examAnswerJson = (JSONObject) examAnswerArray.get(i);
 
             String examAnswerId = examAnswerJson.getString("dataId");
             int marks = examAnswerJson.getInt("marks");
-            String examId = examAnswerJson.getString("examId");
 
             Exam exam = ExamMapper.getSingletonInstance().findWithID(examId);
             exam.setStatus("MARKED");
