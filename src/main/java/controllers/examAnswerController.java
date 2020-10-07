@@ -215,12 +215,10 @@ public class examAnswerController extends HttpServlet {
 
 
         Exam exam = ExamMapper.getSingletonInstance().findWithID(examId);
-        System.out.println("Status1: "+exam.getStatus());
-        if (exam.getStatus() == "PUBLISHED" || exam.getStatus() == "ONGOING") {
-            System.out.println("1");
+        //System.out.println("Status1: "+exam.getStatus());
+        if (exam.getStatus().equals("PUBLISHED") || exam.getStatus().equals("ONGOING")) {
             exam.setStatus("ONGOING");
         }else{
-            System.out.println("2");
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
             out.print(jsonObject);
