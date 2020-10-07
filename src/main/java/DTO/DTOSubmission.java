@@ -16,6 +16,7 @@ public class DTOSubmission {
         marks = examAnswer.getFinalMark();
         studentId = examAnswer.getStudentID();
         for (Answer ans: examAnswer.getAnswers()) {
+            System.out.println("1");
             answers.put(ans.getId(), new DTOAnswer(ans));
         }
     }
