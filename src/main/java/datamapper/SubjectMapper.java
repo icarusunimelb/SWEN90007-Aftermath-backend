@@ -73,7 +73,7 @@ public class SubjectMapper extends DataMapper{
         }catch (SQLException e){
             System.out.println(e.getMessage());
         }
-        System.out.println("this is in SubjectMapper. subjects size = "+ subjects.size());
+        //System.out.println("this is in SubjectMapper. subjects size = "+ subjects.size());
         return subjects;
     }
 

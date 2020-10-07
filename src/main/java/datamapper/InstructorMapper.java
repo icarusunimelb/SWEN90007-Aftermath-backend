@@ -164,13 +164,13 @@ public class InstructorMapper extends DataMapper{
     public List<Subject> getManagingSubjects(String instructorId) {
 
         List<Subject> subjects = SubjectMapper.getSingletonInstance().findWithInstructorID(instructorId);
-        System.out.println("this is subject in instructor mapper size = " + subjects.size());
+        //System.out.println("this is subject in instructor mapper size = " + subjects.size());
         for(int i = 0; i < subjects.size(); i++){
             List<Exam> examOfSubject = ExamMapper.getSingletonInstance().findWithSubjectCode(subjects.get(i).getId());
             subjects.get(i).setExams(examOfSubject);
-            System.out.println("this is in Instructor mapper !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            //System.out.println("this is in Instructor mapper !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
-        System.out.println("end of getManagingSubjects in Instructor mapper !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        //System.out.println("end of getManagingSubjects in Instructor mapper !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return subjects;
     }
 }
