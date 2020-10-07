@@ -1,5 +1,6 @@
 package controllers;
 
+import DTO.DTOSubjectSubmission;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet("/api/exams-controller")
 public class examsController extends HttpServlet {
@@ -193,12 +195,13 @@ public class examsController extends HttpServlet {
     private String markExams(String userId){
         List<Subject> subjects = InstructorMapper.getSingletonInstance().getMarkingSubjects(userId);
 
+        List<DTOSubjectSubmission> dtoSubjectSubmissions = subjects.stream().map(DTOSubjectSubmission::new)
+                .collect(Collectors.toList());
 
-        String json = new Gson().toJson(subjects);
-        String newJsonArray = json.replace("\"id\":", "\"dataId\":");
+        String json = new Gson().toJson(dtoSubjectSubmissions);
 //        JSONArray jsonArray = new JSONArray(jsonString);
 
-        return newJsonArray;
+        return json;
     }
 
     private String takeExams(String userId){
