@@ -19,7 +19,7 @@ public class DTOSubmission {
         for (Answer ans: examAnswer.getAnswers()) {
             //System.out.println("ans id: "+ans.getId());
             //System.out.println("DTOAnswer: "+new Gson().toJson(new DTOAnswer(ans)));
-            answers.put(ans.getId(), new DTOAnswer(ans));
+            answers.put(ans.getQuestionID(), new DTOAnswer(ans));
         }
     }
 }
