@@ -16,7 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -213,8 +215,16 @@ public class examAnswerController extends HttpServlet {
 
 
         Exam exam = ExamMapper.getSingletonInstance().findWithID(examId);
-        exam.setStatus("ONGOING");
-        UnitOfWork.getCurrent().registerDirty(exam);
+        if (exam.getStatus() == "PUBLISHED" || exam.getStatus() == "ONGOING") {
+            exam.setStatus("ONGOING");
+        }else{
+            JSONObject jsonObject = new JSONObject(String.format(
+                    "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+            out.print(jsonObject);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.flush();
+            return;
+        }
 
 //        if(ExamAnswerMapper.getSingletonInstance().checkIfStudentAnswer(examAnswer.getExamID(), userId)){
 //            JSONObject jsonObject = new JSONObject(String.format(
@@ -271,6 +281,12 @@ public class examAnswerController extends HttpServlet {
 //            UnitOfWork.getCurrent().commit();
         }
 
+        List<ExamAnswer> submitted = exam.getExamAnswers();
+        if (submitted.size() + 1 == StudentMapper.getSingletonInstance().findWithSubjectID(exam.getSubjectID()).size()) {
+            exam.setStatus("CLOSED");
+        }
+
+        UnitOfWork.getCurrent().registerDirty(exam);
 
 
 //         validate this examAnswer
