@@ -1,10 +1,7 @@
 package utils;
 
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import org.json.JSONObject;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -56,15 +53,20 @@ public class TokenVerification {
     }
 
     public static String verifyToken(String token){
-        String realToken = token.substring(7,token.length());
-        Claims claims = Jwts.parser()
-                .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
-                .parseClaimsJws(realToken).getBody();
-        System.out.println("userId: " + claims.getId());
-        System.out.println("userType: " + claims.getSubject());
-        System.out.println("Expiration: " + claims.getExpiration());
-        System.out.println("token: " + realToken);
-        return claims.getId()+","+claims.getSubject();
+        try {
+            String realToken = token.substring(7, token.length());
+            Claims claims = Jwts.parser()
+                    .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
+                    .parseClaimsJws(realToken).getBody();
+            System.out.println("userId: " + claims.getId());
+            System.out.println("userType: " + claims.getSubject());
+            System.out.println("Expiration: " + claims.getExpiration());
+            System.out.println("token: " + realToken);
+            return claims.getId() + "," + claims.getSubject();
+        }catch (ExpiredJwtException e){
+            System.out.println(e);
+            return "";
+        }
     }
 
 //    public static String getUserTypeFromToken()
