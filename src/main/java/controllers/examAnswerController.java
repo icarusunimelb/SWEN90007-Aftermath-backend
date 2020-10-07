@@ -58,9 +58,7 @@ public class examAnswerController extends HttpServlet {
 //        out.flush();
     }
 
-    /**
-     * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-     */ // update exam answer marks
+     // update exam answer marks
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         PrintWriter out = response.getWriter();
@@ -208,6 +206,7 @@ public class examAnswerController extends HttpServlet {
         ExamAnswer examAnswer = new ExamAnswer();
         examAnswer.setStudentID(userId);
         examAnswer.setExamID(examId);
+        examAnswer.setFinalMark(-1);
         examAnswer.setId(KeyGenerator.getSingletonInstance().getKey(examAnswer));
 
         UnitOfWork.getCurrent().registerNew(examAnswer);
