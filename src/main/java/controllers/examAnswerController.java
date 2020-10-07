@@ -215,6 +215,7 @@ public class examAnswerController extends HttpServlet {
 
 
         Exam exam = ExamMapper.getSingletonInstance().findWithID(examId);
+        System.out.println("Status1: "+exam.getStatus());
         if (exam.getStatus() == "PUBLISHED" || exam.getStatus() == "ONGOING") {
             exam.setStatus("ONGOING");
         }else{
@@ -281,10 +282,12 @@ public class examAnswerController extends HttpServlet {
 //            UnitOfWork.getCurrent().commit();
         }
 
+        System.out.println("Status3: "+exam.getStatus());
         List<ExamAnswer> submitted = exam.getExamAnswers();
         if (submitted.size() + 1 == StudentMapper.getSingletonInstance().findWithSubjectID(exam.getSubjectID()).size()) {
             exam.setStatus("CLOSED");
         }
+        System.out.println("Status2: "+exam.getStatus());
 
         UnitOfWork.getCurrent().registerDirty(exam);
 
