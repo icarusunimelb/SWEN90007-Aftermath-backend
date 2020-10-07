@@ -85,7 +85,8 @@ public class examsController extends HttpServlet {
             return;
         } else if(status.equals("marking")){
             String jsonArray = markExams(userId);
-            String newJsonArray = jsonArray.replace("\"id\":", "\"dataId\":");
+            String newJsonArray = jsonArray.replace("\"id\":", "\"dataId\":")
+                    .replace("\"examAnswers\":", "\"submissions\":");
             out.print(newJsonArray);
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
