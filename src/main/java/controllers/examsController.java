@@ -39,7 +39,7 @@ public class examsController extends HttpServlet {
      */ // /api/exam-controller?status=managing
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String status = request.getParameter("status");
-        System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
+        //System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
@@ -78,6 +78,7 @@ public class examsController extends HttpServlet {
             String newJsonArray = jsonArray.replace("id:", "dataId:");
 
             out.print(newJsonArray);
+            System.out.println(newJsonArray);
             System.out.println("this is printing JSONArray!!!!!!!!!!!!!!!!!!!");
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
