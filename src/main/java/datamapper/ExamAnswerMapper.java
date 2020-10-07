@@ -83,12 +83,14 @@ public class ExamAnswerMapper extends  DataMapper{
             + "WHERE e.examID = ?";
 
     public List<ExamAnswer> findTableViewExamAnswer(String examID) {
+        System.out.println("examID: "+examID);
         List<ExamAnswer> result = new ArrayList<>();
         try {
             PreparedStatement stmt = DBConnection.prepare(findTableViewExamAnswerStatement);
             stmt.setString(1, examID);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
+                System.out.println("insideloop: "+result.size());
                 ExamAnswer examAnswer = new ExamAnswer();
                 String examAnswerID = rs.getString(1);
                 String studentID = rs.getString(2);
