@@ -7,6 +7,11 @@ import java.util.List;
 
 public class MultipleChoiceQuestion extends Question{
     private List<Choice> multipleChoices = null;
+    private String type = "QUESTION_MULTIPLE_CHOICE";
+
+    public String getType() {
+        return type;
+    }
 
     public MultipleChoiceQuestion(){super();};
 

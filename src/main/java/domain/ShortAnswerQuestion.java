@@ -6,6 +6,11 @@ import datamapper.ShortAnswerQuestionMapper;
 public class ShortAnswerQuestion extends Question{
 
     public ShortAnswerQuestion(){super();};
+    private String type ="QUESTION_SHORT_ANSWER";
+
+    public String getType() {
+        return type;
+    }
 
     @Override
     public String getExamID() {
