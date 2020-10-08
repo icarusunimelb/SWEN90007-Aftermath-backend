@@ -54,10 +54,10 @@ public class ShortAnswerQuestionAnswerMapper extends DataMapper{
         return answer;
     }
 
-    private static final String findAnswerStatement = "SELECT s.shortAnswerQuestionAnswerID, s.questionID, s.mark, "
-            + "s.answer "
-            + "FROM oes.shortAnswerQuestionAnswers s"
-            + "WHERE s.examAnswerID = ?";
+    private static final String findAnswerStatement = "SELECT shortAnswerQuestionAnswerID, questionID, mark, "
+            + "answer "
+            + "FROM oes.shortAnswerQuestionAnswers "
+            + "WHERE examAnswerID = ?";
     public List<ShortAnswerQuestionAnswer> findAllAnswers(String examAnswerID) {
         List<ShortAnswerQuestionAnswer> answers = new ArrayList<ShortAnswerQuestionAnswer>();
         try {
