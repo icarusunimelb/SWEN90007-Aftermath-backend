@@ -75,7 +75,6 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
                 answer.setAnswerIndex(answerIndex);
                 answer.setMark(mark);
                 answer.setQuestionID(questionID);
-                IdentityMap.getInstance(answer).put(multipleChoiceQuestionAnswerID, answer);
                 answers.add(answer);
             }
         } catch (SQLException e) {
