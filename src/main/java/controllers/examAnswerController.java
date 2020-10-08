@@ -292,6 +292,7 @@ public class examAnswerController extends HttpServlet {
             System.out.println("Status3: "+exam.getStatus());
             List<ExamAnswer> submitted = exam.getExamAnswers();
             if (submitted.size() + 1 == StudentMapper.getSingletonInstance().findWithSubjectID(exam.getSubjectID()).size()) {
+                System.out.println("students num: "+(submitted.size() + 1));
                 exam.setStatus("CLOSED");
             }
             System.out.println("Status2: "+exam.getStatus());
