@@ -152,19 +152,14 @@ public class examController extends HttpServlet {
                     String questionDescription = questionJson.getString("description");
                     int questionMarks = questionJson.getInt("marks");
                     String questionTitle = questionJson.getString("title");
-                    String questionId = "";
+                    String questionId;
 
                     if(questionType.equals("QUESTION_MULTIPLE_CHOICE")){
 
-                        try{
-                            questionId = questionJson.getString("dataId");
-                        } catch (org.json.JSONException e){
-                            System.out.println("JSON Exception Error" + e.toString());
-                        }
+
                         MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion();
-                        if(questionId.isEmpty()){
-                            questionId = KeyGenerator.getSingletonInstance().getKey(multipleChoiceQuestion);
-                        }
+                        questionId = KeyGenerator.getSingletonInstance().getKey(multipleChoiceQuestion);
+
 
                         multipleChoiceQuestion.setExamID(examId);
                         multipleChoiceQuestion.setTitle(questionTitle);
@@ -188,15 +183,8 @@ public class examController extends HttpServlet {
                             //System.out.println("this is your first choice "+ choiceJson);
                         }
                     } else {
-                        try{
-                            questionId = questionJson.getString("dataId");
-                        } catch (org.json.JSONException e){
-                            System.out.println("JSON Exception Error" + e.toString());
-                        }
                         ShortAnswerQuestion shortAnswerQuestion = new ShortAnswerQuestion();
-                        if(questionId.isEmpty()){
-                            questionId = KeyGenerator.getSingletonInstance().getKey(shortAnswerQuestion);
-                        }
+                        questionId = KeyGenerator.getSingletonInstance().getKey(shortAnswerQuestion);
                         shortAnswerQuestion.setExamID(examId);
                         shortAnswerQuestion.setQuestionBody(questionDescription);
                         shortAnswerQuestion.setId(questionId);
