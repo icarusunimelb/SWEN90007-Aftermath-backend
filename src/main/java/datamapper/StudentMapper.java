@@ -153,7 +153,7 @@ public class StudentMapper extends DataMapper{
             PreparedStatement findStatement = DBConnection.prepare(findWithSubjectIDStatement);
             findStatement.setString(1, subjectID);
             ResultSet rs = findStatement.executeQuery();
-            if(rs.next()){
+            while(rs.next()){
                 Student student = new Student();
                 String id = rs.getString(1);
                 String firstName = rs.getString(2);
