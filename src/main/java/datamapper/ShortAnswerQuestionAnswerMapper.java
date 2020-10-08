@@ -70,7 +70,7 @@ public class ShortAnswerQuestionAnswerMapper extends DataMapper{
                 String shortAnswerQuestionAnswerID = rs.getString(1);
                 String questionID = rs.getString(2);
                 int mark = rs.getInt(3);
-                String answerText = rs.getString(5);
+                String answerText = rs.getString(4);
                 answer.setExamAnswerID(examAnswerID);
                 answer.setId(shortAnswerQuestionAnswerID);
                 answer.setMark(mark);
