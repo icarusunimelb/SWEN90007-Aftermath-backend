@@ -205,11 +205,11 @@ public class examsController extends HttpServlet {
         List<DTOSubjectSubmission> dtoSubjectSubmissions = new ArrayList<>();
 
         if (subjects.size()>0) {
-            System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+            //System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             dtoSubjectSubmissions = subjects.stream().map(DTOSubjectSubmission::new)
                     .collect(Collectors.toList());
         }else {
-            System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbb");
+            //System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbb");
         }
 
         String json = new Gson().toJson(dtoSubjectSubmissions);

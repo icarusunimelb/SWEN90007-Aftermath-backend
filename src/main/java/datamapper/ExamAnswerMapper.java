@@ -90,7 +90,7 @@ public class ExamAnswerMapper extends  DataMapper{
             stmt.setString(1, examID);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                System.out.println("insideloop: "+result.size());
+                //System.out.println("insideloop: "+result.size());
                 ExamAnswer examAnswer = new ExamAnswer();
                 String examAnswerID = rs.getString(1);
                 String studentID = rs.getString(2);
@@ -142,7 +142,7 @@ public class ExamAnswerMapper extends  DataMapper{
                 return rs.getBoolean(1);
             }
         }catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("Here: "+e.getMessage());
         }
         return false;
     }
