@@ -3,6 +3,7 @@ package controllers;
 import datamapper.StudentMapper;
 import domain.Name;
 import domain.Student;
+import org.json.JSONException;
 import org.json.JSONObject;
 import utils.KeyGenerator;
 import utils.UnitOfWork;
@@ -62,85 +63,99 @@ public class studentController extends HttpServlet {
 
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String firstName = request.getParameter("first_name");
-        String lastName = request.getParameter("last_name");
+        try {
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            String firstName = request.getParameter("first_name");
+            String lastName = request.getParameter("last_name");
 
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "*");
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Access-Control-Allow-Origin", "*");
 
 
-        if (!StudentMapper.getSingletonInstance().registerOrNot(email)) {
+            if (!StudentMapper.getSingletonInstance().registerOrNot(email)) {
+                Student student = new Student();
+                student.setId(KeyGenerator.getSingletonInstance().getKey(student));
+                student.setEmail(email);
+                student.setName(new Name(firstName, lastName));
+                student.setPassword(password);
+
+                UnitOfWork.newCurrent();
+                UnitOfWork.getCurrent().registerNew(student);
+                UnitOfWork.getCurrent().commit();
+
+                out.print("Success");
+            }else {
+                out.print("Already registered");
+            }
+
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            String id = request.getParameter("student_id");
+            String email = request.getParameter("email");
+            String password = request.getParameter("password");
+            String firstName = request.getParameter("first_name");
+            String lastName = request.getParameter("last_name");
+
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Access-Control-Allow-Origin", "*");
+
             Student student = new Student();
-            student.setId(KeyGenerator.getSingletonInstance().getKey(student));
+            student.setId(id);
             student.setEmail(email);
             student.setName(new Name(firstName, lastName));
             student.setPassword(password);
 
             UnitOfWork.newCurrent();
-            UnitOfWork.getCurrent().registerNew(student);
+            UnitOfWork.getCurrent().registerDirty(student);
             UnitOfWork.getCurrent().commit();
 
             out.print("Success");
-        }else {
-            out.print("Already registered");
+
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        out.flush();
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String id = request.getParameter("student_id");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String firstName = request.getParameter("first_name");
-        String lastName = request.getParameter("last_name");
-
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "*");
-
-        Student student = new Student();
-        student.setId(id);
-        student.setEmail(email);
-        student.setName(new Name(firstName, lastName));
-        student.setPassword(password);
-
-        UnitOfWork.newCurrent();
-        UnitOfWork.getCurrent().registerDirty(student);
-        UnitOfWork.getCurrent().commit();
-
-        out.print("Success");
-
-        out.flush();
     }
 
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String id = request.getParameter("student_id");
+        try {
+            String id = request.getParameter("student_id");
 
 
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "*");
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Access-Control-Allow-Origin", "*");
 
-        Student student = new Student();
-        student.setId(id);
+            Student student = new Student();
+            student.setId(id);
 
-        UnitOfWork.newCurrent();
-        UnitOfWork.getCurrent().registerDeleted(student);
-        UnitOfWork.getCurrent().commit();
+            UnitOfWork.newCurrent();
+            UnitOfWork.getCurrent().registerDeleted(student);
+            UnitOfWork.getCurrent().commit();
 
-        JSONObject jsonObject = new JSONObject(String.format(
-                "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
-        out.print(jsonObject);
-        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            JSONObject jsonObject = new JSONObject(String.format(
+                    "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+            out.print(jsonObject);
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 
-        out.flush();
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         response.setContentType("application/json");

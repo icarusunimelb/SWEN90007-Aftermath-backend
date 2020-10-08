@@ -10,6 +10,7 @@ import datamapper.InstructorMapper;
 import datamapper.StudentMapper;
 
 import domain.Subject;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import utils.TokenVerification;
@@ -41,74 +42,80 @@ public class examsController extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */ // /api/exam-controller?status=managing
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String status = request.getParameter("status");
-        //System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "*");
+        try {
+            String status = request.getParameter("status");
+            //System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Access-Control-Allow-Origin", "*");
 
-        String token = TokenVerification.getTokenFromHeader(request);
-        String userIdAndUserType = "";
-        //System.out.println("token: " + token);
-        if(token.equals("")){
-            JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-            out.print(jsonObject);
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            out.flush();
-            return;
-        } else {
-            userIdAndUserType = TokenVerification.verifyToken(token);
-            //System.out.println("userId and User Type");
-            if(userIdAndUserType.equals("")){
+            String token = TokenVerification.getTokenFromHeader(request);
+            String userIdAndUserType = "";
+            //System.out.println("token: " + token);
+            if(token.equals("")){
                 JSONObject jsonObject = new JSONObject(String.format(
                         "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
                 out.print(jsonObject);
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 out.flush();
                 return;
+            } else {
+                userIdAndUserType = TokenVerification.verifyToken(token);
+                //System.out.println("userId and User Type");
+                if(userIdAndUserType.equals("")){
+                    JSONObject jsonObject = new JSONObject(String.format(
+                            "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
+                    out.print(jsonObject);
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    out.flush();
+                    return;
+                }
+
             }
 
-        }
 
-
-        String userId = userIdAndUserType.split(",", 2)[0];
+            String userId = userIdAndUserType.split(",", 2)[0];
 //        String userType = userIdAndUserType.split(",", 2)[1];
 
-        if(status.equals("managing")){
-            String jsonArray = manageExams(userId);
-            String newJsonArray = jsonArray.replace("\"id\":", "\"dataId\":");
+            if(status.equals("managing")){
+                String jsonArray = manageExams(userId);
+                String newJsonArray = jsonArray.replace("\"id\":", "\"dataId\":");
 
-            out.print(newJsonArray);
-            //System.out.println(newJsonArray);
-            //System.out.println("this is printing JSONArray!!!!!!!!!!!!!!!!!!!");
-            response.setStatus(HttpServletResponse.SC_OK);
-            out.flush();
-            return;
-        } else if(status.equals("marking")){
-            String jsonArray = markExams(userId);
-            String newJsonArray = jsonArray.replace("\"id\":", "\"dataId\":")
-                    .replace("\"examAnswers\":", "\"submissions\":");
-            out.print(newJsonArray);
-            response.setStatus(HttpServletResponse.SC_OK);
-            out.flush();
-            return;
-        } else if(status.equals("taking")){
-            // get exams of a student who can take right now
-            String jsonArray =  takeExams(userId);
-            String newJsonArray = jsonArray.replace("\"id\":", "\"dataId\":");
-            out.print(newJsonArray);
-            response.setStatus(HttpServletResponse.SC_OK);
-            out.flush();
-            return;
-        } else {
-            JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
-            out.print(jsonObject);
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.flush();
+                out.print(newJsonArray);
+                //System.out.println(newJsonArray);
+                //System.out.println("this is printing JSONArray!!!!!!!!!!!!!!!!!!!");
+                response.setStatus(HttpServletResponse.SC_OK);
+                out.flush();
+                return;
+            } else if(status.equals("marking")){
+                String jsonArray = markExams(userId);
+                String newJsonArray = jsonArray.replace("\"id\":", "\"dataId\":")
+                        .replace("\"examAnswers\":", "\"submissions\":");
+                out.print(newJsonArray);
+                response.setStatus(HttpServletResponse.SC_OK);
+                out.flush();
+                return;
+            } else if(status.equals("taking")){
+                // get exams of a student who can take right now
+                String jsonArray =  takeExams(userId);
+                String newJsonArray = jsonArray.replace("\"id\":", "\"dataId\":");
+                out.print(newJsonArray);
+                response.setStatus(HttpServletResponse.SC_OK);
+                out.flush();
+                return;
+            } else {
+                JSONObject jsonObject = new JSONObject(String.format(
+                        "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+                out.print(jsonObject);
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                out.flush();
 
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
         //System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
     }

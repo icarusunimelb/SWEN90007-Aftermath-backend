@@ -3,6 +3,7 @@ package controllers;
 import datamapper.*;
 import domain.*;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import utils.KeyGenerator;
@@ -63,74 +64,78 @@ public class examAnswerController extends HttpServlet {
      // update exam answer marks
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "*");
+        try {
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Access-Control-Allow-Origin", "*");
 
-        if(TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG){
-            JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-            out.print(jsonObject);
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            out.flush();
-            return;
-        }
-        UnitOfWork.newCurrent();
+            if(TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG){
+                JSONObject jsonObject = new JSONObject(String.format(
+                        "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
+                out.print(jsonObject);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                out.flush();
+                return;
+            }
+            UnitOfWork.newCurrent();
 
-        String requestData = request.getReader().lines().collect(Collectors.joining());
+            String requestData = request.getReader().lines().collect(Collectors.joining());
 
-        JSONObject jsonObject1 = new JSONObject(requestData);
-        String examId = jsonObject1.getString("examId");
-        JSONArray examAnswerArray = jsonObject1.getJSONArray("markings");
+            JSONObject jsonObject1 = new JSONObject(requestData);
+            String examId = jsonObject1.getString("examId");
+            JSONArray examAnswerArray = jsonObject1.getJSONArray("markings");
 
-        for ( int i = 0; i < examAnswerArray.length(); i ++){
-            JSONObject examAnswerJson = (JSONObject) examAnswerArray.get(i);
+            for ( int i = 0; i < examAnswerArray.length(); i ++){
+                JSONObject examAnswerJson = (JSONObject) examAnswerArray.get(i);
 
-            String examAnswerId = examAnswerJson.getString("dataId");
-            int marks = examAnswerJson.getInt("marks");
+                String examAnswerId = examAnswerJson.getString("dataId");
+                int marks = examAnswerJson.getInt("marks");
 
-            Exam exam = ExamMapper.getSingletonInstance().findWithID(examId);
-            exam.setStatus("MARKED");
-            UnitOfWork.getCurrent().registerDirty(exam);
+                Exam exam = ExamMapper.getSingletonInstance().findWithID(examId);
+                exam.setStatus("MARKED");
+                UnitOfWork.getCurrent().registerDirty(exam);
 
-            ExamAnswer examAnswer = ExamAnswerMapper.getSingletonInstance().findWithID(examAnswerId);
-            examAnswer.load();
-            examAnswer.setFinalMark(marks);
-            UnitOfWork.getCurrent().registerDirty(examAnswer);
+                ExamAnswer examAnswer = ExamAnswerMapper.getSingletonInstance().findWithID(examAnswerId);
+                examAnswer.load();
+                examAnswer.setFinalMark(marks);
+                UnitOfWork.getCurrent().registerDirty(examAnswer);
 
-            JSONObject answersJsonObject = examAnswerJson.getJSONObject("answers");
-            Iterator keys = answersJsonObject.keys();
-            while(keys.hasNext()){
-                String questionAnswerId = (String) keys.next();
-                if(answersJsonObject.get(questionAnswerId) instanceof JSONObject){
-                    JSONObject answerJson = (JSONObject) answersJsonObject.get(questionAnswerId);
-                    String answer = answerJson.getString("answer");
-                    int mark = answerJson.getInt("mark");
+                JSONObject answersJsonObject = examAnswerJson.getJSONObject("answers");
+                Iterator keys = answersJsonObject.keys();
+                while(keys.hasNext()){
+                    String questionAnswerId = (String) keys.next();
+                    if(answersJsonObject.get(questionAnswerId) instanceof JSONObject){
+                        JSONObject answerJson = (JSONObject) answersJsonObject.get(questionAnswerId);
+                        String answer = answerJson.getString("answer");
+                        int mark = answerJson.getInt("mark");
 
-                    if(questionAnswerId.contains("Multiple")){
-                        MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswer = MultipleChoiceQuestionAnswerMapper.getSingletonInstance().findWithID(questionAnswerId);
-                        multipleChoiceQuestionAnswer.setMark(mark);
-                        UnitOfWork.getCurrent().registerDirty(multipleChoiceQuestionAnswer);
-                    } else {
-                        ShortAnswerQuestionAnswer shortAnswerQuestionAnswer = ShortAnswerQuestionAnswerMapper.getSingletonInstance().findWithID(questionAnswerId);
-                        shortAnswerQuestionAnswer.setMark(mark);
-                        UnitOfWork.getCurrent().registerDirty(shortAnswerQuestionAnswer);
+                        if(questionAnswerId.contains("Multiple")){
+                            MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswer = MultipleChoiceQuestionAnswerMapper.getSingletonInstance().findWithID(questionAnswerId);
+                            multipleChoiceQuestionAnswer.setMark(mark);
+                            UnitOfWork.getCurrent().registerDirty(multipleChoiceQuestionAnswer);
+                        } else {
+                            ShortAnswerQuestionAnswer shortAnswerQuestionAnswer = ShortAnswerQuestionAnswerMapper.getSingletonInstance().findWithID(questionAnswerId);
+                            shortAnswerQuestionAnswer.setMark(mark);
+                            UnitOfWork.getCurrent().registerDirty(shortAnswerQuestionAnswer);
+                        }
                     }
                 }
+
             }
+            UnitOfWork.getCurrent().commit();
 
+            JSONObject jsonObject = new JSONObject(String.format(
+                    "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
+            out.print(jsonObject);
+            response.setStatus(HttpServletResponse.SC_OK);
+            out.flush();
+            return;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        UnitOfWork.getCurrent().commit();
-
-        JSONObject jsonObject = new JSONObject(String.format(
-                "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
-        out.print(jsonObject);
-        response.setStatus(HttpServletResponse.SC_OK);
-        out.flush();
-        return;
-
-
 
 
 //        UnitOfWork.newCurrent();
@@ -181,53 +186,54 @@ public class examAnswerController extends HttpServlet {
      */ // student submits an exam answer
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "*");
+        try {
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Access-Control-Allow-Origin", "*");
 
-        if(TokenVerification.validLecturer(request, response) != TokenVerification.STUDENTFLAG){
-            JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-            out.print(jsonObject);
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            out.flush();
-            return;
-        }
+            if(TokenVerification.validLecturer(request, response) != TokenVerification.STUDENTFLAG){
+                JSONObject jsonObject = new JSONObject(String.format(
+                        "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
+                out.print(jsonObject);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                out.flush();
+                return;
+            }
 
-        UnitOfWork.newCurrent();
+            UnitOfWork.newCurrent();
 
-        String token = TokenVerification.getTokenFromHeader(request);
-        String userIdAndUserType = TokenVerification.verifyToken(token);
+            String token = TokenVerification.getTokenFromHeader(request);
+            String userIdAndUserType = TokenVerification.verifyToken(token);
 
-        String userId = userIdAndUserType.split(",", 2)[0];
+            String userId = userIdAndUserType.split(",", 2)[0];
 
-        String requestData = request.getReader().lines().collect(Collectors.joining());
-        JSONObject examJson = new JSONObject(requestData);
-        String examId = examJson.getString("examId");
-        JSONArray answers = examJson.getJSONArray("answers");
+            String requestData = request.getReader().lines().collect(Collectors.joining());
+            JSONObject examJson = new JSONObject(requestData);
+            String examId = examJson.getString("examId");
+            JSONArray answers = examJson.getJSONArray("answers");
 
-        ExamAnswer examAnswer = new ExamAnswer();
-        examAnswer.setStudentID(userId);
-        examAnswer.setExamID(examId);
-        examAnswer.setFinalMark(-1);
-        examAnswer.setId(KeyGenerator.getSingletonInstance().getKey(examAnswer));
+            ExamAnswer examAnswer = new ExamAnswer();
+            examAnswer.setStudentID(userId);
+            examAnswer.setExamID(examId);
+            examAnswer.setFinalMark(-1);
+            examAnswer.setId(KeyGenerator.getSingletonInstance().getKey(examAnswer));
 
-        UnitOfWork.getCurrent().registerNew(examAnswer);
+            UnitOfWork.getCurrent().registerNew(examAnswer);
 
 
-        Exam exam = ExamMapper.getSingletonInstance().findWithID(examId);
-        //System.out.println("Status1: "+exam.getStatus());
-        if (exam.getStatus().equals("PUBLISHED") || exam.getStatus().equals("ONGOING")) {
-            exam.setStatus("ONGOING");
-        }else{
-            JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
-            out.print(jsonObject);
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-            out.flush();
-            return;
-        }
+            Exam exam = ExamMapper.getSingletonInstance().findWithID(examId);
+            //System.out.println("Status1: "+exam.getStatus());
+            if (exam.getStatus().equals("PUBLISHED") || exam.getStatus().equals("ONGOING")) {
+                exam.setStatus("ONGOING");
+            }else{
+                JSONObject jsonObject = new JSONObject(String.format(
+                        "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+                out.print(jsonObject);
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                out.flush();
+                return;
+            }
 
 //        if(ExamAnswerMapper.getSingletonInstance().checkIfStudentAnswer(examAnswer.getExamID(), userId)){
 //            JSONObject jsonObject = new JSONObject(String.format(
@@ -239,72 +245,75 @@ public class examAnswerController extends HttpServlet {
 //        }
 
 
+            for(int i = 0; i< answers.length(); i++){
+                JSONObject examAnswerJson = (JSONObject) answers.get(i);
+                // System.out.println("this is your exam answer" + examAnswerJson.toString());
+                String questionId = examAnswerJson.getString("questionId");
+                String answer = "";
+                int newAnswer = -1;
+                try{
+                    answer = examAnswerJson.getString("answer");
+                } catch(JSONException e){
+                    System.out.println("JSON EXCEPTION ERROR: "+ e.toString());
+                    newAnswer = examAnswerJson.getInt("answer");
+                }
+                int mark = -1;
 
-        for(int i = 0; i< answers.length(); i++){
-            JSONObject examAnswerJson = (JSONObject) answers.get(i);
-            // System.out.println("this is your exam answer" + examAnswerJson.toString());
-            String questionId = examAnswerJson.getString("questionId");
-            String answer = "";
-            int newAnswer = -1;
-            try{
-                answer = examAnswerJson.getString("answer");
-            } catch(org.json.JSONException e){
-                System.out.println("JSON EXCEPTION ERROR: "+ e.toString());
-                newAnswer = examAnswerJson.getInt("answer");
+                // todo find the question
+
+                MultipleChoiceQuestion multipleChoiceQuestion = MultipleChoiceQuestionMapper.getSingletonInstance().findWithID(questionId);
+                ShortAnswerQuestion shortAnswerQuestion = ShortAnswerQuestionMapper.getSingletonInstance().findWithID(questionId);
+
+                if(multipleChoiceQuestion.getId() == null){
+                    // it's a short answer question
+                    ShortAnswerQuestionAnswer shortAnswerQuestionAnswer= new ShortAnswerQuestionAnswer();
+                    shortAnswerQuestionAnswer.setAnswer(answer);
+                    shortAnswerQuestionAnswer.setQuestionID(questionId);
+                    shortAnswerQuestionAnswer.setMark(mark);
+                    shortAnswerQuestionAnswer.setExamAnswerID(examAnswer.getId());
+                    shortAnswerQuestionAnswer.setShortAnswerQuestion(shortAnswerQuestion);
+                    shortAnswerQuestionAnswer.setId(KeyGenerator.getSingletonInstance().getKey(shortAnswerQuestionAnswer));
+                    UnitOfWork.getCurrent().registerNew(shortAnswerQuestionAnswer);
+                } else{
+                    MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswer= new MultipleChoiceQuestionAnswer();
+
+                    multipleChoiceQuestionAnswer.setAnswerIndex(newAnswer);
+                    multipleChoiceQuestionAnswer.setExamAnswerID(examAnswer.getId());
+                    multipleChoiceQuestionAnswer.setQuestionID(questionId);
+                    multipleChoiceQuestionAnswer.setMark(mark);
+                    multipleChoiceQuestionAnswer.setMultipleChoiceQuestion(multipleChoiceQuestion);
+                    multipleChoiceQuestionAnswer.setId(KeyGenerator.getSingletonInstance().getKey(multipleChoiceQuestionAnswer));
+                    UnitOfWork.getCurrent().registerNew(multipleChoiceQuestionAnswer);
+                }
+
+    //            UnitOfWork.getCurrent().commit();
             }
-            int mark = -1;
 
-            // todo find the question
-
-            MultipleChoiceQuestion multipleChoiceQuestion = MultipleChoiceQuestionMapper.getSingletonInstance().findWithID(questionId);
-            ShortAnswerQuestion shortAnswerQuestion = ShortAnswerQuestionMapper.getSingletonInstance().findWithID(questionId);
-
-            if(multipleChoiceQuestion.getId() == null){
-                // it's a short answer question
-                ShortAnswerQuestionAnswer shortAnswerQuestionAnswer= new ShortAnswerQuestionAnswer();
-                shortAnswerQuestionAnswer.setAnswer(answer);
-                shortAnswerQuestionAnswer.setQuestionID(questionId);
-                shortAnswerQuestionAnswer.setMark(mark);
-                shortAnswerQuestionAnswer.setExamAnswerID(examAnswer.getId());
-                shortAnswerQuestionAnswer.setShortAnswerQuestion(shortAnswerQuestion);
-                shortAnswerQuestionAnswer.setId(KeyGenerator.getSingletonInstance().getKey(shortAnswerQuestionAnswer));
-                UnitOfWork.getCurrent().registerNew(shortAnswerQuestionAnswer);
-            } else{
-                MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswer= new MultipleChoiceQuestionAnswer();
-
-                multipleChoiceQuestionAnswer.setAnswerIndex(newAnswer);
-                multipleChoiceQuestionAnswer.setExamAnswerID(examAnswer.getId());
-                multipleChoiceQuestionAnswer.setQuestionID(questionId);
-                multipleChoiceQuestionAnswer.setMark(mark);
-                multipleChoiceQuestionAnswer.setMultipleChoiceQuestion(multipleChoiceQuestion);
-                multipleChoiceQuestionAnswer.setId(KeyGenerator.getSingletonInstance().getKey(multipleChoiceQuestionAnswer));
-                UnitOfWork.getCurrent().registerNew(multipleChoiceQuestionAnswer);
+            System.out.println("Status3: "+exam.getStatus());
+            List<ExamAnswer> submitted = exam.getExamAnswers();
+            if (submitted.size() + 1 == StudentMapper.getSingletonInstance().findWithSubjectID(exam.getSubjectID()).size()) {
+                exam.setStatus("CLOSED");
             }
+            System.out.println("Status2: "+exam.getStatus());
 
-//            UnitOfWork.getCurrent().commit();
-        }
-
-        System.out.println("Status3: "+exam.getStatus());
-        List<ExamAnswer> submitted = exam.getExamAnswers();
-        if (submitted.size() + 1 == StudentMapper.getSingletonInstance().findWithSubjectID(exam.getSubjectID()).size()) {
-            exam.setStatus("CLOSED");
-        }
-        System.out.println("Status2: "+exam.getStatus());
-
-        UnitOfWork.getCurrent().registerDirty(exam);
+            UnitOfWork.getCurrent().registerDirty(exam);
 
 
 //         validate this examAnswer
 
-        UnitOfWork.getCurrent().commit();
+            UnitOfWork.getCurrent().commit();
 
 
-
-        JSONObject jsonObject = new JSONObject(String.format(
-                "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
-        out.print(jsonObject);
-        response.setStatus(HttpServletResponse.SC_OK);
-        out.flush();
+            JSONObject jsonObject = new JSONObject(String.format(
+                    "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
+            out.print(jsonObject);
+            response.setStatus(HttpServletResponse.SC_OK);
+            out.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
     }
 

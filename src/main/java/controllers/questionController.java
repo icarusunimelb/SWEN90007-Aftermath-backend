@@ -35,43 +35,46 @@ public class questionController extends HttpServlet {
      */
     // /api/question-controller?dataId=examId
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            PrintWriter out = response.getWriter();
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("Access-Control-Allow-Origin", "*");
 
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "*");
-
-        if(TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG){
-            JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-            out.print(jsonObject);
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            out.flush();
-            return;
-        }
-
-
-        String examId = request.getParameter("dataId");
-        Exam exam = new Exam();
-        exam.setId(examId);
-        exam.load();
+            if (TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG) {
+                JSONObject jsonObject = new JSONObject(String.format(
+                        "{\"code\":\"%s\"}", HttpServletResponse.SC_UNAUTHORIZED));
+                out.print(jsonObject);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                out.flush();
+                return;
+            }
 
 
-        List<Question> questions = exam.getQuestions();
-        if(questions.size() == 0){
-            out.print("[]");
-            response.setStatus(HttpServletResponse.SC_OK);
-            out.flush();
-        } else {
-            List<DTOQuestion> dtoQuestions = questions.stream().map(question -> new DTOQuestion(question)).collect(Collectors.toList());
-            String json = new Gson().toJson(dtoQuestions);
-//            String newJson = json.replace("\"id\":", "\"dataId\":")
-//                    .replace("\"questionBody\":", "\"description\":")
-//                    .replace("\"totalMark\":", "\"marks\":")
-//                    .replace("\"multipleChoices\":", "\"choices\":");
-            out.print(json);
-            response.setStatus(HttpServletResponse.SC_OK);
-            out.flush();
+            String examId = request.getParameter("dataId");
+            Exam exam = new Exam();
+            exam.setId(examId);
+            exam.load();
+
+
+            List<Question> questions = exam.getQuestions();
+            if (questions.size() == 0) {
+                out.print("[]");
+                response.setStatus(HttpServletResponse.SC_OK);
+                out.flush();
+            } else {
+                List<DTOQuestion> dtoQuestions = questions.stream().map(question -> new DTOQuestion(question)).collect(Collectors.toList());
+                String json = new Gson().toJson(dtoQuestions);
+    //            String newJson = json.replace("\"id\":", "\"dataId\":")
+    //                    .replace("\"questionBody\":", "\"description\":")
+    //                    .replace("\"totalMark\":", "\"marks\":")
+    //                    .replace("\"multipleChoices\":", "\"choices\":");
+                out.print(json);
+                response.setStatus(HttpServletResponse.SC_OK);
+                out.flush();
+            }
+        }catch (Exception e){
+            System.out.println(e.getMessage());
         }
 
 
