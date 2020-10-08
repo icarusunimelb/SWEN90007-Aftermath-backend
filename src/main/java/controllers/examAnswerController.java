@@ -97,25 +97,26 @@ public class examAnswerController extends HttpServlet {
                 UnitOfWork.getCurrent().registerDirty(exam);
 
                 ExamAnswer examAnswer = ExamAnswerMapper.getSingletonInstance().findWithID(examAnswerId);
-                examAnswer.load();
                 examAnswer.setFinalMark(marks);
                 UnitOfWork.getCurrent().registerDirty(examAnswer);
 
                 JSONObject answersJsonObject = examAnswerJson.getJSONObject("answers");
                 Iterator keys = answersJsonObject.keys();
                 while(keys.hasNext()){
-                    String questionAnswerId = (String) keys.next();
-                    if(answersJsonObject.get(questionAnswerId) instanceof JSONObject){
-                        JSONObject answerJson = (JSONObject) answersJsonObject.get(questionAnswerId);
-                        String answer = answerJson.getString("answer");
+                    String questionId = (String) keys.next();
+                    if(answersJsonObject.get(questionId) instanceof JSONObject){
+                        JSONObject answerJson = (JSONObject) answersJsonObject.get(questionId);
+                        // String answer = answerJson.getString("answer");
                         int mark = answerJson.getInt("mark");
 
-                        if(questionAnswerId.contains("Multiple")){
-                            MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswer = MultipleChoiceQuestionAnswerMapper.getSingletonInstance().findWithID(questionAnswerId);
+                        if(questionId.contains("Multiple")){
+                            MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswer =
+                                    MultipleChoiceQuestionAnswerMapper.getSingletonInstance().findWithTwoID(examAnswerId, questionId);
                             multipleChoiceQuestionAnswer.setMark(mark);
                             UnitOfWork.getCurrent().registerDirty(multipleChoiceQuestionAnswer);
                         } else {
-                            ShortAnswerQuestionAnswer shortAnswerQuestionAnswer = ShortAnswerQuestionAnswerMapper.getSingletonInstance().findWithID(questionAnswerId);
+                            ShortAnswerQuestionAnswer shortAnswerQuestionAnswer =
+                                    ShortAnswerQuestionAnswerMapper.getSingletonInstance().findWithTwoID(examAnswerId, questionId);
                             shortAnswerQuestionAnswer.setMark(mark);
                             UnitOfWork.getCurrent().registerDirty(shortAnswerQuestionAnswer);
                         }

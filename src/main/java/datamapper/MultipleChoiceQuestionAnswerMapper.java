@@ -26,6 +26,32 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
         return instance;
     }
 
+    private static final String findWithTwoID = "SELECT m.multipleChoiceQuestionAnswerID, m.mark, m.answerIndex "
+            + "FROM oes.multipleChoiceQuestionAnswers m "
+            + "WHERE m.examAnswerID = ? AND m.questionID = ?";
+    public MultipleChoiceQuestionAnswer findWithTwoID(String examAnswerID, String questionID){
+        MultipleChoiceQuestionAnswer answer = new MultipleChoiceQuestionAnswer();
+        try {
+            PreparedStatement findStatement = DBConnection.prepare(findWithTwoID);
+            findStatement.setString(1,examAnswerID);
+            findStatement.setString(2,questionID);
+            ResultSet rs = findStatement.executeQuery();
+            if (rs.next()) {
+                String id = rs.getString(1);
+                int mark = rs.getInt(2);
+                int answerIndex = rs.getInt(3);
+                answer.setExamAnswerID(examAnswerID);
+                answer.setId(id);
+                answer.setAnswerIndex(answerIndex);
+                answer.setMark(mark);
+                answer.setQuestionID(questionID);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return answer;
+    }
+
     private static final String findWithID = "SELECT m.questionID, m.examAnswerID, m.mark, m.answerIndex "
             + "FROM oes.multipleChoiceQuestionAnswers m "
             + "WHERE m.multipleChoiceQuestionAnswerID = ?";
@@ -35,7 +61,7 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
             PreparedStatement findStatement = DBConnection.prepare(findAnswerStatement);
             findStatement.setString(1,id);
             ResultSet rs = findStatement.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
                 String questionID = rs.getString(1);
                 String examAnswerID = rs.getString(2);
                 int mark = rs.getInt(3);
@@ -45,7 +71,6 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
                 answer.setAnswerIndex(answerIndex);
                 answer.setMark(mark);
                 answer.setQuestionID(questionID);
-                IdentityMap.getInstance(answer).put(id, answer);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

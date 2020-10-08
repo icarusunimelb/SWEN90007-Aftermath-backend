@@ -17,8 +17,8 @@ public class DTOSubmission {
         marks = examAnswer.getFinalMark();
         studentId = examAnswer.getStudentID();
         for (Answer ans: examAnswer.getAnswers()) {
-            System.out.println("ans id: "+ans.getQuestionID());
-            System.out.println("DTOAnswer: "+new Gson().toJson(new DTOAnswer(ans)));
+            //System.out.println("ans id: "+ans.getQuestionID());
+            //System.out.println("DTOAnswer: "+new Gson().toJson(new DTOAnswer(ans)));
             answers.put(ans.getQuestionID(), new DTOAnswer(ans));
         }
     }

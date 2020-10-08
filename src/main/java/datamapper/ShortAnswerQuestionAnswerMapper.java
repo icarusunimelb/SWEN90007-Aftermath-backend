@@ -27,6 +27,32 @@ public class ShortAnswerQuestionAnswerMapper extends DataMapper{
         return instance;
     }
 
+    private static final String findWithTwoID = "SELECT s.shortAnswerQuestionAnswerID, s.mark, s.answer "
+            + "FROM oes.shortAnswerQuestionAnswers s "
+            + "WHERE s.examAnswerID = ? AND s.questionID = ?";
+    public ShortAnswerQuestionAnswer findWithTwoID(String examAnswerID, String questionID){
+        ShortAnswerQuestionAnswer answer = new ShortAnswerQuestionAnswer();
+        try {
+            PreparedStatement findStatement = DBConnection.prepare(findWithTwoID);
+            findStatement.setString(1,examAnswerID);
+            findStatement.setString(2,questionID);
+            ResultSet rs = findStatement.executeQuery();
+            if (rs.next()) {
+                String id = rs.getString(1);
+                int mark = rs.getInt(2);
+                String answerText = rs.getString(3);
+                answer.setExamAnswerID(examAnswerID);
+                answer.setId(id);
+                answer.setAnswer(answerText);
+                answer.setMark(mark);
+                answer.setQuestionID(questionID);
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return answer;
+    }
+
     private static final String findWithID = "SELECT s.questionID, s.examAnswerID, s.mark, s.answer "
             + "FROM oes.shortAnswerQuestionAnswers s "
             + "WHERE s.shortAnswerQuestionAnswerID = ?";
@@ -36,7 +62,7 @@ public class ShortAnswerQuestionAnswerMapper extends DataMapper{
             PreparedStatement findStatement = DBConnection.prepare(findWithID);
             findStatement.setString(1,id);
             ResultSet rs = findStatement.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
                 String questionID = rs.getString(1);
                 String examAnswerID = rs.getString(2);
                 int mark = rs.getInt(3);
