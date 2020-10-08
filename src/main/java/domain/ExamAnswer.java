@@ -1,5 +1,6 @@
 package domain;
 
+import com.google.gson.Gson;
 import datamapper.ChoiceMapper;
 import datamapper.ExamAnswerMapper;
 import datamapper.MultipleChoiceQuestionAnswerMapper;
@@ -47,6 +48,7 @@ public class ExamAnswer extends DomainObject{
             List<Answer> tempAnswers = new ArrayList<>();
             tempAnswers.addAll(MultipleChoiceQuestionAnswerMapper.getSingletonInstance().findAllAnswers(getId()));
             tempAnswers.addAll(ShortAnswerQuestionAnswerMapper.getSingletonInstance().findAllAnswers(getId()));
+            System.out.println("EXAM-ANSWER-ITEMS: "+new Gson().toJson(tempAnswers));
             setAnswers(tempAnswers);
         }
         return answers;
