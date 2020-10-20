@@ -133,8 +133,11 @@ public class ExamMapper extends DataMapper{
 
             // delete questions
             for (Question question : ((Exam) object).getQuestions()) {
-                MultipleChoiceQuestionMapper.getSingletonInstance().delete(question);
-                ShortAnswerQuestionMapper.getSingletonInstance().delete(question);
+                if (question instanceof MultipleChoiceQuestion) {
+                    MultipleChoiceQuestionMapper.getSingletonInstance().delete(question);
+                } else {
+                    ShortAnswerQuestionMapper.getSingletonInstance().delete(question);
+                }
             }
 
             updateStatement.setString(1, examObj.getId());
