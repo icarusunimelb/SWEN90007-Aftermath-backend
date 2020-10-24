@@ -33,35 +33,8 @@ public class examController extends HttpServlet {
     }
 
     /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-     */ // /api/exam-controller?dataId=123456
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        String examId = request.getParameter("dataId");
-//
-//        PrintWriter out = response.getWriter();
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//        response.addHeader("Access-Control-Allow-Origin", "*");
-//
-//        String token = TokenVerification.getTokenFromHeader(request);
-//        String userIdAndUserType = TokenVerification.verifyToken(token);
-//
-//        String userId = userIdAndUserType.split(",", 2)[0];
-//        String userType = userIdAndUserType.split(",", 2)[1];
-//
-//        Exam exam = new Exam();
-//
-//
-//        JSONObject jsonObject = new JSONObject(String.format(
-//                    "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
-//        out.print(jsonObject);
-//        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        out.flush();
-    }
-
-    /**
      * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-     */ ///api/exam-controller?status=publish&dataId:123456
+     */
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String status = request.getParameter("status");
@@ -224,16 +197,6 @@ public class examController extends HttpServlet {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-//        Exam exam = new Exam();
-//        exam.setSubjectID(subjectId);
-//        exam.setExamName(examName);
-//        exam.setId(KeyGenerator.getSingletonInstance().getKey(exam));
-//
-//        UnitOfWork.newCurrent();
-//        UnitOfWork.getCurrent().registerNew(exam);
-//        UnitOfWork.getCurrent().commit();
-
     }
 
     /**

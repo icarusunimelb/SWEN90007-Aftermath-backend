@@ -80,68 +80,6 @@ public class questionController extends HttpServlet {
 
     }
 
-    /**
-     * @see HttpServlet#doPut(HttpServletRequest request, HttpServletResponse response)
-     */
-    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        String questionBody = request.getParameter("questionBody");
-//        String examID = request.getParameter("exam_id");
-//
-//        MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion() ;
-//        multipleChoiceQuestion.setQuestionBody(questionBody);
-//        multipleChoiceQuestion.setExamID(examID);
-//        multipleChoiceQuestion.setId(KeyGenerator.getSingletonInstance().getKey(multipleChoiceQuestion));
-//
-//        UnitOfWork.newCurrent();
-//        UnitOfWork.getCurrent().registerNew(multipleChoiceQuestion);
-//
-//        PrintWriter out = response.getWriter();
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//        response.addHeader("Access-Control-Allow-Origin", "*");
-//        out.print("Success");
-//        out.flush();
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        String id = request.getParameter("mcq_id");
-//        String questionBody = request.getParameter("questionBody");
-//        String examID = request.getParameter("exam_id");
-//
-//        MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion() ;
-//        multipleChoiceQuestion.setQuestionBody(questionBody);
-//        multipleChoiceQuestion.setExamID(examID);
-//        multipleChoiceQuestion.setId(id);
-//        UnitOfWork.newCurrent();
-//        UnitOfWork.getCurrent().registerDirty(multipleChoiceQuestion);
-//
-//        PrintWriter out = response.getWriter();
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//        response.addHeader("Access-Control-Allow-Origin", "*");
-//        out.print("Success");
-//        out.flush();
-    }
-
-
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        String id = request.getParameter("mcq_id");
-//
-//        MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion() ;
-//        multipleChoiceQuestion.setId(id);
-//
-//        UnitOfWork.newCurrent();
-//        UnitOfWork.getCurrent().registerDeleted(multipleChoiceQuestion);
-//        UnitOfWork.getCurrent().commit();
-//
-//        PrintWriter out = response.getWriter();
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//        response.addHeader("Access-Control-Allow-Origin", "*");
-//        out.print("Success");
-//        out.flush();
-    }
-
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

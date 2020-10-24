@@ -34,33 +34,6 @@ public class examAnswerController extends HttpServlet {
         super();
     }
 
-    /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-     */ // /api/exam-controller?dataId=123456
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        String examId = request.getParameter("dataId");
-//
-//        PrintWriter out = response.getWriter();
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//        response.addHeader("Access-Control-Allow-Origin", "*");
-//
-//        String token = TokenVerification.getTokenFromHeader(request);
-//        String userIdAndUserType = TokenVerification.verifyToken(token);
-//
-//        String userId = userIdAndUserType.split(",", 2)[0];
-//        String userType = userIdAndUserType.split(",", 2)[1];
-//
-//        Exam exam = new Exam();
-//
-//
-//        JSONObject jsonObject = new JSONObject(String.format(
-//                    "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
-//        out.print(jsonObject);
-//        response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//        out.flush();
-    }
-
      // update exam answer marks
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -138,48 +111,6 @@ public class examAnswerController extends HttpServlet {
             e.printStackTrace();
         }
 
-
-//        UnitOfWork.newCurrent();
-//
-//        String requestData = request.getReader().lines().collect(Collectors.joining());
-//        JSONArray examAnswerArray = new JSONArray(requestData);
-////
-//        for ( int i = 0; i < examAnswerArray.length(); i ++){
-//            JSONObject examAnswerJson = (JSONObject) examAnswerArray.get(i);
-//
-//            String examAnswerId = examAnswerJson.getString("dataId");
-//            String marks = examAnswerJson.getString("marks");
-//
-//            ExamAnswer examAnswer = ExamAnswerMapper.getSingletonInstance().findWithID(examAnswerId);
-//            examAnswer.load();
-//            examAnswer.setFinalMark(Double.parseDouble(marks));
-//            UnitOfWork.getCurrent().registerDirty(examAnswer);
-//            JSONArray answersJsonArray = examAnswerJson.getJSONArray("answers");
-//            for ( int j = 0; j < answersJsonArray.length(); j ++){
-//                JSONObject answerJson = (JSONObject) examAnswerArray.get(i);
-//                String answerId = answerJson.getString("dataId");
-//                String mark = answerJson.getString("mark");
-//                ShortAnswerQuestionAnswer shortAnswerQuestionAnswer = ShortAnswerQuestionAnswerMapper.getSingletonInstance().findWithID(answerId);
-//                if(shortAnswerQuestionAnswer.getId() == null || shortAnswerQuestionAnswer.getId().equals("")){
-//                    MultipleChoiceQuestionAnswer multipleChoiceQuestionAnswer = MultipleChoiceQuestionAnswerMapper.getSingletonInstance().findWithID(examAnswerId);
-//                    multipleChoiceQuestionAnswer.setMark(Double.parseDouble(mark));
-//                    UnitOfWork.getCurrent().registerDirty(multipleChoiceQuestionAnswer);
-//                } else {
-//                    shortAnswerQuestionAnswer.setMark(Double.parseDouble(mark));
-//                    UnitOfWork.getCurrent().registerDirty(shortAnswerQuestionAnswer);
-//                }
-//            }
-//
-//            UnitOfWork.getCurrent().commit();
-//        }
-//
-//        JSONObject jsonObject = new JSONObject(String.format(
-//                "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
-//        out.print(jsonObject);
-//        response.setStatus(HttpServletResponse.SC_OK);
-//        out.flush();
-//        return;
-
     }
 
     /**
@@ -235,16 +166,6 @@ public class examAnswerController extends HttpServlet {
                 out.flush();
                 return;
             }
-
-//        if(ExamAnswerMapper.getSingletonInstance().checkIfStudentAnswer(examAnswer.getExamID(), userId)){
-//            JSONObject jsonObject = new JSONObject(String.format(
-//                    "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
-//            out.print(jsonObject);
-//            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-//            out.flush();
-//            return;
-//        }
-
 
             for(int i = 0; i< answers.length(); i++){
                 JSONObject examAnswerJson = (JSONObject) answers.get(i);
@@ -319,27 +240,6 @@ public class examAnswerController extends HttpServlet {
 
     }
 
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        String examID =request.getParameter("dataId");
-//
-//        Exam exam = new Exam();
-//        exam.setId(examID);
-//
-//        UnitOfWork.newCurrent();
-//        UnitOfWork.getCurrent().registerDeleted(exam);
-//        UnitOfWork.getCurrent().commit();
-//
-//        PrintWriter out = response.getWriter();
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//        response.addHeader("Access-Control-Allow-Origin", "*");
-//        JSONObject jsonObject = new JSONObject(String.format(
-//                "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
-//        out.print(jsonObject);
-//        response.setStatus(HttpServletResponse.SC_OK);
-//        out.flush();
-
-    }
 
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         response.setContentType("application/json");
