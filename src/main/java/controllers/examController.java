@@ -417,7 +417,7 @@ public class examController extends HttpServlet {
 
         return newJsonArray;
     }
-    
+
     protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
