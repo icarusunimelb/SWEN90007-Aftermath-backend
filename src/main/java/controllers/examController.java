@@ -276,6 +276,19 @@ public class examController extends HttpServlet {
             exam.setId(examID);
 
             UnitOfWork.newCurrent();
+
+
+            // delete questions
+            for (Question question : exam.getQuestions()) {
+                if (question instanceof MultipleChoiceQuestion) {
+                    // delete choices
+                    for (Choice multipleChoice : ((MultipleChoiceQuestion) question).getMultipleChoices()) {
+                        UnitOfWork.getCurrent().registerDirty(multipleChoice);
+                    }
+                }
+                UnitOfWork.getCurrent().registerDirty(question);
+            }
+
             UnitOfWork.getCurrent().registerDeleted(exam);
             UnitOfWork.getCurrent().commit();
 

@@ -134,6 +134,7 @@ public class InstructorMapper extends DataMapper{
     public void delete(DomainObject object) {
         Instructor instructorObj = (Instructor) object;
         try {
+            System.out.println("Warning: Instructor cannot be deleted!!!");
             PreparedStatement updateStatement = DBConnection.prepare(deleteInstructorStatement);
             updateStatement.setString(1, instructorObj.getId());
             updateStatement.execute();

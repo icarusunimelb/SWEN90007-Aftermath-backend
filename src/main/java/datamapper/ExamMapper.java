@@ -121,25 +121,6 @@ public class ExamMapper extends DataMapper{
         Exam examObj = (Exam) object;
         try {
             PreparedStatement updateStatement = DBConnection.prepare(deleteExamStatement);
-
-            // delete answers and submissions
-            for (ExamAnswer examAnswer : ((Exam) object).getExamAnswers()) {
-                for (Answer answer : examAnswer.getAnswers()) {
-                    MultipleChoiceQuestionAnswerMapper.getSingletonInstance().delete(answer);
-                    ShortAnswerQuestionAnswerMapper.getSingletonInstance().delete(answer);
-                }
-                ExamAnswerMapper.getSingletonInstance().delete(examAnswer);
-            }
-
-            // delete questions
-            for (Question question : ((Exam) object).getQuestions()) {
-                if (question instanceof MultipleChoiceQuestion) {
-                    MultipleChoiceQuestionMapper.getSingletonInstance().delete(question);
-                } else {
-                    ShortAnswerQuestionMapper.getSingletonInstance().delete(question);
-                }
-            }
-
             updateStatement.setString(1, examObj.getId());
             updateStatement.execute();
         } catch (SQLException e) {
