@@ -4,33 +4,35 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 
-public class LockManagerEX {
+public class LockManager {
 	
-	private static LockManagerEX instance;
+	private static LockManager instance;
 	
 	//Key: lockable
 	//Value: owner
 	private ConcurrentMap<String, String> lockMap;
 
-	public static synchronized LockManagerEX getInstance() {
+	public static synchronized LockManager getInstance() {
 		if(instance == null) {
-			instance = new LockManagerEX();
+			instance = new LockManager();
 		}
 		return instance;
 	}
 	
-	private LockManagerEX() {
+	private LockManager() {
 		lockMap = new ConcurrentHashMap<String, String>();
 	}
-	
-	public boolean acquireLock(String lockable, String owner) {
-		if(!lockMap.containsKey(lockable)) {
-			//no lock on lockable, grant lock
-			lockMap.put(lockable, owner);
-			return true;
+
+	public synchronized void acquireLock(String lockable, String owner) {
+		while(lockMap.containsKey(lockable)) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 
-		return false;
+		lockMap.put(lockable, owner);
 	}
 	
 	public void releaseLock(String lockable, String owner) {

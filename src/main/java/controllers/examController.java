@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import utils.KeyGenerator;
+import utils.LockManager;
 import utils.TokenVerification;
 import utils.UnitOfWork;
 
@@ -53,6 +54,9 @@ public class examController extends HttpServlet {
                 out.flush();
                 return;
             }
+
+            // get the lock of current exam
+            LockManager.getInstance().acquireLock(examId, Thread.currentThread().getName());
 
             Exam exam = new Exam();
             exam.setId(examId);
@@ -167,7 +171,6 @@ public class examController extends HttpServlet {
 
                     //System.out.println("this is your exam answer" + questionJson.toString());
                 }
-                UnitOfWork.getCurrent().commit();
 
                 // todo confirm with front end about the format of request
 
@@ -184,6 +187,9 @@ public class examController extends HttpServlet {
 
             UnitOfWork.getCurrent().registerDirty(exam);
             UnitOfWork.getCurrent().commit();
+
+            // release the lock of current exam
+            LockManager.getInstance().releaseLock(examId, Thread.currentThread().getName());
 
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
@@ -270,11 +276,13 @@ public class examController extends HttpServlet {
 
             String examID =request.getParameter("dataId");
 
+            // get the lock for the exam
+            LockManager.getInstance().acquireLock(examID, Thread.currentThread().getName());
+
             Exam exam = new Exam();
             exam.setId(examID);
 
             UnitOfWork.newCurrent();
-
 
             // delete questions
             for (Question question : exam.getQuestions()) {
@@ -289,6 +297,9 @@ public class examController extends HttpServlet {
 
             UnitOfWork.getCurrent().registerDeleted(exam);
             UnitOfWork.getCurrent().commit();
+
+            // release the lock for the exam
+            LockManager.getInstance().releaseLock(examID, Thread.currentThread().getName());
 
 
             JSONObject jsonObject = new JSONObject(String.format(
