@@ -3,6 +3,7 @@ package datamapper;
 import datasource.DBConnection;
 import domain.Choice;
 import domain.DomainObject;
+import exceptions.RecordNotExistException;
 import utils.IdentityMap;
 
 import java.sql.PreparedStatement;
@@ -86,7 +87,7 @@ public class ChoiceMapper extends DataMapper{
     private static final String insertChoiceStatement =
             "INSERT INTO oes.choices (choiceID, questionID, choice, index) VALUES (?, ?, ?, ?)";
     @Override
-    public void insert(DomainObject object) {
+    public void insert(DomainObject object) throws RecordNotExistException{
         Choice choiceObj = (Choice) object;
         try {
             PreparedStatement insertStatement = DBConnection.prepare(insertChoiceStatement);
@@ -104,7 +105,7 @@ public class ChoiceMapper extends DataMapper{
     private static final String updateChoiceStatement =
             "UPDATE oes.choices SET choice = ? WHERE choiceID = ?";
     @Override
-    public void update(DomainObject object) {
+    public void update(DomainObject object) throws RecordNotExistException {
         Choice choiceObj = (Choice) object;
         try {
             PreparedStatement updateStatement = DBConnection.prepare(updateChoiceStatement);

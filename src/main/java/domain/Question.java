@@ -1,12 +1,14 @@
 package domain;
 
+import exceptions.RecordNotExistException;
+
 public class Question extends DomainObject{
     private String title = null;
     private int totalMark = -100;
     private String questionBody = null;
     private String examID = null;
 
-    public String getTitle() {
+    public String getTitle() throws RecordNotExistException {
         return title;
     }
 
@@ -16,7 +18,7 @@ public class Question extends DomainObject{
 
     public Question(){super();};
 
-    public String getExamID() {
+    public String getExamID() throws RecordNotExistException{
         return examID;
     }
 
@@ -24,7 +26,7 @@ public class Question extends DomainObject{
         this.examID = examID;
     }
 
-    public int getTotalMark() {
+    public int getTotalMark() throws RecordNotExistException{
         return totalMark;
     }
 
@@ -32,7 +34,7 @@ public class Question extends DomainObject{
         this.totalMark = totalMark;
     }
 
-    public String getQuestionBody() {
+    public String getQuestionBody() throws RecordNotExistException{
         return questionBody;
     }
 

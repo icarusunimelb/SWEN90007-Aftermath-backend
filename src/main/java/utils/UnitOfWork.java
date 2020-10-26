@@ -3,6 +3,7 @@ package utils;
 import datamapper.DataMapperFactory;
 import domain.DomainObject;
 import exceptions.NoSuchMapperTypeException;
+import exceptions.RecordNotExistException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class UnitOfWork {
                 !deletedObjects.contains(obj);
     }
 
-    public void commit() {
+    public void commit() throws RecordNotExistException {
         try {
             for (DomainObject object : newObjects) {
                 DataMapperFactory.getMapper(object.getClass().getName()).insert(object);

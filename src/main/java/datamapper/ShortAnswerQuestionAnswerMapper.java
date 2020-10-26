@@ -4,6 +4,7 @@ import datasource.DBConnection;
 import domain.DomainObject;
 import domain.MultipleChoiceQuestionAnswer;
 import domain.ShortAnswerQuestionAnswer;
+import exceptions.RecordNotExistException;
 import utils.IdentityMap;
 
 import java.sql.PreparedStatement;
@@ -116,7 +117,7 @@ public class ShortAnswerQuestionAnswerMapper extends DataMapper{
                     "VALUES (?, ?, ?, ?, ?)";
 
     @Override
-    public void insert(DomainObject object) {
+    public void insert(DomainObject object) throws RecordNotExistException {
         ShortAnswerQuestionAnswer shortAnswerQuestionAnswerObj = (ShortAnswerQuestionAnswer) object;
         try {
             PreparedStatement insertStatement = DBConnection.prepare(insertAnswerStatement);
@@ -135,7 +136,7 @@ public class ShortAnswerQuestionAnswerMapper extends DataMapper{
             "UPDATE oes.shortAnswerQuestionAnswers SET answer = ?, mark = ? " +
                     "WHERE shortAnswerQuestionAnswerID = ?";
     @Override
-    public void update(DomainObject object) {
+    public void update(DomainObject object) throws RecordNotExistException{
         ShortAnswerQuestionAnswer shortAnswerQuestionAnswerObj = (ShortAnswerQuestionAnswer) object;
         try {
             PreparedStatement updateStatement = DBConnection.prepare(updateSAQAStatement);

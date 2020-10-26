@@ -10,6 +10,7 @@ import datamapper.InstructorMapper;
 import datamapper.StudentMapper;
 
 import domain.Subject;
+import exceptions.RecordNotExistException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -116,6 +117,8 @@ public class examsController extends HttpServlet {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
+        } catch (RecordNotExistException e) {
+            e.printStackTrace();
         }
         //System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
     }
@@ -130,7 +133,7 @@ public class examsController extends HttpServlet {
         return newJsonArray;
     }
 
-    private String markExams(String userId){
+    private String markExams(String userId) throws RecordNotExistException {
         List<Subject> subjects = InstructorMapper.getSingletonInstance().getMarkingSubjects(userId);
         List<DTOSubjectSubmission> dtoSubjectSubmissions = new ArrayList<>();
 
@@ -148,7 +151,7 @@ public class examsController extends HttpServlet {
         return json;
     }
 
-    private String takeExams(String userId){
+    private String takeExams(String userId) throws RecordNotExistException {
         List<Subject> subjects = StudentMapper.getSingletonInstance().getTakingSubjects(userId);
 
         String json = new Gson().toJson(subjects);

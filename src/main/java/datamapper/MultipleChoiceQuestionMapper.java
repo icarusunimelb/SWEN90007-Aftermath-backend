@@ -2,6 +2,7 @@ package datamapper;
 
 import datasource.DBConnection;
 import domain.*;
+import exceptions.RecordNotExistException;
 import utils.IdentityMap;
 
 import java.sql.PreparedStatement;
@@ -92,7 +93,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
     private static final String insertMultipleChoiceQuestionStatement =
             "INSERT INTO oes.multipleChoiceQuestion (questionID, examID, totalMark, questionBody, title) VALUES (?, ?, ?, ?, ?)";
     @Override
-    public void insert(DomainObject object) {
+    public void insert(DomainObject object) throws RecordNotExistException{
         MultipleChoiceQuestion multipleChoiceQuestionObj = (MultipleChoiceQuestion) object;
         try {
             PreparedStatement insertStatement = DBConnection.prepare(insertMultipleChoiceQuestionStatement);
@@ -111,7 +112,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
             "UPDATE oes.multipleChoiceQuestion SET title = ?, questionBody = ?, totalMark = ? " +
                     "WHERE questionID = ?";
     @Override
-    public void update(DomainObject object) {
+    public void update(DomainObject object) throws RecordNotExistException {
         MultipleChoiceQuestion multipleChoiceQuestionObj = (MultipleChoiceQuestion) object;
         try {
             PreparedStatement updateStatement = DBConnection.prepare(updateMCQStatement);

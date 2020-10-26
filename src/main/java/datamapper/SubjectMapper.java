@@ -4,6 +4,7 @@ import datasource.DBConnection;
 import domain.DomainObject;
 import domain.Student;
 import domain.Subject;
+import exceptions.RecordNotExistException;
 import utils.IdentityMap;
 
 import java.sql.PreparedStatement;
@@ -108,7 +109,7 @@ public class SubjectMapper extends DataMapper{
     private static final String insertSubjectStatement =
             "INSERT INTO oes.subjects (subjectID, subjectCode, subjectName) VALUES (?, ?, ?)";
     @Override
-    public void insert(DomainObject object) {
+    public void insert(DomainObject object) throws RecordNotExistException{
         Subject subjectObj = (Subject) object;
         try {
             PreparedStatement insertStatement = DBConnection.prepare(insertSubjectStatement);
@@ -125,7 +126,7 @@ public class SubjectMapper extends DataMapper{
             "UPDATE oes.subjects s SET s.subjectCode = ?, s.subjectName = ? " +
                     "WHERE s.subjectID = ?";
     @Override
-    public void update(DomainObject object) {
+    public void update(DomainObject object) throws RecordNotExistException {
         Subject subjectObj = (Subject) object;
         try {
             PreparedStatement updateStatement = DBConnection.prepare(updateSubjectStatement);

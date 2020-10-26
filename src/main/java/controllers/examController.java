@@ -2,6 +2,7 @@ package controllers;
 
 import datamapper.*;
 import domain.*;
+import exceptions.RecordNotExistException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -186,7 +187,12 @@ public class examController extends HttpServlet {
             }
 
             UnitOfWork.getCurrent().registerDirty(exam);
-            UnitOfWork.getCurrent().commit();
+            try {
+                UnitOfWork.getCurrent().commit();
+            } catch (RecordNotExistException e) {
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
+                return;
+            }
 
             // release the lock of current exam
             LockManager.getInstance().releaseLock(examId, Thread.currentThread().getName());
@@ -199,6 +205,8 @@ public class examController extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (RecordNotExistException e) {
             e.printStackTrace();
         }
     }
@@ -241,7 +249,12 @@ public class examController extends HttpServlet {
 
             UnitOfWork.newCurrent();
             UnitOfWork.getCurrent().registerNew(exam);
-            UnitOfWork.getCurrent().commit();
+            try {
+                UnitOfWork.getCurrent().commit();
+            } catch (RecordNotExistException e) {
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
+                return;
+            }
 
 
             JSONObject jsonObject = new JSONObject(String.format(
@@ -281,7 +294,6 @@ public class examController extends HttpServlet {
 
             Exam exam = new Exam();
             exam.setId(examID);
-            exam.load();
 
             UnitOfWork.newCurrent();
 
@@ -297,7 +309,12 @@ public class examController extends HttpServlet {
             }
 
             UnitOfWork.getCurrent().registerDeleted(exam);
-            UnitOfWork.getCurrent().commit();
+            try {
+                UnitOfWork.getCurrent().commit();
+            } catch (RecordNotExistException e) {
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
+                return;
+            }
 
             // release the lock for the exam
             LockManager.getInstance().releaseLock(examID, Thread.currentThread().getName());

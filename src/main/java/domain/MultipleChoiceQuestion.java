@@ -2,6 +2,7 @@ package domain;
 
 import datamapper.ChoiceMapper;
 import datamapper.MultipleChoiceQuestionMapper;
+import exceptions.RecordNotExistException;
 
 import java.util.List;
 
@@ -28,31 +29,34 @@ public class MultipleChoiceQuestion extends Question{
     }
 
     @Override
-    public String getExamID() {
+    public String getExamID() throws RecordNotExistException{
         if (super.getExamID() == null) load();
         return super.getExamID();
     }
 
     @Override
-    public int getTotalMark() {
+    public int getTotalMark() throws RecordNotExistException{
         if (super.getTotalMark() == -100) load();
         return super.getTotalMark();
     }
 
     @Override
-    public String getQuestionBody() {
+    public String getQuestionBody() throws RecordNotExistException{
         if (super.getQuestionBody() == null) load();
         return super.getQuestionBody();
     }
 
     @Override
-    public String getTitle() {
+    public String getTitle() throws RecordNotExistException{
         if (super.getTitle() == null) load();
         return super.getTitle();
     }
 
-    public void load(){
+    public void load() throws RecordNotExistException{
         MultipleChoiceQuestion record = MultipleChoiceQuestionMapper.getSingletonInstance().findWithID(getId());
+        if (record.getId() == null) {
+            throw new RecordNotExistException(getClass()+" "+ getId() + " has no record in the database");
+        }
         if (super.getTotalMark() == -100) setTotalMark(record.getTotalMark());
         if (super.getExamID() == null) setExamID(record.getExamID());
         if (super.getQuestionBody() == null) setQuestionBody(record.getQuestionBody());

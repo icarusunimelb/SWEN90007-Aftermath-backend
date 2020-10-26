@@ -1,6 +1,7 @@
 package domain;
 
 import datamapper.ChoiceMapper;
+import exceptions.RecordNotExistException;
 
 public class Choice extends DomainObject implements Comparable{
     private String choice = null;
@@ -11,7 +12,7 @@ public class Choice extends DomainObject implements Comparable{
     private int index = -1;
     public Choice(){super();};
 
-    public String getQuestionID() {
+    public String getQuestionID() throws RecordNotExistException{
         if(questionID == null) load();
         return questionID;
     }
@@ -28,15 +29,18 @@ public class Choice extends DomainObject implements Comparable{
         this.questionID = questionID;
     }
 
-    public String getChoice() {
+    public String getChoice() throws RecordNotExistException{
         if(choice == null) load();
         return choice;
     }
 
     public void setChoice(String choice) { this.choice = choice; }
 
-    public void load(){
+    public void load() throws RecordNotExistException{
         Choice record = ChoiceMapper.getSingletonInstance().findWithChoiceID(getId());
+        if (record.getId() == null) {
+            throw new RecordNotExistException(getClass()+" "+ getId() + " has no record in the database");
+        }
         if (this.choice == null) this.choice = record.getChoice();
         if (this.questionID == null) this.questionID = record.getQuestionID();
         if (this.index == -1) this.index = record.getIndex();

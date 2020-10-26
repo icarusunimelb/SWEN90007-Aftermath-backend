@@ -2,6 +2,7 @@ package controllers;
 
 import datamapper.*;
 import domain.*;
+import exceptions.RecordNotExistException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -97,7 +99,13 @@ public class examAnswerController extends HttpServlet {
                 }
 
             }
-            UnitOfWork.getCurrent().commit();
+
+            try {
+                UnitOfWork.getCurrent().commit();
+            } catch (RecordNotExistException e) {
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
+                return;
+            }
 
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
@@ -223,8 +231,12 @@ public class examAnswerController extends HttpServlet {
 
 
 //         validate this examAnswer
-
-            UnitOfWork.getCurrent().commit();
+            try {
+                UnitOfWork.getCurrent().commit();
+            } catch (RecordNotExistException e) {
+                response.setStatus(HttpServletResponse.SC_CONFLICT);
+                return;
+            }
 
 
             JSONObject jsonObject = new JSONObject(String.format(
@@ -235,6 +247,8 @@ public class examAnswerController extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (RecordNotExistException e) {
             e.printStackTrace();
         }
 

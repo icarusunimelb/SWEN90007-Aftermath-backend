@@ -1,6 +1,7 @@
 package datamapper;
 
 import domain.DomainObject;
+import exceptions.RecordNotExistException;
 
 public abstract class DataMapper {
     /**
@@ -8,14 +9,14 @@ public abstract class DataMapper {
      * @param object
      * @return
      */
-    public abstract void insert(DomainObject object);
+    public abstract void insert(DomainObject object) throws RecordNotExistException;
 
     /**
      * an abstract function to perform update action by domainObject's id to database.
      * @param object
      * @return
      */
-    public abstract void update(DomainObject object);
+    public abstract void update(DomainObject object) throws RecordNotExistException;
 
     /**
      * an abstract function to perform delete action by domainObject's id to database.

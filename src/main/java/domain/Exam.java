@@ -2,6 +2,7 @@ package domain;
 
 import datamapper.*;
 import datasource.DBConnection;
+import exceptions.RecordNotExistException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -45,7 +46,7 @@ public class Exam extends DomainObject{
         this.examAnswers = examAnswers;
     }
 
-    public String getSubjectID() {
+    public String getSubjectID() throws RecordNotExistException{
         if(subjectID == null) load();
         return subjectID;
     }
@@ -54,7 +55,7 @@ public class Exam extends DomainObject{
         this.subjectID = subjectID;
     }
 
-    public String getExamName() {
+    public String getExamName() throws RecordNotExistException{
         if (examName == null) load();
         return examName;
     }
@@ -63,7 +64,7 @@ public class Exam extends DomainObject{
         this.examName = examName;
     }
 
-    public String getStatus() {
+    public String getStatus() throws RecordNotExistException{
         if (status == null) {
             load();
         }
@@ -74,8 +75,11 @@ public class Exam extends DomainObject{
         this.status = status;
     }
 
-    public void load(){
+    public void load() throws RecordNotExistException{
         Exam record = ExamMapper.getSingletonInstance().findWithID(getId());
+        if (record.getId() == null) {
+            throw new RecordNotExistException(getClass()+" "+ getId() + " has no record in the database");
+        }
         if (subjectID == null) subjectID = record.getSubjectID();
         if (examName == null) examName = record.getExamName();
         if (status == null) status = record.getStatus();

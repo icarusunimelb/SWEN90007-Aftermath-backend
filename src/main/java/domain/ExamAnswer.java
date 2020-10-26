@@ -5,6 +5,7 @@ import datamapper.ChoiceMapper;
 import datamapper.ExamAnswerMapper;
 import datamapper.MultipleChoiceQuestionAnswerMapper;
 import datamapper.ShortAnswerQuestionAnswerMapper;
+import exceptions.RecordNotExistException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +18,8 @@ public class ExamAnswer extends DomainObject{
 
     public ExamAnswer(){super();}
 
-    public int getFinalMark() {
+    public int getFinalMark() throws RecordNotExistException{
+        if (finalMark == -100 ) load();
         return finalMark;
     }
 
@@ -25,7 +27,7 @@ public class ExamAnswer extends DomainObject{
         this.finalMark = finalMark;
     }
 
-    public String getExamID() {
+    public String getExamID() throws RecordNotExistException{
         if(examID == null) load();
         return examID;
     }
@@ -34,7 +36,7 @@ public class ExamAnswer extends DomainObject{
         this.examID = examID;
     }
 
-    public String getStudentID() {
+    public String getStudentID() throws RecordNotExistException{
         if(studentID == null) load();
         return studentID;
     }
@@ -58,8 +60,11 @@ public class ExamAnswer extends DomainObject{
         this.answers = answers;
     }
 
-    public void load(){
+    public void load() throws RecordNotExistException{
         ExamAnswer record = ExamAnswerMapper.getSingletonInstance().findWithID(getId());
+        if (record.getId() == null) {
+            throw new RecordNotExistException(getClass()+" "+ getId() + " has no record in the database");
+        }
         if (examID == null) this.examID = record.getExamID();
         if (studentID == null) this.studentID = record.getStudentID();
         if (finalMark == -100 ) this.finalMark = record.getFinalMark();

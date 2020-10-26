@@ -1,6 +1,7 @@
 package domain;
 
 import datamapper.InstructorMapper;
+import exceptions.RecordNotExistException;
 
 public class User extends DomainObject {
     private Name name = null;
@@ -9,7 +10,7 @@ public class User extends DomainObject {
 
     public User(){super();};
 
-    public Name getName() {
+    public Name getName() throws RecordNotExistException {
         return name;
     }
 
@@ -17,7 +18,7 @@ public class User extends DomainObject {
         this.name = name;
     }
 
-    public String getEmail() {
+    public String getEmail() throws RecordNotExistException{
         return email;
     }
 
@@ -25,7 +26,7 @@ public class User extends DomainObject {
         this.email = email;
     }
 
-    public String getPassword() {
+    public String getPassword() throws RecordNotExistException{
         return password;
     }
 

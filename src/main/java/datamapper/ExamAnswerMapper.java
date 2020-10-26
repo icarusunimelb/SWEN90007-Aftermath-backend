@@ -2,6 +2,7 @@ package datamapper;
 
 import datasource.DBConnection;
 import domain.*;
+import exceptions.RecordNotExistException;
 import utils.IdentityMap;
 
 import java.sql.*;
@@ -114,7 +115,7 @@ public class ExamAnswerMapper extends  DataMapper{
             "INSERT INTO oes.examAnswer (examAnswerID, examID, studentID, finalMark) VALUES (?, ?, ?, ?)";
 
     @Override
-    public void insert(DomainObject object) {
+    public void insert(DomainObject object) throws RecordNotExistException{
         ExamAnswer examAnswerObj = (ExamAnswer) object;
         try{
             PreparedStatement insertStatement = DBConnection.prepare(insertExamAnswerStatement);
@@ -150,7 +151,7 @@ public class ExamAnswerMapper extends  DataMapper{
     private static final String updateExamAnswerStatement =
             "UPDATE oes.examAnswer SET finalMark = ? WHERE examAnswerID = ?";
     @Override
-    public void update(DomainObject object) {
+    public void update(DomainObject object) throws RecordNotExistException {
         ExamAnswer examAnswerObj = (ExamAnswer) object;
         try {
             PreparedStatement updateStatement = DBConnection.prepare(updateExamAnswerStatement);
