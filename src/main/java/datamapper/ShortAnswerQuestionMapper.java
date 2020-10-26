@@ -105,7 +105,7 @@ public class ShortAnswerQuestionMapper extends DataMapper{
 
     private static final String updateSAQStatement =
             "UPDATE oes.shortAnswerQuestions SET title = ?, questionBody = ?, totalMark = ? " +
-                    "WHERE s = ?";
+                    "WHERE questionID = ?";
     @Override
     public void update(DomainObject object) {
         ShortAnswerQuestion shortAnswerQuestionObj = (ShortAnswerQuestion) object;
