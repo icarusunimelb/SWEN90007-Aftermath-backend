@@ -81,6 +81,7 @@ public class examController extends HttpServlet {
                     examAnswer.setExamID(exam.getId());
                     examAnswer.setStudentID(notSubmittedStudents.get(i).getId());
                     examAnswer.setId(KeyGenerator.getSingletonInstance().getKey(examAnswer));
+                    examAnswer.setFinalMark(-1);
 
                     UnitOfWork.getCurrent().registerNew(examAnswer);
 
