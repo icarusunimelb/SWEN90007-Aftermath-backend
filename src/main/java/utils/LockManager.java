@@ -37,6 +37,6 @@ public class LockManager {
 	
 	public void releaseLock(String lockable, String owner) {
 		lockMap.remove(lockable);
-		notify();
+		notifyAll();
 	}
 }
