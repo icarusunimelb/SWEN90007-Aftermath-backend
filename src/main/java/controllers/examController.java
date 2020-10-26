@@ -56,8 +56,6 @@ public class examController extends HttpServlet {
 
             Exam exam = new Exam();
             exam.setId(examId);
-            // System.out.println("this is your data id" + examId);
-            exam.load();
 
             UnitOfWork.newCurrent();
 
