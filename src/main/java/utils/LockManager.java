@@ -35,8 +35,8 @@ public class LockManager {
 		lockMap.put(lockable, owner);
 	}
 	
-	public void releaseLock(String lockable, String owner) {
+	public synchronized void releaseLock(String lockable, String owner) {
 		lockMap.remove(lockable);
-		instance.notify();
+		notify();
 	}
 }
