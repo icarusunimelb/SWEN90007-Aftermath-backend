@@ -281,6 +281,7 @@ public class examController extends HttpServlet {
 
             Exam exam = new Exam();
             exam.setId(examID);
+            exam.load();
 
             UnitOfWork.newCurrent();
 
