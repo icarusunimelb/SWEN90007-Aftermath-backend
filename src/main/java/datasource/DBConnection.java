@@ -20,7 +20,7 @@ public class  DBConnection {
 
 		} catch (SQLException e) {
 
-			System.out.println(this.getClass()+e.getMessage());
+			System.out.println(e.getMessage());
 
 		}
 
@@ -44,7 +44,7 @@ public class  DBConnection {
 
 		} catch (SQLException e) {
 
-			System.out.println(this.getClass()+e.getMessage());
+			System.out.println(e.getMessage());
 
 		}
 		return null;
