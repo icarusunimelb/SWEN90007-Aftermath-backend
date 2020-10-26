@@ -65,10 +65,6 @@ public class questionController extends HttpServlet {
             } else {
                 List<DTOQuestion> dtoQuestions = questions.stream().map(question -> new DTOQuestion(question)).collect(Collectors.toList());
                 String json = new Gson().toJson(dtoQuestions);
-    //            String newJson = json.replace("\"id\":", "\"dataId\":")
-    //                    .replace("\"questionBody\":", "\"description\":")
-    //                    .replace("\"totalMark\":", "\"marks\":")
-    //                    .replace("\"multipleChoices\":", "\"choices\":");
                 out.print(json);
                 response.setStatus(HttpServletResponse.SC_OK);
                 out.flush();
