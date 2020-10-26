@@ -51,14 +51,14 @@ public class UnitOfWork {
 
     public void commit() {
         try {
-            for (DomainObject object : deletedObjects){
-                DataMapperFactory.getMapper(object.getClass().getName()).delete(object);
-            }
             for (DomainObject object : newObjects) {
                 DataMapperFactory.getMapper(object.getClass().getName()).insert(object);
             }
             for (DomainObject object : dirtyObjects){
                 DataMapperFactory.getMapper(object.getClass().getName()).update(object);
+            }
+            for (DomainObject object : deletedObjects){
+                DataMapperFactory.getMapper(object.getClass().getName()).delete(object);
             }
         }catch (NoSuchMapperTypeException e){
             System.out.println(this.getClass()+e.getMessage());

@@ -281,10 +281,10 @@ public class examController extends HttpServlet {
                 if (question instanceof MultipleChoiceQuestion) {
                     // delete choices
                     for (Choice multipleChoice : ((MultipleChoiceQuestion) question).getMultipleChoices()) {
-                        UnitOfWork.getCurrent().registerDirty(multipleChoice);
+                        UnitOfWork.getCurrent().registerDeleted(multipleChoice);
                     }
                 }
-                UnitOfWork.getCurrent().registerDirty(question);
+                UnitOfWork.getCurrent().registerDeleted(question);
             }
 
             UnitOfWork.getCurrent().registerDeleted(exam);
