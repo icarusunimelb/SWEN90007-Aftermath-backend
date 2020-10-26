@@ -96,27 +96,14 @@ public class examController extends HttpServlet {
                 exam = ExamMapper.getSingletonInstance().findWithID(examId);
                 exam.setExamName(examName);
 
-                // delete exam questions, choices
+                // get the existing questions
 
                 List<Question> currentQuestions = new ArrayList<>();
                 currentQuestions.addAll(MultipleChoiceQuestionMapper.getSingletonInstance().findWithExamID(examId));
-
-                for (int i = 0; i < currentQuestions.size(); i++){
-                    List<Choice> currentChoices = ChoiceMapper.getSingletonInstance().findWithQuestionID(currentQuestions.get(i).getId());
-                    for (int j = 0; j < currentChoices.size(); j++){
-                        UnitOfWork.getCurrent().registerDeleted(currentChoices.get(j));
-                    }
-
-                }
-
                 currentQuestions.addAll(ShortAnswerQuestionMapper.getSingletonInstance().findWithExamID(examId));
-                for (int i = 0; i < currentQuestions.size(); i++){
-                    UnitOfWork.getCurrent().registerDeleted(currentQuestions.get(i));
-                }
 
 
-                UnitOfWork.getCurrent().registerDirty(exam);
-
+                // get the question returned via frontend
                 JSONArray questionsArray = examJson.getJSONArray("questions");
 
                 for(int i = 0; i< questionsArray.length(); i++){
@@ -127,48 +114,55 @@ public class examController extends HttpServlet {
                     String questionTitle = questionJson.getString("title");
                     String questionId;
 
-                    if(questionType.equals("QUESTION_MULTIPLE_CHOICE")){
+                    if (questionJson.has("dataId") ) {
+                        questionId = questionJson.getString("dataId");
+                        if (questionType.equals("QUESTION_MULTIPLE_CHOICE")) {
 
+                            MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion();
 
-                        MultipleChoiceQuestion multipleChoiceQuestion = new MultipleChoiceQuestion();
-                        questionId = KeyGenerator.getSingletonInstance().getKey(multipleChoiceQuestion);
+                            multipleChoiceQuestion.setExamID(examId);
+                            multipleChoiceQuestion.setTitle(questionTitle);
+                            multipleChoiceQuestion.setTotalMark(questionMarks);
+                            multipleChoiceQuestion.setQuestionBody(questionDescription);
+                            multipleChoiceQuestion.setId(questionId);
 
+                            if (currentQuestions.contains(multipleChoiceQuestion)) {
+                                UnitOfWork.getCurrent().registerDirty(multipleChoiceQuestion);
+                                currentQuestions.remove(multipleChoiceQuestion);
+                            } else {
+                                UnitOfWork.getCurrent().registerNew(multipleChoiceQuestion);
+                            }
 
-                        multipleChoiceQuestion.setExamID(examId);
-                        multipleChoiceQuestion.setTitle(questionTitle);
-                        multipleChoiceQuestion.setTotalMark(questionMarks);
-                        multipleChoiceQuestion.setQuestionBody(questionDescription);
-                        multipleChoiceQuestion.setId(questionId);
+                            JSONArray questionChoices = questionJson.getJSONArray("choices");
 
-                        UnitOfWork.getCurrent().registerNew(multipleChoiceQuestion);
+                            for (int j = 0; j < questionChoices.length(); j++) {
+                                String choiceJson = (String) questionChoices.get(j);
+                                Choice choice = new Choice();
+                                choice.setQuestionID(questionId);
+                                choice.setChoice(choiceJson);
+                                choice.setIndex(j + 1);
+                                choice.setId(KeyGenerator.getSingletonInstance().getKey(choice));
+                                UnitOfWork.getCurrent().registerNew(choice);
 
-                        JSONArray questionChoices = questionJson.getJSONArray("choices");
+                                //System.out.println("this is your first choice "+ choiceJson);
+                            }
+                        } else {
+                            ShortAnswerQuestion shortAnswerQuestion = new ShortAnswerQuestion();
+                            questionId = KeyGenerator.getSingletonInstance().getKey(shortAnswerQuestion);
+                            shortAnswerQuestion.setExamID(examId);
+                            shortAnswerQuestion.setQuestionBody(questionDescription);
+                            shortAnswerQuestion.setId(questionId);
+                            shortAnswerQuestion.setTitle(questionTitle);
+                            shortAnswerQuestion.setTotalMark(questionMarks);
 
-                        for(int j = 0; j< questionChoices.length(); j++){
-                            String choiceJson = (String) questionChoices.get(j);
-                            Choice choice = new Choice();
-                            choice.setQuestionID(questionId);
-                            choice.setChoice(choiceJson);
-                            choice.setIndex(j+1);
-                            choice.setId(KeyGenerator.getSingletonInstance().getKey(choice));
-                            UnitOfWork.getCurrent().registerNew(choice);
-
-                            //System.out.println("this is your first choice "+ choiceJson);
+                            UnitOfWork.getCurrent().registerNew(shortAnswerQuestion);
                         }
-                    } else {
-                        ShortAnswerQuestion shortAnswerQuestion = new ShortAnswerQuestion();
-                        questionId = KeyGenerator.getSingletonInstance().getKey(shortAnswerQuestion);
-                        shortAnswerQuestion.setExamID(examId);
-                        shortAnswerQuestion.setQuestionBody(questionDescription);
-                        shortAnswerQuestion.setId(questionId);
-                        shortAnswerQuestion.setTitle(questionTitle);
-                        shortAnswerQuestion.setTotalMark(questionMarks);
-
-                        UnitOfWork.getCurrent().registerNew(shortAnswerQuestion);
                     }
 
                     //System.out.println("this is your exam answer" + questionJson.toString());
                 }
+
+                UnitOfWork.getCurrent().registerDirty(exam);
                 UnitOfWork.getCurrent().commit();
 
                 // todo confirm with front end about the format of request
