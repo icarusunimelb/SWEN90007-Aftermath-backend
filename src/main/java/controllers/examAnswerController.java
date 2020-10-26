@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import utils.KeyGenerator;
+import utils.LockManager;
 import utils.TokenVerification;
 import utils.UnitOfWork;
 
@@ -53,13 +54,15 @@ public class examAnswerController extends HttpServlet {
                 out.flush();
                 return;
             }
-            UnitOfWork.newCurrent();
 
             String requestData = request.getReader().lines().collect(Collectors.joining());
 
             JSONObject jsonObject1 = new JSONObject(requestData);
             String examId = jsonObject1.getString("examId");
             JSONArray examAnswerArray = jsonObject1.getJSONArray("markings");
+
+            LockManager.getInstance().acquireLock(examId, Thread.currentThread().getName());
+            UnitOfWork.newCurrent();
 
             for ( int i = 0; i < examAnswerArray.length(); i ++){
                 JSONObject examAnswerJson = (JSONObject) examAnswerArray.get(i);
@@ -106,6 +109,8 @@ public class examAnswerController extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_CONFLICT);
                 return;
             }
+
+            LockManager.getInstance().releaseLock(examId, Thread.currentThread().getName());
 
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
