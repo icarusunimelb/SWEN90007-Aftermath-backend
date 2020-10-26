@@ -47,7 +47,7 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
                 answer.setQuestionID(questionID);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         return answer;
     }
@@ -73,7 +73,7 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
                 answer.setQuestionID(questionID);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         return answer;
     }
@@ -103,7 +103,7 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
                 answers.add(answer);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
 
         return answers;
@@ -125,7 +125,7 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
             insertStatement.setInt(5, multipleChoiceQuestionAnswerObj.getAnswerIndex());
             insertStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
@@ -143,7 +143,7 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
             updateStatement.setString(3, multipleChoiceQuestionAnswerObj.getId());
             updateStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
@@ -157,7 +157,7 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
             updateStatement.setString(1, multipleChoiceQuestionAnswerObj.getId());
             updateStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 }

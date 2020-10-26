@@ -43,7 +43,7 @@ public class SubjectMapper extends DataMapper{
                 IdentityMap.getInstance(subject).put(subjectID, subject);
             }
         }catch (SQLException e){
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         return subject;
     }
@@ -71,7 +71,7 @@ public class SubjectMapper extends DataMapper{
                 subjects.add(subject);
             }
         }catch (SQLException e){
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         //System.out.println("this is in SubjectMapper. subjects size = "+ subjects.size());
         return subjects;
@@ -100,7 +100,7 @@ public class SubjectMapper extends DataMapper{
                 subjects.add(subject);
             }
         }catch (SQLException e){
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         return subjects;
     }
@@ -117,7 +117,7 @@ public class SubjectMapper extends DataMapper{
             insertStatement.setString(3, subjectObj.getSubjectName());
             insertStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
@@ -134,7 +134,7 @@ public class SubjectMapper extends DataMapper{
             updateStatement.setString(3, subjectObj.getId());
             updateStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
@@ -148,7 +148,7 @@ public class SubjectMapper extends DataMapper{
             updateStatement.setString(1, subjectObj.getId());
             updateStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 }

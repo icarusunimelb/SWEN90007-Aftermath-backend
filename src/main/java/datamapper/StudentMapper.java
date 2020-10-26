@@ -45,7 +45,7 @@ public class StudentMapper extends DataMapper{
                 IdentityMap.getInstance(student).put(id, student);
             }
         }catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         return student;
     }
@@ -63,7 +63,7 @@ public class StudentMapper extends DataMapper{
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         return isRegisterOrNot;
     }
@@ -85,7 +85,7 @@ public class StudentMapper extends DataMapper{
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
 
         return "";
@@ -105,7 +105,7 @@ public class StudentMapper extends DataMapper{
             insertStatement.setString(5, studentObj.getPassword());
             insertStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
@@ -124,7 +124,7 @@ public class StudentMapper extends DataMapper{
             updateStatement.setString(5, studentObj.getId());
             updateStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
@@ -138,7 +138,7 @@ public class StudentMapper extends DataMapper{
             updateStatement.setString(1, studentObj.getId());
             updateStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
@@ -167,7 +167,7 @@ public class StudentMapper extends DataMapper{
                 students.add(student);
             }
         }catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         return students;
     }

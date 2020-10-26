@@ -46,7 +46,7 @@ public class InstructorMapper extends DataMapper{
                 IdentityMap.getInstance(instructor).put(id, instructor);
             }
         }catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         return instructor;
     }
@@ -64,7 +64,7 @@ public class InstructorMapper extends DataMapper{
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         return isRegisterOrNot;
     }
@@ -85,7 +85,7 @@ public class InstructorMapper extends DataMapper{
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         return "";
     }
@@ -105,7 +105,7 @@ public class InstructorMapper extends DataMapper{
             insertStatement.setString(5, instructorObj.getPassword());
             insertStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
@@ -124,7 +124,7 @@ public class InstructorMapper extends DataMapper{
             updateStatement.setString(5, instructorObj.getId());
             updateStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
@@ -139,7 +139,7 @@ public class InstructorMapper extends DataMapper{
             updateStatement.setString(1, instructorObj.getId());
             updateStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 

@@ -46,7 +46,7 @@ public class ExamMapper extends DataMapper{
                 exam.setStatus(status);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         return exam;
     }
@@ -74,7 +74,7 @@ public class ExamMapper extends DataMapper{
                 exams.add(exam);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         //System.out.println("this is in exam mapper !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return exams;
@@ -93,7 +93,7 @@ public class ExamMapper extends DataMapper{
             insertStatement.setString(4, examObj.getStatus());
             insertStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
@@ -124,7 +124,7 @@ public class ExamMapper extends DataMapper{
             updateStatement.setString(1, examObj.getId());
             updateStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 }

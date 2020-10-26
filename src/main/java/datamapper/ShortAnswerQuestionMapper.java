@@ -48,7 +48,7 @@ public class ShortAnswerQuestionMapper extends DataMapper{
 
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         return question;
     }
@@ -79,7 +79,7 @@ public class ShortAnswerQuestionMapper extends DataMapper{
                 questions.add(question);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
 
         return questions;
@@ -99,7 +99,7 @@ public class ShortAnswerQuestionMapper extends DataMapper{
             insertStatement.setString(5, shortAnswerQuestionObj.getTitle());
             insertStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
@@ -117,7 +117,7 @@ public class ShortAnswerQuestionMapper extends DataMapper{
             updateStatement.setString(4, shortAnswerQuestionObj.getId());
             updateStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
@@ -131,7 +131,7 @@ public class ShortAnswerQuestionMapper extends DataMapper{
             updateStatement.setString(1, shortAnswerQuestionObj.getId());
             updateStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 }

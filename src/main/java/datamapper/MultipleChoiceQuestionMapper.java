@@ -49,7 +49,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
 
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         return question;
     }
@@ -83,7 +83,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
                 questions.add(question);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
 
         return questions;
@@ -103,7 +103,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
             insertStatement.setString(5, multipleChoiceQuestionObj.getTitle());
             insertStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
@@ -121,7 +121,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
             updateStatement.setString(4, multipleChoiceQuestionObj.getId());
             updateStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
@@ -135,7 +135,7 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
             updateStatement.setString(1, multipleChoiceQuestionObj.getId());
             updateStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 

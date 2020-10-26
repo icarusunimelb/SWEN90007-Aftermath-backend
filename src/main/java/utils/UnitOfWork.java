@@ -61,7 +61,7 @@ public class UnitOfWork {
                 DataMapperFactory.getMapper(object.getClass().getName()).delete(object);
             }
         }catch (NoSuchMapperTypeException e){
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 }

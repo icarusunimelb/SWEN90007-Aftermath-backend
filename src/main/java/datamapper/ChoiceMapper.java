@@ -48,7 +48,7 @@ public class ChoiceMapper extends DataMapper{
                 IdentityMap.getInstance(choice).put(choiceID, choice);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
 
         return choice;
@@ -76,7 +76,7 @@ public class ChoiceMapper extends DataMapper{
                 choices.add(choice);
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
         Collections.sort(choices);
         return choices;
@@ -96,13 +96,13 @@ public class ChoiceMapper extends DataMapper{
             insertStatement.setInt(4,choiceObj.getIndex());
             insertStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
 
     private static final String updateChoiceStatement =
-            "UPDATE oes.choices c SET c.choice = ? WHERE c.choiceID = ?";
+            "UPDATE oes.choices SET choice = ? WHERE choiceID = ?";
     @Override
     public void update(DomainObject object) {
         Choice choiceObj = (Choice) object;
@@ -112,12 +112,12 @@ public class ChoiceMapper extends DataMapper{
             updateStatement.setString(2, choiceObj.getId());
             updateStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
     private static final String deleteChoiceStatement =
-            "DELETE FROM oes.choices c WHERE c.choiceID = ?";
+            "DELETE FROM oes.choices WHERE choiceID = ?";
     @Override
     public void delete(DomainObject object) {
         Choice choiceObj = (Choice) object;
@@ -126,7 +126,7 @@ public class ChoiceMapper extends DataMapper{
             updateStatement.setString(1, choiceObj.getId());
             updateStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 }

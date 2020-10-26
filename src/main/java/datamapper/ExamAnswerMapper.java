@@ -44,7 +44,7 @@ public class ExamAnswerMapper extends  DataMapper{
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
 
         return examAnswer;
@@ -72,7 +72,7 @@ public class ExamAnswerMapper extends  DataMapper{
             }
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
 
         return examAnswer;
@@ -104,7 +104,7 @@ public class ExamAnswerMapper extends  DataMapper{
             //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+result.size());
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
 
         return result;
@@ -158,7 +158,7 @@ public class ExamAnswerMapper extends  DataMapper{
             updateStatement.setString(2, examAnswerObj.getId());
             updateStatement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 
@@ -172,7 +172,7 @@ public class ExamAnswerMapper extends  DataMapper{
             updateStatement.setString(1, examAnswerObj.getId());
             updateStatement.execute();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println(this.getClass()+e.getMessage());
         }
     }
 }
