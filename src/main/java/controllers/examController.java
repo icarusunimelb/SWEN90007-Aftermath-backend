@@ -47,6 +47,8 @@ public class examController extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             response.setHeader("Access-Control-Allow-Origin", "*");
 
+            // do the authorization
+            // if the role is incorrect or the token expires, will report error to the frontend
             if(TokenVerification.validLecturer(request, response) != TokenVerification.LECTURERFLAG){
                 JSONObject jsonObject = new JSONObject(String.format(
                         "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
