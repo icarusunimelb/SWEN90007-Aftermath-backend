@@ -16,6 +16,15 @@ CREATE TABLE oes.instructors(
                                 PRIMARY KEY (instructorID)
 );
 
+CREATE TABLE oes.admin(
+                                adminID VARCHAR(200),
+                                firstName VARCHAR(200),
+                                lastName VARCHAR(200),
+                                email VARCHAR(200),
+                                password VARCHAR(200),
+                                PRIMARY KEY (adminID)
+);
+
 CREATE TABLE oes.subjects(
                              subjectID VARCHAR(200),
                              subjectCode   VARCHAR(20),

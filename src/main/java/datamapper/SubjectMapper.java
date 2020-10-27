@@ -2,7 +2,6 @@ package datamapper;
 
 import datasource.DBConnection;
 import domain.DomainObject;
-import domain.Student;
 import domain.Subject;
 import utils.IdentityMap;
 
@@ -150,5 +149,31 @@ public class SubjectMapper extends DataMapper{
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    // TODO confirm whether password is needed
+    private static final String allSubjectStatement =
+            "SELECT subjectID, subjectCode, subjectName FROM oes.subjects";
+    public List<Subject> getAllSubjects(){
+        List<Subject> allSubjects = new ArrayList<Subject>();
+
+        try{
+            PreparedStatement findStatement = DBConnection.prepare(allSubjectStatement);
+            ResultSet rs = findStatement.executeQuery();
+            if(rs.next()){
+                Subject subject = new Subject();
+                String subjectID = rs.getString(1);
+                String subjectCode = rs.getString(2);
+                String subjectName = rs.getString(3);
+                subject.setId(subjectID);
+                subject.setSubjectCode(subjectCode);
+                subject.setSubjectName(subjectName);
+                IdentityMap.getInstance(subject).put(subjectID, subject);
+                allSubjects.add(subject);
+            }
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return allSubjects;
     }
 }

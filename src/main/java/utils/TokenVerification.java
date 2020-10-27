@@ -130,6 +130,8 @@ public class TokenVerification {
                 return ERRORFLAG;
             } else if(userIdAndUserType.contains("STUDENT")){
                 return STUDENTFLAG;
+            } else if(userIdAndUserType.contains("ADMIN")){
+                return ADMINTFLAG;
             }
         }
         return LECTURERFLAG;

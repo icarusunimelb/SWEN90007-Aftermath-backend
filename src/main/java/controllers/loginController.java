@@ -1,5 +1,6 @@
 package controllers;
 
+import datamapper.AdminMapper;
 import datamapper.InstructorMapper;
 import datamapper.StudentMapper;
 import domain.User;
@@ -37,23 +38,30 @@ public class loginController extends HttpServlet {
 
             String email = user.getEmail();
             String password = user.getPassword();
-            //System.out.println(email+password);
+//            System.out.println(email+password);
             PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.setHeader("Access-Control-Allow-Origin", "*");
+
 
             String userType = null;
             String dataID = null;
             String token = null;
             String instructorID = InstructorMapper.getSingletonInstance().authenticate(email, password);
             String studentID = StudentMapper.getSingletonInstance().authenticate(email, password);
+
+            String adminID = AdminMapper.getSingletonInstance().authenticate(email, password);
+
             if (!instructorID.isEmpty()) {
                 userType = USERTYPE.LECTURER.toString();
                 dataID = instructorID;
             } else if (!studentID.isEmpty()) {
                 userType = USERTYPE.STUDENT.toString();
                 dataID = studentID;
+            } else if (!adminID.isEmpty()){
+                userType = USERTYPE.ADMIN.toString();
+                dataID = adminID;
             } else {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 JSONObject jsonObject = new JSONObject(String.format(
@@ -62,7 +70,9 @@ public class loginController extends HttpServlet {
                 out.flush();
                 return;
             }
+            System.out.println(dataID + userType);
             token = TokenVerification.createJWT(dataID, userType);
+            System.out.println("this is ur token: "+ token);
             //System.out.println(dataID+password+token);
             try {
                 TokenVerification.addToken(token);
