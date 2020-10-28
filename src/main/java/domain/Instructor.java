@@ -10,7 +10,19 @@ import java.util.List;
 public class Instructor extends User{
 	private List<Subject> subjects = null;
 
+	private String role = "instructor";
+
 	public Instructor(){super();};
+
+	@Override
+	public String getRole() {
+		return role;
+	}
+
+	@Override
+	public void setRole(String role) {
+		this.role = role;
+	}
 
 	public List<Subject> getSubjects() {
 		if (subjects == null) {

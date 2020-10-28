@@ -40,7 +40,6 @@ public class SubjectMapper extends DataMapper{
                 String subjectName = rs.getString(2);
                 subject.setSubjectCode(subjectCode);
                 subject.setSubjectName(subjectName);
-                IdentityMap.getInstance(subject).put(subjectID, subject);
             }
         }catch (SQLException e){
             System.out.println(this.getClass()+e.getMessage());
@@ -67,7 +66,6 @@ public class SubjectMapper extends DataMapper{
                 subject.setId(subjectID);
                 subject.setSubjectCode(subjectCode);
                 subject.setSubjectName(subjectName);
-                IdentityMap.getInstance(subject).put(subjectID, subject);
                 subjects.add(subject);
             }
         }catch (SQLException e){
@@ -96,7 +94,6 @@ public class SubjectMapper extends DataMapper{
                 subject.setId(subjectID);
                 subject.setSubjectCode(subjectCode);
                 subject.setSubjectName(subjectName);
-                IdentityMap.getInstance(subject).put(subjectID, subject);
                 subjects.add(subject);
             }
         }catch (SQLException e){
@@ -169,7 +166,6 @@ public class SubjectMapper extends DataMapper{
                 subject.setId(subjectID);
                 subject.setSubjectCode(subjectCode);
                 subject.setSubjectName(subjectName);
-                IdentityMap.getInstance(subject).put(subjectID, subject);
                 allSubjects.add(subject);
             }
         }catch (SQLException e) {

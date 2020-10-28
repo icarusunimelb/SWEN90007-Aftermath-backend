@@ -73,7 +73,6 @@ public class ShortAnswerQuestionAnswerMapper extends DataMapper{
                 answer.setAnswer(answerText);
                 answer.setMark(mark);
                 answer.setQuestionID(questionID);
-                IdentityMap.getInstance(answer).put(id, answer);
             }
         } catch (SQLException e) {
             System.out.println(this.getClass()+e.getMessage());

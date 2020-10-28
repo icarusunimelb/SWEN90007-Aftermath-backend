@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import utils.KeyGenerator;
 import utils.LockManager;
-import utils.TokenVerification;
+import security.TokenVerification;
 import utils.UnitOfWork;
 
 import javax.servlet.ServletException;

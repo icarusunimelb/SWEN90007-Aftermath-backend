@@ -4,7 +4,7 @@ import datamapper.AdminMapper;
 import datamapper.InstructorMapper;
 import datamapper.StudentMapper;
 import domain.User;
-import utils.TokenVerification;
+import security.TokenVerification;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

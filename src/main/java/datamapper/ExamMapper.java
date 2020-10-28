@@ -71,7 +71,6 @@ public class ExamMapper extends DataMapper{
                 exam.setSubjectID(subjectID);
                 exam.setExamName(examName);
                 exam.setStatus(status);
-                IdentityMap.getInstance(exam).put(examID, exam);
                 exams.add(exam);
             }
         } catch (SQLException e) {

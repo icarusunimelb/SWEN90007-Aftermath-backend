@@ -9,7 +9,7 @@ import datamapper.StudentMapper;
 import domain.Instructor;
 import domain.Student;
 import org.json.JSONObject;
-import utils.TokenVerification;
+import security.TokenVerification;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;

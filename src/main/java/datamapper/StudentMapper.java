@@ -43,7 +43,6 @@ public class StudentMapper extends DataMapper{
                 student.setEmail(email);
                 student.setName(new Name(firstName, lastName));
                 student.setPassword(password);
-                IdentityMap.getInstance(student).put(id, student);
             }
         }catch (SQLException e) {
             System.out.println(this.getClass()+e.getMessage());
@@ -221,7 +220,6 @@ public class StudentMapper extends DataMapper{
                 student.setId(studentID);
                 student.setEmail(email);
                 student.setName(new Name(firstName, lastName));
-                IdentityMap.getInstance(student).put(studentID, student);
                 allStudents.add(student);
             }
         }catch (SQLException e) {

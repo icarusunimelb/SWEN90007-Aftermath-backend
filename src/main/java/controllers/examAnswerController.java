@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 import utils.KeyGenerator;
 import utils.LockManager;
-import utils.TokenVerification;
+import security.TokenVerification;
 import utils.UnitOfWork;
 
 import javax.servlet.ServletException;
@@ -19,8 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.http.HttpResponse;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;

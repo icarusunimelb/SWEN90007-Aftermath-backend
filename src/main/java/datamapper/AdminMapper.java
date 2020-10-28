@@ -24,6 +24,31 @@ public class AdminMapper extends DataMapper{
         return instance;
     }
 
+    private static final String findWithIdStatement = "SELECT i.firstName, i.lastName, i.email, i.password FROM oes.admin i " +
+            "WHERE i.adminID = ?";
+
+    public Admin findWithID(String id){
+        Admin admin = new Admin();
+        try{
+            PreparedStatement findStatement = DBConnection.prepare(findWithIdStatement);
+            findStatement.setString(1, id);
+            ResultSet rs = findStatement.executeQuery();
+            if(rs.next()){
+                String firstName = rs.getString(1);
+                String lastName = rs.getString(2);
+                String email = rs.getString(3);
+                String password = rs.getString(4);
+                admin.setId(id);
+                admin.setEmail(email);
+                admin.setName(new Name(firstName, lastName));
+                admin.setPassword(password);
+            }
+        }catch (SQLException e) {
+            System.out.println(this.getClass()+e.getMessage());
+        }
+        return admin;
+    }
+
     private static final String authenticateStatement = "SELECT s.password, s.adminID FROM oes.admin s " +
             "WHERE s.email = ? limit 1";
     public String authenticate(String email, String password) {

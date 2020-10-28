@@ -80,7 +80,6 @@ public class MultipleChoiceQuestionMapper extends DataMapper {
 
                 List<Choice> choices = ChoiceMapper.getSingletonInstance().findWithQuestionID(questionID);
                 question.setMultipleChoices(choices);
-                IdentityMap.getInstance(question).put(questionID, question);
                 questions.add(question);
             }
         } catch (SQLException e) {

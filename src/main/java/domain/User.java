@@ -7,6 +7,7 @@ public class User extends DomainObject {
     private Name name = null;
     private String email = null;
     private String password = null;
+    private String role;
 
     public User(){super();};
 
@@ -34,4 +35,11 @@ public class User extends DomainObject {
         this.password = password;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
 }

@@ -40,7 +40,6 @@ public class SubjectStudentMapMapper extends DataMapper{
                 subjectStudentMap.setId(id);
                 subjectStudentMap.setSubjectID(subjectID);
                 subjectStudentMap.setStudentID(studentID);
-                IdentityMap.getInstance(subjectStudentMap).put(id, subjectStudentMap);
             }
         }catch (SQLException e) {
             System.out.println(e.getMessage());

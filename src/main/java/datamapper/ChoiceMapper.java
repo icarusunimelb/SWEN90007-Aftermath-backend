@@ -46,7 +46,6 @@ public class ChoiceMapper extends DataMapper{
                 choice.setQuestionID(questionID);
                 choice.setChoice(choiceContent);
                 choice.setIndex(index);
-                IdentityMap.getInstance(choice).put(choiceID, choice);
             }
         } catch (SQLException e) {
             System.out.println(this.getClass()+e.getMessage());
@@ -73,7 +72,6 @@ public class ChoiceMapper extends DataMapper{
                 choice.setChoice(choiceContent);
                 int index = rs.getInt(3);
                 choice.setIndex(index);
-                IdentityMap.getInstance(choice).put(choiceID, choice);
                 choices.add(choice);
             }
         } catch (SQLException e) {

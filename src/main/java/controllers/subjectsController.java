@@ -4,12 +4,8 @@ import DTO.DTOSubject;
 import com.google.gson.Gson;
 import datamapper.SubjectMapper;
 import domain.Subject;
-import domain.SubjectInstructorMap;
-import domain.SubjectStudentMap;
 import org.json.JSONObject;
-import utils.KeyGenerator;
-import utils.TokenVerification;
-import utils.UnitOfWork;
+import security.TokenVerification;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;

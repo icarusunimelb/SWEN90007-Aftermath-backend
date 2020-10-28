@@ -1,6 +1,6 @@
 package controllers;
 
-import utils.TokenVerification;
+import security.TokenVerification;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

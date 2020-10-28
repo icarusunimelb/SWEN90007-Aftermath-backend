@@ -6,7 +6,7 @@ import domain.SubjectStudentMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.KeyGenerator;
-import utils.TokenVerification;
+import security.TokenVerification;
 import utils.UnitOfWork;
 
 import javax.servlet.ServletException;
@@ -15,7 +15,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.stream.Collectors;
