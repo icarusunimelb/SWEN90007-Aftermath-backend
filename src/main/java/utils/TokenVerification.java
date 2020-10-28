@@ -58,10 +58,6 @@ public class TokenVerification {
             Claims claims = Jwts.parser()
                     .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
                     .parseClaimsJws(realToken).getBody();
-            //System.out.println("userId: " + claims.getId());
-            //System.out.println("userType: " + claims.getSubject());
-            //System.out.println("Expiration: " + claims.getExpiration());
-            //System.out.println("token: " + realToken);
             return claims.getId() + "," + claims.getSubject();
         }catch (ExpiredJwtException e){
             System.out.println(e);
