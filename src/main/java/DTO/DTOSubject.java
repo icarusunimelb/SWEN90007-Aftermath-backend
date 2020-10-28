@@ -7,6 +7,7 @@ import domain.Exam;
 import domain.Instructor;
 import domain.Student;
 import domain.Subject;
+import exceptions.RecordNotExistException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public class DTOSubject {
     public final List<DTOStudent> students = new ArrayList<>();
     public final List<DTOExam> exams = new ArrayList<>();
 
-    public DTOSubject(Subject subject){
+    public DTOSubject(Subject subject) throws RecordNotExistException {
         dataId = subject.getId();
         subjectId = subject.getSubjectCode();
         subjectName = subject.getSubjectName();

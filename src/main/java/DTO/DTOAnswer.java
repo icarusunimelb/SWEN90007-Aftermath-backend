@@ -11,7 +11,7 @@ public class DTOAnswer {
     public String answer;
     public int mark;
 
-    public DTOAnswer(Answer ans){
+    public DTOAnswer(Answer ans) {
         try {
             answer = ans instanceof MultipleChoiceQuestionAnswer ? String.valueOf(((MultipleChoiceQuestionAnswer) ans).getAnswerIndex()) :
                     ans instanceof ShortAnswerQuestionAnswer ? ((ShortAnswerQuestionAnswer) ans).getAnswer() : null;
