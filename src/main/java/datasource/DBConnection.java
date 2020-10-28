@@ -5,9 +5,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class  DBConnection {
+public class DBConnection {
 
-	private static Connection connection = null;
+	private static final String DB_CONNECTION = "jdbc:postgresql://localhost:5432/postgres";
+	private static final String DB_USER = "postgres";
+	private static final String DB_PASSWORD = "Wy.12.14";
+
 
 	public static PreparedStatement prepare(String stm) throws SQLException {
 
@@ -28,25 +31,21 @@ public class  DBConnection {
 	}
 	private static Connection getDBConnection() {
 
-		if (connection != null) {
-			return connection;
-		}
 
 
 		try {
 			DriverManager.registerDriver(new org.postgresql.Driver());
 
-			String dbUrl = System.getenv("JDBC_DATABASE_URL");
-
-			connection = DriverManager.getConnection(
-					dbUrl);
-			return connection;
+			Connection dbConnection = DriverManager.getConnection(
+					DB_CONNECTION, DB_USER,DB_PASSWORD);
+			return dbConnection;
 
 		} catch (SQLException e) {
 
 			System.out.println(e.getMessage());
 
 		}
+		System.out.println("Connection problem");
 		return null;
 
 	}

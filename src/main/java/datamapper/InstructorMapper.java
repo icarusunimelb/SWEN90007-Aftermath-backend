@@ -52,6 +52,37 @@ public class InstructorMapper extends DataMapper{
         return instructor;
     }
 
+    private static final String findWithSubjectIDStatement =
+            "SELECT s.instructorID, s.firstName, s.lastName, s.email, s.password "
+                    + "FROM oes.instructors s "
+                    + "LEFT JOIN oes.subjectInstructorMap m ON s.instructorID = m.instructorID "
+                    + "WHERE m.subjectID = ?";
+    public List<Instructor> findWithSubjectID(String subjectID) {
+        List<Instructor> instructors = new ArrayList<>();
+        try{
+            PreparedStatement findStatement = DBConnection.prepare(findWithSubjectIDStatement);
+            findStatement.setString(1, subjectID);
+            ResultSet rs = findStatement.executeQuery();
+            while(rs.next()){
+                Instructor instructor = new Instructor();
+                String id = rs.getString(1);
+                String firstName = rs.getString(2);
+                String lastName = rs.getString(3);
+                String email = rs.getString(4);
+                String password = rs.getString(5);
+                instructor.setId(id);
+                instructor.setEmail(email);
+                instructor.setName(new Name(firstName, lastName));
+                instructor.setPassword(password);
+                instructors.add(instructor);
+            }
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return instructors;
+    }
+
+
     private static final String checkRegisterStatement = "SELECT EXISTS(SELECT 1 FROM oes.instructors i " +
             "WHERE i.email = ? limit 1)";
     public boolean registerOrNot(String email) {
@@ -179,5 +210,32 @@ public class InstructorMapper extends DataMapper{
         }
         //System.out.println("end of getManagingSubjects in Instructor mapper !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return subjects;
+    }
+
+    // TODO confirm whether password is needed
+    private static final String allInstructorStatement =
+            "SELECT instructorID, firstName, lastName, email FROM oes.instructors";
+    public List<Instructor> getAllInstructors(){
+        List<Instructor> allInstructors = new ArrayList<Instructor>();
+
+        try{
+            PreparedStatement findStatement = DBConnection.prepare(allInstructorStatement);
+            ResultSet rs = findStatement.executeQuery();
+            while(rs.next()){
+                Instructor instructor = new Instructor();
+                String instructorID = rs.getString(1);
+                String firstName = rs.getString(2);
+                String lastName = rs.getString(3);
+                String email = rs.getString(4);
+                instructor.setId(instructorID);
+                instructor.setEmail(email);
+                instructor.setName(new Name(firstName, lastName));
+                IdentityMap.getInstance(instructor).put(instructorID, instructor);
+                allInstructors.add(instructor);
+            }
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return allInstructors;
     }
 }

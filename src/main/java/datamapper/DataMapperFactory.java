@@ -1,6 +1,7 @@
 package datamapper;
 
 import domain.ShortAnswerQuestionAnswer;
+import domain.SubjectInstructorMap;
 import exceptions.NoSuchMapperTypeException;
 
 import java.lang.reflect.Type;
@@ -28,6 +29,12 @@ public class DataMapperFactory {
                 return StudentMapper.getSingletonInstance();
             case "domain.Subject":
                 return SubjectMapper.getSingletonInstance();
+            case "domain.Admin":
+                return AdminMapper.getSingletonInstance();
+            case "domain.SubjectInstructorMap":
+                return SubjectInstructorMapMapper.getSingletonInstance();
+            case "domain.SubjectStudentMap":
+                return SubjectStudentMapMapper.getSingletonInstance();
             default:
                 throw new NoSuchMapperTypeException("No suitable mapper found for "+ className);
         }

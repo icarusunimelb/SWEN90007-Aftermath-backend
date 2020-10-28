@@ -202,4 +202,31 @@ public class StudentMapper extends DataMapper{
         }
         return notSubmittedStudents;
     }
+
+    // TODO confirm whether password is needed
+    private static final String allStudentStatement =
+            "SELECT studentID, firstName, lastName, email FROM oes.students";
+    public List<Student> getAllStudents(){
+        List<Student> allStudents = new ArrayList<Student>();
+
+        try{
+            PreparedStatement findStatement = DBConnection.prepare(allStudentStatement);
+            ResultSet rs = findStatement.executeQuery();
+            while(rs.next()){
+                Student student = new Student();
+                String studentID = rs.getString(1);
+                String firstName = rs.getString(2);
+                String lastName = rs.getString(3);
+                String email = rs.getString(4);
+                student.setId(studentID);
+                student.setEmail(email);
+                student.setName(new Name(firstName, lastName));
+                IdentityMap.getInstance(student).put(studentID, student);
+                allStudents.add(student);
+            }
+        }catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return allStudents;
+    }
 }
