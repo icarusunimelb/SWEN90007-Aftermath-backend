@@ -26,13 +26,21 @@ public class logoutController extends HttpServlet {
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setHeader("Access-Control-Allow-Origin", "*");
         try{
-            PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setHeader("Access-Control-Allow-Origin", "*");
-
             String token = TokenVerification.getTokenFromHeader(request);
+
+            if(TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG){
+                JSONObject jsonObject = new JSONObject(String.format(
+                        "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
+                out.print(jsonObject);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                out.flush();
+                return;
+            }
 
             if(!token.isEmpty()){
                 TokenVerification.removeToken(token);
@@ -42,15 +50,18 @@ public class logoutController extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_OK);
                 out.flush();
                 return;
+            } else {
+                JSONObject jsonObject = new JSONObject(String.format(
+                        "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+                out.print(jsonObject);
+                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                out.flush();
             }
 
-            JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-            out.print(jsonObject);
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            out.flush();
         }catch (Exception e){
-            System.out.println(this.getClass()+e.getMessage());
+            System.out.println(e.getMessage());
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            out.flush();
         }
 
     }

@@ -11,7 +11,7 @@ public class DTOExam {
     public DTOExam(Exam exam) throws RecordNotExistException {
         dataId = exam.getId();
         examName = exam.getExamName();
-        status = "EXAM_STATUS."+exam.getStatus();
+        status = exam.getStatus();
     }
 
 }
