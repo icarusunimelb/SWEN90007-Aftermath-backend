@@ -54,14 +54,6 @@ public class examAnswerController extends HttpServlet {
                 out.flush();
                 return;
             }
-            if(TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG){
-                JSONObject jsonObject = new JSONObject(String.format(
-                        "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-                out.print(jsonObject);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                out.flush();
-                return;
-            }
 
             String requestData = request.getReader().lines().collect(Collectors.joining());
 

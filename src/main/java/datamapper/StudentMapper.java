@@ -50,24 +50,6 @@ public class StudentMapper extends DataMapper{
         return student;
     }
 
-    private static final String checkRegisterStatement = "SELECT EXISTS(SELECT 1 FROM oes.students s " +
-            "WHERE s.email = ? limit 1)";
-    public boolean registerOrNot(String email) {
-        boolean isRegisterOrNot = false;
-        try {
-            PreparedStatement findStatement = DBConnection.prepare(checkRegisterStatement);
-            findStatement.setString(1, email);
-            ResultSet rs = findStatement.executeQuery();
-            if (rs.next()) {
-                isRegisterOrNot = rs.getBoolean(1);
-            }
-
-        } catch (SQLException e) {
-            System.out.println(this.getClass()+e.getMessage());
-        }
-        return isRegisterOrNot;
-    }
-
     private static final String authenticateStatement = "SELECT s.password, s.studentid FROM oes.students s " +
             "WHERE s.email = ? limit 1";
     public String authenticate(String email, String password) {

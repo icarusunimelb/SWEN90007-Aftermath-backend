@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import  org.json.*;
 import com.google.gson.Gson;
+import utils.USERTYPE;
 
 @WebServlet("/api/user/login")
 public class loginController extends HttpServlet {
@@ -26,7 +27,6 @@ public class loginController extends HttpServlet {
     public loginController() {
         super();
     }
-    private enum USERTYPE {STUDENT, LECTURER,ADMIN};
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
