@@ -45,9 +45,9 @@ public class logoutController extends HttpServlet {
             }
 
             JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+                    "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
             out.print(jsonObject);
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             out.flush();
         }catch (Exception e){
             System.out.println(this.getClass()+e.getMessage());
