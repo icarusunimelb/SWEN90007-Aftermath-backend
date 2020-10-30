@@ -4,7 +4,6 @@ import datamapper.AdminMapper;
 import datamapper.InstructorMapper;
 import datamapper.StudentMapper;
 import domain.User;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import security.TokenVerification;
 
 import javax.servlet.ServletException;
@@ -19,7 +18,6 @@ import  org.json.*;
 import com.google.gson.Gson;
 import utils.USERTYPE;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @WebServlet("/api/user/login")
 public class loginController extends HttpServlet {
     private static final long serialVersionUID = 4L;

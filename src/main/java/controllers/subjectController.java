@@ -5,7 +5,6 @@ import domain.SubjectInstructorMap;
 import domain.SubjectStudentMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import utils.KeyGenerator;
 import security.TokenVerification;
 import utils.UnitOfWork;

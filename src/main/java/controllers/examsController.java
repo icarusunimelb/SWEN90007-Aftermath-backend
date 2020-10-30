@@ -14,7 +14,6 @@ import exceptions.RecordNotExistException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import security.TokenVerification;
 
 

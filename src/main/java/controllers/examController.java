@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import utils.KeyGenerator;
 import utils.LockManager;
 import security.TokenVerification;

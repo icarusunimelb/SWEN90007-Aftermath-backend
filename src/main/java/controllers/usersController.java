@@ -9,7 +9,6 @@ import datamapper.StudentMapper;
 import domain.Instructor;
 import domain.Student;
 import org.json.JSONObject;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import security.TokenVerification;
 
 import javax.servlet.ServletException;

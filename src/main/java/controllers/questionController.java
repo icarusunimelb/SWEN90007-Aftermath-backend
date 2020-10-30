@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import domain.Exam;
 import domain.Question;
 import org.json.JSONObject;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import security.TokenVerification;
 
 import javax.servlet.ServletException;
