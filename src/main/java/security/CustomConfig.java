@@ -24,11 +24,4 @@ public class CustomConfig extends WebSecurityConfigurerAdapter {
             .addFilterAfter(
                 new AuthorFilter(), AuthenFilter.class);
     }
-
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-        return source;
-    }
 }
