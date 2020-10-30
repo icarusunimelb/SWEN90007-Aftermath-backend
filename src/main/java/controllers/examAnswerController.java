@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import utils.KeyGenerator;
 import utils.LockManager;
 import security.TokenVerification;
@@ -24,7 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@CrossOrigin(origins = "*", maxAge = 3600)
 @WebServlet("/api/examAnswer-controller")
 public class examAnswerController extends HttpServlet {
     private static final long serialVersionUID = 2L;

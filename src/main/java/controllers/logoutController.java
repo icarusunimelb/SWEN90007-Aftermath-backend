@@ -1,5 +1,6 @@
 package controllers;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import security.TokenVerification;
 
 import javax.servlet.ServletException;
@@ -12,6 +13,7 @@ import java.io.PrintWriter;
 
 import  org.json.*;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @WebServlet("/api/user/logout")
 public class logoutController extends HttpServlet {
 

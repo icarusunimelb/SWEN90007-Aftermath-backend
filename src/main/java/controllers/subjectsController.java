@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import datamapper.SubjectMapper;
 import domain.Subject;
 import org.json.JSONObject;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import security.TokenVerification;
 
 import javax.servlet.ServletException;
@@ -18,7 +19,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@CrossOrigin(origins = "*", maxAge = 3600)
 @WebServlet("/api/subjects-controller") @MultipartConfig
 public class subjectsController extends HttpServlet {
     // get all subjects
