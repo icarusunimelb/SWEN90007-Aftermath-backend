@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 
 @WebServlet("/api/examAnswer-controller")
 public class examAnswerController extends HttpServlet {
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 1L;
     private enum EXAMSTATUS {publish, close, update};
     /**
      * @see HttpServlet#HttpServlet()

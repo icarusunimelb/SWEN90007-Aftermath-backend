@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @WebServlet("/api/question-controller")
 public class questionController extends HttpServlet {
-    private static final long serialVersionUID = 5L;
+    private static final long serialVersionUID = 6L;
 
     /**
      * @see HttpServlet#HttpServlet()

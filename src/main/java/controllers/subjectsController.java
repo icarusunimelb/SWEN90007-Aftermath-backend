@@ -21,6 +21,7 @@ import java.util.List;
 
 @WebServlet("/api/subjects-controller") @MultipartConfig
 public class subjectsController extends HttpServlet {
+    private static final long serialVersionUID = 8L;
     // get all subjects
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();

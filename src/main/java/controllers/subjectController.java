@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 @WebServlet("/api/subject-controller")
 public class subjectController extends HttpServlet {
+    private static final long serialVersionUID = 7L;
     // add one subject
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();

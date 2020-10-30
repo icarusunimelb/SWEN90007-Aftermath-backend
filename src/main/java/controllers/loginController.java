@@ -20,7 +20,7 @@ import utils.USERTYPE;
 
 @WebServlet("/api/user/login")
 public class loginController extends HttpServlet {
-
+    private static final long serialVersionUID = 4L;
     /**
      * @see HttpServlet#HttpServlet()
      */

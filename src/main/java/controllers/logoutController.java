@@ -14,7 +14,7 @@ import  org.json.*;
 
 @WebServlet("/api/user/logout")
 public class logoutController extends HttpServlet {
-
+    private static final long serialVersionUID = 5L;
     /**
      * @see HttpServlet#HttpServlet()
      */

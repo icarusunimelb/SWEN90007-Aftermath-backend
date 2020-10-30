@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 @WebServlet("/api/exams-controller")
 public class examsController extends HttpServlet {
-    private static final long serialVersionUID = 2L;
+    private static final long serialVersionUID = 3L;
 
     /**
      * @see HttpServlet#HttpServlet()
