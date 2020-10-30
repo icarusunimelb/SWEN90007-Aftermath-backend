@@ -1,3 +1,4 @@
+/*
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 import security.CustomConfig;
 
@@ -6,4 +7,4 @@ public class SecurityWebApplicationInitializer extends AbstractSecurityWebApplic
     public SecurityWebApplicationInitializer() {
         super(CustomConfig.class);
     }
-}
+}*/
