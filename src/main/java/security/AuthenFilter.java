@@ -1,19 +1,18 @@
 package security;
 
 import org.json.JSONObject;
-import org.springframework.web.filter.GenericFilterBean;
 import utils.USERTYPE;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-public class AuthenFilter extends GenericFilterBean {
+@WebFilter(filterName = "authenfilter")
+public class AuthenFilter implements Filter {
+
     @Override
     public void doFilter(
             ServletRequest request,

@@ -1,22 +1,17 @@
 package security;
 
 import org.json.JSONObject;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
-import org.springframework.web.filter.GenericFilterBean;
 import utils.USERTYPE;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@Order(Ordered.HIGHEST_PRECEDENCE)
-public class CorsFilter extends GenericFilterBean {
+@WebFilter(filterName = "corsfilter")
+public class CorsFilter implements Filter {
     @Override
     public void doFilter(
             ServletRequest request,
