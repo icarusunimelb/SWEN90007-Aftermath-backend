@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import utils.KeyGenerator;
 import utils.LockManager;
 import security.TokenVerification;
+import utils.USERTYPE;
 import utils.UnitOfWork;
 
 import javax.servlet.ServletException;
@@ -46,7 +47,7 @@ public class examAnswerController extends HttpServlet {
 
             // do the authorization
             // if the role is incorrect or the token expires, will report error to the frontend
-            if(TokenVerification.validLecturer(request, response) != TokenVerification.LECTURERFLAG){
+            if(!TokenVerification.getRoleFromRequest(request).equals(USERTYPE.LECTURER)){
                 JSONObject jsonObject = new JSONObject(String.format(
                         "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
                 out.print(jsonObject);

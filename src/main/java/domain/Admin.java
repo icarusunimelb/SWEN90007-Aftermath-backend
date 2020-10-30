@@ -9,19 +9,7 @@ import java.util.List;
 
 public class Admin extends User{
 
-    private String role = "admin";
-
     public Admin(){super();};
-
-    @Override
-    public String getRole() {
-        return role;
-    }
-
-    @Override
-    public void setRole(String role) {
-        this.role = role;
-    }
 
     @Override
     public Name getName() throws RecordNotExistException{

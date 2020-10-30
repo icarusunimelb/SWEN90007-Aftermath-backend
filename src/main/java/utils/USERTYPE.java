@@ -1,3 +1,3 @@
 package utils;
 
-public enum USERTYPE {STUDENT, LECTURER, ADMIN};
+public enum USERTYPE {STUDENT, LECTURER, ADMIN, UNKNOWN};

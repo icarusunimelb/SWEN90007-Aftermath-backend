@@ -3,6 +3,7 @@ package security;
 
 import io.jsonwebtoken.*;
 import org.json.JSONObject;
+import utils.USERTYPE;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
@@ -20,10 +21,6 @@ public class TokenVerification {
     private static final String SECRET_KEY = "Aftermath";
     private static final long TTEXPIRE = 7200000;
     private static volatile List<String> tokens = new ArrayList<String>();
-    public static final int STUDENTFLAG = 0;
-    public static final int LECTURERFLAG = 1;
-    public static final int ADMINTFLAG = 2;
-    public static final int ERRORFLAG = -1;
 
     public static String createJWT(String userId, String userType) {
 
@@ -104,33 +101,29 @@ public class TokenVerification {
         return "";
     }
     
-    public static int validLecturer(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        PrintWriter out = response.getWriter();
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "*");
+    public static USERTYPE getRoleFromRequest(HttpServletRequest request) {
 
         String token = getTokenFromHeader(request);
         String userIdAndUserType = "";
         //System.out.println("token: " + token);
         if(token.equals("")){
 
-            return ERRORFLAG;
+            return USERTYPE.UNKNOWN;
         } else {
             try{
                 userIdAndUserType = verifyToken(token);
             } catch(io.jsonwebtoken.ExpiredJwtException e) {
-                return ERRORFLAG;
+                return USERTYPE.UNKNOWN;
             }
-            if(userIdAndUserType.equals("")){
-                return ERRORFLAG;
+            if(userIdAndUserType.equals("LECTURER")){
+                return USERTYPE.LECTURER;
             } else if(userIdAndUserType.contains("STUDENT")){
-                return STUDENTFLAG;
+                return USERTYPE.STUDENT;
             } else if(userIdAndUserType.contains("ADMIN")){
-                return ADMINTFLAG;
+                return USERTYPE.ADMIN;
             }
         }
-        return LECTURERFLAG;
+        return USERTYPE.UNKNOWN;
     }
 
 }
