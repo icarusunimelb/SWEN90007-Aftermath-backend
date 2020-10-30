@@ -18,7 +18,6 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @WebServlet("/api/question-controller")
 public class questionController extends HttpServlet {
     private static final long serialVersionUID = 6L;

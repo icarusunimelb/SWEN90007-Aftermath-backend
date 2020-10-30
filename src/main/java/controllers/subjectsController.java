@@ -19,7 +19,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @WebServlet("/api/subjects-controller") @MultipartConfig
 public class subjectsController extends HttpServlet {
     private static final long serialVersionUID = 8L;

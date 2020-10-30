@@ -25,7 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @WebServlet("/api/examAnswer-controller")
 public class examAnswerController extends HttpServlet {
     private static final long serialVersionUID = 1L;

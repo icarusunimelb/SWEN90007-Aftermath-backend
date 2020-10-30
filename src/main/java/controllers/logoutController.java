@@ -13,7 +13,6 @@ import java.io.PrintWriter;
 
 import  org.json.*;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @WebServlet("/api/user/logout")
 public class logoutController extends HttpServlet {
     private static final long serialVersionUID = 5L;
