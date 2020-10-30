@@ -11,7 +11,8 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 public class CustomCofig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterAfter(
+        http.cors().and().csrf().disable()
+            .addFilterAfter(
                 new AuthenFilter(), BasicAuthenticationFilter.class)
             .addFilterAfter(
                 new AuthorFilter(), AuthenFilter.class);
