@@ -33,9 +33,9 @@ public class AuthorFilter extends GenericFilterBean {
         if (!hasAccess) {
             PrintWriter out = httpResponse.getWriter();
             JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}", HttpServletResponse.SC_UNAUTHORIZED));
+                    "{\"code\":\"%s\"}", HttpServletResponse.SC_FORBIDDEN));
             out.print(jsonObject);
-            httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
             out.flush();
             return;
         } else {
