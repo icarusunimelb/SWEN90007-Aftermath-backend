@@ -10,6 +10,7 @@ import domain.Instructor;
 import domain.Student;
 import org.json.JSONObject;
 import security.TokenVerification;
+import utils.LockManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -27,10 +28,13 @@ public class usersController extends HttpServlet {
     private static final long serialVersionUID = 9L;
     // get all users
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
 
         try{
-
+            PrintWriter out = response.getWriter();
+            String token = TokenVerification.getTokenFromHeader(request);
+            String userIdAndUserType = TokenVerification.getIdAndSubject(token);
+            String userId = userIdAndUserType.split(",", 2)[0];
+            LockManager.getInstance().releaseAll(userId);
             // TODO get all users
             List<Instructor> allInstructors = InstructorMapper.getSingletonInstance().getAllInstructors();
             List<DTOInstructor> allDTOInstructors = new ArrayList<>();
@@ -50,6 +54,7 @@ public class usersController extends HttpServlet {
             out.flush();
 
         } catch (Exception e){
+            PrintWriter out = response.getWriter();
             e.printStackTrace();
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\",\"subjectId\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));

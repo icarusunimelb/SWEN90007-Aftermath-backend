@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import  org.json.*;
 import com.google.gson.Gson;
+import utils.LockManager;
 import utils.USERTYPE;
 
 @WebServlet("/login")
@@ -32,6 +33,7 @@ public class loginController extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+
             BufferedReader reader = request.getReader();
             Gson gson = new Gson();
             User user = gson.fromJson(reader, User.class);
