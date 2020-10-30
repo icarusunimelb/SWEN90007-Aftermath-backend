@@ -40,19 +40,13 @@ public class examController extends HttpServlet {
      */
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-
-            String token = TokenVerification.getTokenFromHeader(request);
-            String userIdAndUserType = TokenVerification.getIdAndSubject(token);
-            String userId = userIdAndUserType.split(",", 2)[0];
-            LockManager.getInstance().releaseAll(userId);
-
             String status = request.getParameter("status");
             String examId = request.getParameter("dataId");
 
             PrintWriter out = response.getWriter();
 
             // get the lock of current exam
-            LockManager.getInstance().acquireLock(examId, userId, LockManager.LOCKTYPE.WRITE);
+            LockManager.getInstance().acquireLock(examId, Thread.currentThread().getName());
 
             Exam exam = new Exam();
             exam.setId(examId);
@@ -191,7 +185,7 @@ public class examController extends HttpServlet {
             }
 
             // release the lock of current exam
-            LockManager.getInstance().releaseLock(examId, userId, LockManager.LOCKTYPE.WRITE);
+            LockManager.getInstance().releaseLock(examId, Thread.currentThread().getName());
 
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
@@ -221,11 +215,6 @@ public class examController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             PrintWriter out = response.getWriter();
-
-            String token = TokenVerification.getTokenFromHeader(request);
-            String userIdAndUserType = TokenVerification.getIdAndSubject(token);
-            String userId = userIdAndUserType.split(",", 2)[0];
-            LockManager.getInstance().releaseAll(userId);
 
             String requestData = request.getReader().lines().collect(Collectors.joining());
             JSONObject examJson = new JSONObject(requestData);
