@@ -19,6 +19,7 @@ import  org.json.*;
 import com.google.gson.Gson;
 import utils.USERTYPE;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @WebServlet("/api/user/login")
 public class loginController extends HttpServlet {
     private static final long serialVersionUID = 4L;
