@@ -25,6 +25,10 @@ public class AuthorFilter implements Filter {
         httpResponse.setHeader("Access-Control-Allow-Origin", "*");
         httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         httpResponse.setHeader("Access-Control-Allow-Headers", "authorization");
+        if (httpRequest.getMethod().equals("OPTIONS")) {
+            chain.doFilter(request, response);
+            return;
+        }
         USERTYPE role = TokenVerification.getRoleFromRequest(httpRequest);
         String accessList = AccessControlMap.ACCESS_CONTROL.get(role);
         Boolean hasAccess = false;

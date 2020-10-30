@@ -26,7 +26,7 @@ public class AuthenFilter implements Filter {
         httpResponse.setHeader("Access-Control-Allow-Origin", "*");
         httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         httpResponse.setHeader("Access-Control-Allow-Headers", "authorization");
-        if(TokenVerification.getRoleFromRequest(httpRequest).equals(USERTYPE.UNKNOWN)){
+        if(!httpRequest.getMethod().equals("OPTIONS") && TokenVerification.getRoleFromRequest(httpRequest).equals(USERTYPE.UNKNOWN)){
             PrintWriter out = httpResponse.getWriter();
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
