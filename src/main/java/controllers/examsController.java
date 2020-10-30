@@ -15,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import security.TokenVerification;
+import utils.LockManager;
 
 
 import javax.servlet.ServletException;
@@ -44,14 +45,14 @@ public class examsController extends HttpServlet {
      */ // /api/exam-controller?status=managing
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String status = request.getParameter("status");
-            //System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
-            PrintWriter out = response.getWriter();
-
             String token = TokenVerification.getTokenFromHeader(request);
             String userIdAndUserType = TokenVerification.getIdAndSubject(token);
             String userId = userIdAndUserType.split(",", 2)[0];
-//        String userType = userIdAndUserType.split(",", 2)[1];
+            LockManager.getInstance().releaseAll(userId);
+
+            String status = request.getParameter("status");
+            //System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
+            PrintWriter out = response.getWriter();
 
             if(status.equals("managing")){
                 String jsonArray = manageExams(userId);
