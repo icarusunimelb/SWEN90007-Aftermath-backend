@@ -40,9 +40,6 @@ public class examAnswerController extends HttpServlet {
 
         try {
             PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setHeader("Access-Control-Allow-Origin", "*");
 
             String requestData = request.getReader().lines().collect(Collectors.joining());
 
