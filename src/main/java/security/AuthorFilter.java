@@ -20,6 +20,11 @@ public class AuthorFilter implements Filter {
         System.out.println("AuthorFilter!!!");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
+        httpResponse.setContentType("application/json");
+        httpResponse.setCharacterEncoding("UTF-8");
+        httpResponse.setHeader("Access-Control-Allow-Origin", "*");
+        httpResponse.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+        httpResponse.setHeader("Access-Control-Allow-Headers", "authorization");
         USERTYPE role = TokenVerification.getRoleFromRequest(httpRequest);
         String accessList = AccessControlMap.ACCESS_CONTROL.get(role);
         Boolean hasAccess = false;
