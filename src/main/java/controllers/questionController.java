@@ -4,6 +4,7 @@ import DTO.DTOQuestion;
 import com.google.gson.Gson;
 import domain.Exam;
 import domain.Question;
+import exceptions.CanNotAcquireLockException;
 import org.json.JSONObject;
 import security.TokenVerification;
 import utils.LockManager;
@@ -45,8 +46,8 @@ public class questionController extends HttpServlet {
             String examId = request.getParameter("dataId");
             Exam exam = new Exam();
             exam.setId(examId);
-            exam.load();
 
+            LockManager.getInstance().acquireLock(examId, userId, LockManager.LOCKTYPE.READ);
 
             List<Question> questions = exam.getQuestions();
             if (questions.size() == 0) {
@@ -60,8 +61,16 @@ public class questionController extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_OK);
                 out.flush();
             }
-        }catch (Exception e){
+
+            LockManager.getInstance().releaseLock(examId, userId, LockManager.LOCKTYPE.READ);
+        }catch (CanNotAcquireLockException e){
             System.out.println(this.getClass()+e.getMessage());
+            PrintWriter out = response.getWriter();
+            JSONObject jsonObject = new JSONObject(String.format(
+                    "{\"code\":\"%s\"}",HttpServletResponse.SC_CONFLICT));
+            out.print(jsonObject);
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
+            out.flush();
         }
 
 
