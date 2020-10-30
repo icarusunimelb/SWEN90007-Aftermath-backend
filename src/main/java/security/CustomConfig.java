@@ -17,8 +17,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class CustomConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and()
-            .addFilter(new CorsFilter())
+        http.addFilter(new CorsFilter())
             .addFilterAfter(
                 new AuthenFilter(), CorsFilter.class)
             .addFilterAfter(
