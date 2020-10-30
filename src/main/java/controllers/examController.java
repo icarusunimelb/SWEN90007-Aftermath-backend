@@ -43,9 +43,6 @@ public class examController extends HttpServlet {
             String examId = request.getParameter("dataId");
 
             PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setHeader("Access-Control-Allow-Origin", "*");
 
             // get the lock of current exam
             LockManager.getInstance().acquireLock(examId, Thread.currentThread().getName());
@@ -209,9 +206,6 @@ public class examController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setHeader("Access-Control-Allow-Origin", "*");
 
             String requestData = request.getReader().lines().collect(Collectors.joining());
             JSONObject examJson = new JSONObject(requestData);
@@ -257,9 +251,6 @@ public class examController extends HttpServlet {
 
         try {
             PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setHeader("Access-Control-Allow-Origin", "*");
 
             String examID =request.getParameter("dataId");
 
@@ -305,13 +296,6 @@ public class examController extends HttpServlet {
             e.printStackTrace();
         }
 
-    }
-    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "authorization");
     }
 
 }

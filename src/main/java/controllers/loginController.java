@@ -40,10 +40,6 @@ public class loginController extends HttpServlet {
             String password = user.getPassword();
 //            System.out.println(email+password);
             PrintWriter out = response.getWriter();
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setHeader("Access-Control-Allow-Origin", "*");
-
 
             String userType = null;
             String dataID = null;
@@ -93,14 +89,6 @@ public class loginController extends HttpServlet {
             System.out.println(this.getClass()+e.getMessage());
         }
 
-    }
-
-    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.setHeader("Access-Control-Allow-Origin", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        response.setHeader("Access-Control-Allow-Headers", "authorization");
     }
 
 }
