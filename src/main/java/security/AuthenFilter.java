@@ -27,6 +27,7 @@ public class AuthenFilter extends GenericFilterBean {
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
             out.print(jsonObject);
             httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            System.out.println("--------------Authen fail------------");
             out.flush();
             return;
         }else {

@@ -36,6 +36,7 @@ public class AuthorFilter extends GenericFilterBean {
                     "{\"code\":\"%s\"}", HttpServletResponse.SC_FORBIDDEN));
             out.print(jsonObject);
             httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            System.out.println("-----------Authorize fail---------------");
             out.flush();
             return;
         } else {
