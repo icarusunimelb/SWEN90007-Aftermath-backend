@@ -15,7 +15,7 @@ public class CustomConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
             .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS,"*").permitAll()
+                .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
             .and().addFilter(new CorsFilter())
             .addFilterAfter(
                 new AuthenFilter(), CorsFilter.class)
