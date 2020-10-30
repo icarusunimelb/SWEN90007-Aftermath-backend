@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 import  org.json.*;
-import utils.LockManager;
 
 @WebServlet("/api/user/logout")
 public class logoutController extends HttpServlet {
@@ -30,9 +29,6 @@ public class logoutController extends HttpServlet {
         PrintWriter out = response.getWriter();
         try{
             String token = TokenVerification.getTokenFromHeader(request);
-            String userIdAndUserType = TokenVerification.getIdAndSubject(token);
-            String userId = userIdAndUserType.split(",", 2)[0];
-            LockManager.getInstance().releaseAll(userId);
 
             if(!token.isEmpty()){
                 TokenVerification.removeToken(token);

@@ -2,7 +2,6 @@ package controllers;
 
 import datamapper.*;
 import domain.*;
-import exceptions.CanNotAcquireLockException;
 import exceptions.RecordNotExistException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,10 +39,6 @@ public class examAnswerController extends HttpServlet {
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-            String token = TokenVerification.getTokenFromHeader(request);
-            String userIdAndUserType = TokenVerification.getIdAndSubject(token);
-            String userId = userIdAndUserType.split(",", 2)[0];
-            LockManager.getInstance().releaseAll(userId);
             PrintWriter out = response.getWriter();
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
@@ -55,7 +50,7 @@ public class examAnswerController extends HttpServlet {
             String examId = jsonObject1.getString("examId");
             JSONArray examAnswerArray = jsonObject1.getJSONArray("markings");
 
-            LockManager.getInstance().acquireLock(examId, userId, LockManager.LOCKTYPE.WRITE);
+            LockManager.getInstance().acquireLock(examId, Thread.currentThread().getName());
             UnitOfWork.newCurrent();
 
             for ( int i = 0; i < examAnswerArray.length(); i ++){
@@ -104,7 +99,7 @@ public class examAnswerController extends HttpServlet {
                 return;
             }
 
-            LockManager.getInstance().releaseLock(examId, userId, LockManager.LOCKTYPE.WRITE);
+            LockManager.getInstance().releaseLock(examId, Thread.currentThread().getName());
 
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
@@ -116,14 +111,6 @@ public class examAnswerController extends HttpServlet {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (CanNotAcquireLockException e) {
-            e.printStackTrace();
-            PrintWriter out = response.getWriter();
-            JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\"}",HttpServletResponse.SC_CONFLICT));
-            out.print(jsonObject);
-            response.setStatus(HttpServletResponse.SC_CONFLICT);
-            out.flush();
         }
 
     }
@@ -134,13 +121,14 @@ public class examAnswerController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         try {
-            String token = TokenVerification.getTokenFromHeader(request);
-            String userIdAndUserType = TokenVerification.getIdAndSubject(token);
-            String userId = userIdAndUserType.split(",", 2)[0];
-            LockManager.getInstance().releaseAll(userId);
             PrintWriter out = response.getWriter();
 
             UnitOfWork.newCurrent();
+
+            String token = TokenVerification.getTokenFromHeader(request);
+            String userIdAndUserType = TokenVerification.getIdAndSubject(token);
+
+            String userId = userIdAndUserType.split(",", 2)[0];
 
             String requestData = request.getReader().lines().collect(Collectors.joining());
             JSONObject examJson = new JSONObject(requestData);

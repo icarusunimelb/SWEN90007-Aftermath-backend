@@ -7,7 +7,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.KeyGenerator;
 import security.TokenVerification;
-import utils.LockManager;
 import utils.UnitOfWork;
 
 import javax.servlet.ServletException;
@@ -25,12 +24,9 @@ public class subjectController extends HttpServlet {
     private static final long serialVersionUID = 7L;
     // add one subject
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        PrintWriter out = response.getWriter();
         try{
-            PrintWriter out = response.getWriter();
-            String token = TokenVerification.getTokenFromHeader(request);
-            String userIdAndUserType = TokenVerification.getIdAndSubject(token);
-            String userId = userIdAndUserType.split(",", 2)[0];
-            LockManager.getInstance().releaseAll(userId);
+
             // TODO save a new subject
             String requestData = request.getReader().lines().collect(Collectors.joining());
             JSONObject jsonObject = new JSONObject(requestData);
@@ -75,7 +71,6 @@ public class subjectController extends HttpServlet {
 
         } catch (Exception e){
             e.printStackTrace();
-            PrintWriter out = response.getWriter();
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\",\"subjectId\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
             out.print(jsonObject);

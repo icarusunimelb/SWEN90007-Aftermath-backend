@@ -6,7 +6,6 @@ import domain.Exam;
 import domain.Question;
 import org.json.JSONObject;
 import security.TokenVerification;
-import utils.LockManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,11 +34,6 @@ public class questionController extends HttpServlet {
     // /api/question-controller?dataId=examId
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            String token = TokenVerification.getTokenFromHeader(request);
-            String userIdAndUserType = TokenVerification.getIdAndSubject(token);
-            String userId = userIdAndUserType.split(",", 2)[0];
-            LockManager.getInstance().releaseAll(userId);
-
             PrintWriter out = response.getWriter();
 
             String examId = request.getParameter("dataId");
