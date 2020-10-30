@@ -158,7 +158,7 @@ public class SubjectMapper extends DataMapper{
         try{
             PreparedStatement findStatement = DBConnection.prepare(allSubjectStatement);
             ResultSet rs = findStatement.executeQuery();
-            if(rs.next()){
+            while(rs.next()){
                 Subject subject = new Subject();
                 String subjectID = rs.getString(1);
                 String subjectCode = rs.getString(2);
