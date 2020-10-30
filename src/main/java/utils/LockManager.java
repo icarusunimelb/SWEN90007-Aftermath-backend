@@ -54,6 +54,6 @@ public class LockManager {
 
 	public synchronized void releaseAll(String owner) {
 		readLockMap.entrySet().removeIf(e -> e.getValue().equals(owner) );
-		writeLockMap.entrySet().removeIf(e -> e.getValue().equals(owner))
+		writeLockMap.entrySet().removeIf(e -> e.getValue().equals(owner));
 	}
 }
