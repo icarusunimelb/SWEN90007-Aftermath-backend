@@ -47,17 +47,6 @@ public class examController extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             response.setHeader("Access-Control-Allow-Origin", "*");
 
-            // do the authorization
-            // if the role is incorrect or the token expires, will report error to the frontend
-            if(TokenVerification.validLecturer(request, response) != TokenVerification.LECTURERFLAG){
-                JSONObject jsonObject = new JSONObject(String.format(
-                        "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-                out.print(jsonObject);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                out.flush();
-                return;
-            }
-
             // get the lock of current exam
             LockManager.getInstance().acquireLock(examId, Thread.currentThread().getName());
 
@@ -224,15 +213,6 @@ public class examController extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             response.setHeader("Access-Control-Allow-Origin", "*");
 
-            if(TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG){
-                JSONObject jsonObject = new JSONObject(String.format(
-                        "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-                out.print(jsonObject);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                out.flush();
-                return;
-            }
-
             String requestData = request.getReader().lines().collect(Collectors.joining());
             JSONObject examJson = new JSONObject(requestData);
             String subjectId = examJson.getString("subjectId");
@@ -280,15 +260,6 @@ public class examController extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.setHeader("Access-Control-Allow-Origin", "*");
-
-            if(TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG){
-                JSONObject jsonObject = new JSONObject(String.format(
-                        "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-                out.print(jsonObject);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                out.flush();
-                return;
-            }
 
             String examID =request.getParameter("dataId");
 

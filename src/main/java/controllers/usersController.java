@@ -33,15 +33,6 @@ public class usersController extends HttpServlet {
 
         try{
 
-            if (TokenVerification.validLecturer(request, response) != TokenVerification.ADMINTFLAG) {
-                JSONObject jsonObject = new JSONObject(String.format(
-                        "{\"code\":\"%s\"}", HttpServletResponse.SC_UNAUTHORIZED));
-                out.print(jsonObject);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                out.flush();
-                return;
-            }
-
             // TODO get all users
             List<Instructor> allInstructors = InstructorMapper.getSingletonInstance().getAllInstructors();
             List<DTOInstructor> allDTOInstructors = new ArrayList<>();

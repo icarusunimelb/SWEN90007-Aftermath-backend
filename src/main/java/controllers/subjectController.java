@@ -29,16 +29,6 @@ public class subjectController extends HttpServlet {
         response.setHeader("Access-Control-Allow-Origin", "*");
         try{
 
-
-            if (TokenVerification.validLecturer(request, response) != TokenVerification.ADMINTFLAG) {
-                JSONObject jsonObject = new JSONObject(String.format(
-                        "{\"code\":\"%s\"}", HttpServletResponse.SC_UNAUTHORIZED));
-                out.print(jsonObject);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                out.flush();
-                return;
-            }
-
             // TODO save a new subject
             String requestData = request.getReader().lines().collect(Collectors.joining());
             JSONObject jsonObject = new JSONObject(requestData);

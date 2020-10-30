@@ -29,15 +29,6 @@ public class subjectsController extends HttpServlet {
         response.setHeader("Access-Control-Allow-Origin", "*");
         try{
 
-            if (TokenVerification.validLecturer(request, response) != TokenVerification.ADMINTFLAG) {
-                JSONObject jsonObject = new JSONObject(String.format(
-                        "{\"code\":\"%s\"}", HttpServletResponse.SC_UNAUTHORIZED));
-                out.print(jsonObject);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                out.flush();
-                return;
-            }
-
             // TODO get all subjects, corresponding instructors, students, exams
             List<Subject> subjects = SubjectMapper.getSingletonInstance().getAllSubjects();
             List<DTOSubject> dtoSubjects = new ArrayList<>();

@@ -45,17 +45,6 @@ public class examAnswerController extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             response.setHeader("Access-Control-Allow-Origin", "*");
 
-            // do the authorization
-            // if the role is incorrect or the token expires, will report error to the frontend
-            if(!TokenVerification.getRoleFromRequest(request).equals(USERTYPE.LECTURER)){
-                JSONObject jsonObject = new JSONObject(String.format(
-                        "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-                out.print(jsonObject);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                out.flush();
-                return;
-            }
-
             String requestData = request.getReader().lines().collect(Collectors.joining());
 
             JSONObject jsonObject1 = new JSONObject(requestData);
@@ -138,19 +127,10 @@ public class examAnswerController extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             response.setHeader("Access-Control-Allow-Origin", "*");
 
-            if(TokenVerification.validLecturer(request, response) != TokenVerification.STUDENTFLAG){
-                JSONObject jsonObject = new JSONObject(String.format(
-                        "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-                out.print(jsonObject);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                out.flush();
-                return;
-            }
-
             UnitOfWork.newCurrent();
 
             String token = TokenVerification.getTokenFromHeader(request);
-            String userIdAndUserType = TokenVerification.verifyToken(token);
+            String userIdAndUserType = TokenVerification.getIdAndSubject(token);
 
             String userId = userIdAndUserType.split(",", 2)[0];
 

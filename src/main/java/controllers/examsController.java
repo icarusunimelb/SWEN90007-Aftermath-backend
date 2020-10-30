@@ -52,30 +52,7 @@ public class examsController extends HttpServlet {
             response.setHeader("Access-Control-Allow-Origin", "*");
 
             String token = TokenVerification.getTokenFromHeader(request);
-            String userIdAndUserType = "";
-            //System.out.println("token: " + token);
-            if(token.equals("")){
-                JSONObject jsonObject = new JSONObject(String.format(
-                        "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-                out.print(jsonObject);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                out.flush();
-                return;
-            } else {
-                userIdAndUserType = TokenVerification.verifyToken(token);
-                //System.out.println("userId and User Type");
-                if(userIdAndUserType.equals("")){
-                    JSONObject jsonObject = new JSONObject(String.format(
-                            "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-                    out.print(jsonObject);
-                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    out.flush();
-                    return;
-                }
-
-            }
-
-
+            String userIdAndUserType = TokenVerification.getIdAndSubject(token);
             String userId = userIdAndUserType.split(",", 2)[0];
 //        String userType = userIdAndUserType.split(",", 2)[1];
 

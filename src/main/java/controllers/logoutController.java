@@ -33,15 +33,6 @@ public class logoutController extends HttpServlet {
         try{
             String token = TokenVerification.getTokenFromHeader(request);
 
-            if(TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG){
-                JSONObject jsonObject = new JSONObject(String.format(
-                        "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
-                out.print(jsonObject);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                out.flush();
-                return;
-            }
-
             if(!token.isEmpty()){
                 TokenVerification.removeToken(token);
                 JSONObject jsonObject = new JSONObject(String.format(

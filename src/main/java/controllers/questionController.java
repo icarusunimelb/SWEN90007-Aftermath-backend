@@ -39,16 +39,6 @@ public class questionController extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             response.setHeader("Access-Control-Allow-Origin", "*");
 
-            if (TokenVerification.validLecturer(request, response) == TokenVerification.ERRORFLAG) {
-                JSONObject jsonObject = new JSONObject(String.format(
-                        "{\"code\":\"%s\"}", HttpServletResponse.SC_UNAUTHORIZED));
-                out.print(jsonObject);
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                out.flush();
-                return;
-            }
-
-
             String examId = request.getParameter("dataId");
             Exam exam = new Exam();
             exam.setId(examId);

@@ -49,14 +49,30 @@ public class TokenVerification {
         return builder.compact();
     }
 
-    public static String verifyToken(String token){
+    public static String getIdAndSubject(String token){
         try {
+            if (token == null || !token.startsWith("Bearer ")){
+                System.out.println("Invalid token");
+                return "";
+            }
             String realToken = token.substring(7, token.length());
             Claims claims = Jwts.parser()
                     .setSigningKey(DatatypeConverter.parseBase64Binary(SECRET_KEY))
                     .parseClaimsJws(realToken).getBody();
             return claims.getId() + "," + claims.getSubject();
-        }catch (ExpiredJwtException e){
+        } catch (ExpiredJwtException e){
+            System.out.println(e);
+            return "";
+        } catch (SignatureException e) {
+            System.out.println(e);
+            return "";
+        } catch (MalformedJwtException e) {
+            System.out.println(e);
+            return "";
+        } catch (UnsupportedJwtException e) {
+            System.out.println(e);
+            return "";
+        } catch (IllegalArgumentException e) {
             System.out.println(e);
             return "";
         }
@@ -111,11 +127,11 @@ public class TokenVerification {
             return USERTYPE.UNKNOWN;
         } else {
             try{
-                userIdAndUserType = verifyToken(token);
+                userIdAndUserType = getIdAndSubject(token);
             } catch(io.jsonwebtoken.ExpiredJwtException e) {
                 return USERTYPE.UNKNOWN;
             }
-            if(userIdAndUserType.equals("LECTURER")){
+            if(userIdAndUserType.contains("LECTURER")){
                 return USERTYPE.LECTURER;
             } else if(userIdAndUserType.contains("STUDENT")){
                 return USERTYPE.STUDENT;
