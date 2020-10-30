@@ -19,6 +19,7 @@ public class AuthorFilter extends GenericFilterBean {
             ServletRequest request,
             ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
+        System.out.println("AuthorFilter!!!");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         USERTYPE role = TokenVerification.getRoleFromRequest(httpRequest);

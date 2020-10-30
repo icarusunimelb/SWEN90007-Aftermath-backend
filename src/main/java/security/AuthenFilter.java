@@ -19,6 +19,7 @@ public class AuthenFilter extends GenericFilterBean {
             ServletRequest request,
             ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
+        System.out.println("AuthenFilter!!!");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         if(TokenVerification.getRoleFromRequest(httpRequest).equals(USERTYPE.UNKNOWN)){
