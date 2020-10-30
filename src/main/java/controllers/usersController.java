@@ -9,7 +9,6 @@ import datamapper.StudentMapper;
 import domain.Instructor;
 import domain.Student;
 import org.json.JSONObject;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import security.TokenVerification;
 
 import javax.servlet.ServletException;
@@ -23,7 +22,6 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @WebServlet("/api/users-controller") @MultipartConfig
 public class usersController extends HttpServlet {
     // get all users

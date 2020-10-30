@@ -14,7 +14,6 @@ import exceptions.RecordNotExistException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import security.TokenVerification;
 
 
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @WebServlet("/api/exams-controller")
 public class examsController extends HttpServlet {
     private static final long serialVersionUID = 2L;

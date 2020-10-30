@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import domain.Exam;
 import domain.Question;
 import org.json.JSONObject;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import security.TokenVerification;
 
 import javax.servlet.ServletException;
@@ -18,7 +17,6 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @WebServlet("/api/question-controller")
 public class questionController extends HttpServlet {
     private static final long serialVersionUID = 5L;

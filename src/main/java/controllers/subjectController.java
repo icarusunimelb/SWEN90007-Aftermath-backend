@@ -5,7 +5,6 @@ import domain.SubjectInstructorMap;
 import domain.SubjectStudentMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import utils.KeyGenerator;
 import security.TokenVerification;
 import utils.UnitOfWork;
@@ -20,7 +19,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.stream.Collectors;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
 @WebServlet("/api/subject-controller")
 public class subjectController extends HttpServlet {
     // add one subject
