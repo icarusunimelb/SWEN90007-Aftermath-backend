@@ -17,7 +17,7 @@ public class CorsFilter implements Filter {
             ServletRequest request,
             ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
-        System.out.println("CorsFilter!!!");
+        //System.out.println("CorsFilter!!!");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         httpResponse.setContentType("application/json");

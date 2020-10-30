@@ -18,7 +18,7 @@ public class AuthenFilter implements Filter {
             ServletRequest request,
             ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
-        System.out.println("AuthenFilter!!!");
+        //System.out.println("AuthenFilter!!!");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         httpResponse.setContentType("application/json");
@@ -32,7 +32,7 @@ public class AuthenFilter implements Filter {
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_UNAUTHORIZED));
             out.print(jsonObject);
             httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            System.out.println("--------------Authen fail------------");
+            //System.out.println("--------------Authen fail------------");
             out.flush();
             return;
         }else {

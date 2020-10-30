@@ -17,7 +17,7 @@ public class AuthorFilter implements Filter {
             ServletRequest request,
             ServletResponse response,
             FilterChain chain) throws IOException, ServletException {
-        System.out.println("AuthorFilter!!!");
+        //System.out.println("AuthorFilter!!!");
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         httpResponse.setContentType("application/json");
@@ -44,7 +44,7 @@ public class AuthorFilter implements Filter {
                     "{\"code\":\"%s\"}", HttpServletResponse.SC_FORBIDDEN));
             out.print(jsonObject);
             httpResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            System.out.println("-----------Authorize fail---------------");
+            //System.out.println("-----------Authorize fail---------------");
             out.flush();
             return;
         } else {
