@@ -41,25 +41,21 @@ public class examsController extends HttpServlet {
 
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-     */ // /api/exam-controller?status=managing
+     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             String status = request.getParameter("status");
-            //System.out.println("QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ");
             PrintWriter out = response.getWriter();
 
             String token = TokenVerification.getTokenFromHeader(request);
             String userIdAndUserType = TokenVerification.getIdAndSubject(token);
             String userId = userIdAndUserType.split(",", 2)[0];
-//        String userType = userIdAndUserType.split(",", 2)[1];
 
             if(status.equals("managing")){
                 String jsonArray = manageExams(userId);
                 String newJsonArray = jsonArray.replace("\"id\":", "\"dataId\":");
 
                 out.print(newJsonArray);
-                //System.out.println(newJsonArray);
-                //System.out.println("this is printing JSONArray!!!!!!!!!!!!!!!!!!!");
                 response.setStatus(HttpServletResponse.SC_OK);
                 out.flush();
                 return;
@@ -94,7 +90,6 @@ public class examsController extends HttpServlet {
         } catch (RecordNotExistException e) {
             e.printStackTrace();
         }
-        //System.out.println("EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
     }
 
     private String manageExams(String userId){
@@ -102,8 +97,6 @@ public class examsController extends HttpServlet {
 
         String json = new Gson().toJson(subjects);
         String newJsonArray = json.replace("\"id\":", "\"dataId\":");
-//        JSONArray jsonArray = new JSONArray(subjects);
-
         return newJsonArray;
     }
 
@@ -112,15 +105,11 @@ public class examsController extends HttpServlet {
         List<DTOSubjectSubmission> dtoSubjectSubmissions = new ArrayList<>();
 
         if (subjects.size()>0) {
-            //System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             dtoSubjectSubmissions = subjects.stream().map(DTOSubjectSubmission::new)
                     .collect(Collectors.toList());
-        }else {
-            //System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbb");
         }
 
         String json = new Gson().toJson(dtoSubjectSubmissions);
-//        JSONArray jsonArray = new JSONArray(jsonString);
 
         return json;
     }
@@ -131,8 +120,6 @@ public class examsController extends HttpServlet {
         String json = new Gson().toJson(subjects);
         String newJsonArray = json.replace("\"id\":", "\"dataId\":");
 
-//        JSONArray jsonArray = new JSONArray(jsonString);
-
         return newJsonArray;
     }
 
@@ -142,7 +129,6 @@ public class examsController extends HttpServlet {
         for(Subject subject: subjects){
             try {
                 String jsonString = mapper.writeValueAsString(subject);
-//                System.out.println("jsonString!!! " + jsonString);
                 subjectsJsonString = subjectsJsonString + jsonString;
                 subjectsJsonString = subjectsJsonString + ",";
             } catch (JsonProcessingException e) {

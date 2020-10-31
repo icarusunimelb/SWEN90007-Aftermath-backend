@@ -121,7 +121,6 @@ public class TokenVerification {
 
         String token = getTokenFromHeader(request);
         String userIdAndUserType = "";
-        //System.out.println("token: " + token);
         if(token.equals("")){
 
             return USERTYPE.UNKNOWN;

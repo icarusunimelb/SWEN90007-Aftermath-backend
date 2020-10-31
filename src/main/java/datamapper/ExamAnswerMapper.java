@@ -91,7 +91,6 @@ public class ExamAnswerMapper extends  DataMapper{
             stmt.setString(1, examID);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                //System.out.println("insideloop: "+result.size());
                 ExamAnswer examAnswer = new ExamAnswer();
                 String examAnswerID = rs.getString(1);
                 String studentID = rs.getString(2);
@@ -102,7 +101,6 @@ public class ExamAnswerMapper extends  DataMapper{
                 examAnswer.setFinalMark(finalMark);
                 result.add(examAnswer);
             }
-            //System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+result.size());
 
         } catch (SQLException e) {
             System.out.println(this.getClass()+e.getMessage());

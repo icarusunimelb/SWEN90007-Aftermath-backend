@@ -31,7 +31,6 @@ public class questionController extends HttpServlet {
     /**
      * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
      */
-    // /api/question-controller?dataId=examId
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             PrintWriter out = response.getWriter();
@@ -54,8 +53,8 @@ public class questionController extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_OK);
                 out.flush();
             }
-        }catch (Exception e){
-            System.out.println(this.getClass()+e.getMessage());
+        } catch (Exception e) {
+            System.out.println(this.getClass() + e.getMessage());
         }
 
 

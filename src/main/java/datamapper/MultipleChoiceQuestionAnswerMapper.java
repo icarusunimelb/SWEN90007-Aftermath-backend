@@ -139,7 +139,6 @@ public class MultipleChoiceQuestionAnswerMapper extends DataMapper{
         try {
             PreparedStatement updateStatement = DBConnection.prepare(updateMCQAStatement);
             updateStatement.setInt(1, multipleChoiceQuestionAnswerObj.getAnswerIndex());
-            // System.out.println("!!!!!!!!!!!!!!! this is your mark in Mapper" + multipleChoiceQuestionAnswerObj.getId());
             updateStatement.setInt(2, multipleChoiceQuestionAnswerObj.getMark());
             updateStatement.setString(3, multipleChoiceQuestionAnswerObj.getId());
             updateStatement.executeUpdate();

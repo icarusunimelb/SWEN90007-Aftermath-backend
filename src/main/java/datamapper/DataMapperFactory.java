@@ -1,10 +1,6 @@
 package datamapper;
 
-import domain.ShortAnswerQuestionAnswer;
-import domain.SubjectInstructorMap;
 import exceptions.NoSuchMapperTypeException;
-
-import java.lang.reflect.Type;
 
 public class DataMapperFactory {
     public static DataMapper getMapper(String className) throws NoSuchMapperTypeException{

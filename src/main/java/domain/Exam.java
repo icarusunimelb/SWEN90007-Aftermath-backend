@@ -36,7 +36,6 @@ public class Exam extends DomainObject{
 
     public List<ExamAnswer> getExamAnswers() {
         if (examAnswers == null) {
-            //System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
             setExamAnswers(ExamAnswerMapper.getSingletonInstance().findTableViewExamAnswer(getId()));
         }
         return examAnswers;

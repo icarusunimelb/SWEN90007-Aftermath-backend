@@ -22,10 +22,11 @@ import java.util.stream.Collectors;
 @WebServlet("/api/subject-controller")
 public class subjectController extends HttpServlet {
     private static final long serialVersionUID = 7L;
+
     // add one subject
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        try{
+        try {
 
             // TODO save a new subject
             String requestData = request.getReader().lines().collect(Collectors.joining());
@@ -36,10 +37,6 @@ public class subjectController extends HttpServlet {
             JSONArray lecturers = jsonObject.getJSONArray("lecturers");
             JSONArray students = jsonObject.getJSONArray("students");
 
-
-            System.out.println("this is lecturers" + lecturers);
-            System.out.println("this is subjectCode" + subjectCode);
-
             UnitOfWork.newCurrent();
 
             Subject subject = new Subject();
@@ -48,13 +45,13 @@ public class subjectController extends HttpServlet {
             subject.setSubjectCode(subjectCode);
             subject.setSubjectName(subjectName);
             UnitOfWork.getCurrent().registerNew(subject);
-            for (int i = 0; i < lecturers.length(); i ++ ){
+            for (int i = 0; i < lecturers.length(); i++) {
                 SubjectInstructorMap subjectInstructorMap = new SubjectInstructorMap();
                 subjectInstructorMap.setInstructorID(lecturers.getString(i));
                 subjectInstructorMap.setSubjectID(key);
                 UnitOfWork.getCurrent().registerNew(subjectInstructorMap);
             }
-            for (int i = 0; i < students.length(); i ++ ){
+            for (int i = 0; i < students.length(); i++) {
                 SubjectStudentMap subjectStudentMap = new SubjectStudentMap();
                 subjectStudentMap.setStudentID(students.getString(i));
                 subjectStudentMap.setSubjectID(key);
@@ -64,15 +61,15 @@ public class subjectController extends HttpServlet {
             UnitOfWork.getCurrent().commit();
 
             JSONObject jsonObject1 = new JSONObject(String.format(
-                    "{\"code\":\"%s\",\"subjectId\":\"%s\"}",HttpServletResponse.SC_OK, subject.getId()));
+                    "{\"code\":\"%s\",\"subjectId\":\"%s\"}", HttpServletResponse.SC_OK, subject.getId()));
             out.print(jsonObject1);
             response.setStatus(HttpServletResponse.SC_OK);
             out.flush();
 
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             JSONObject jsonObject = new JSONObject(String.format(
-                    "{\"code\":\"%s\",\"subjectId\":\"%s\"}",HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
+                    "{\"code\":\"%s\",\"subjectId\":\"%s\"}", HttpServletResponse.SC_INTERNAL_SERVER_ERROR));
             out.print(jsonObject);
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             out.flush();

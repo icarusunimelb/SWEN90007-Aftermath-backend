@@ -53,7 +53,6 @@ public class StudentMapper extends DataMapper{
     private static final String authenticateStatement = "SELECT s.password, s.studentid FROM oes.students s " +
             "WHERE s.email = ? limit 1";
     public String authenticate(String email, String password) {
-        boolean match = false;
         try {
             PreparedStatement findStatement = DBConnection.prepare(authenticateStatement);
             findStatement.setString(1, email);

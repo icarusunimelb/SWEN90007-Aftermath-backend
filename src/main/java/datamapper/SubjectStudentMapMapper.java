@@ -73,38 +73,4 @@ public class SubjectStudentMapMapper extends DataMapper{
 
     }
 
-//    private static final String updateInstructorStatement =
-//            "UPDATE oes.instructors i SET i.firstName = ?, i.lastName = ?, i.email = ?, i.password = ? " +
-//                    "WHERE i.instructorID = ?";
-//    @Override
-//    public void update(DomainObject object) {
-//        Instructor instructorObj = (Instructor) object;
-//        try {
-//            PreparedStatement updateStatement = DBConnection.prepare(updateInstructorStatement);
-//            updateStatement.setString(1, instructorObj.getName().getFirstName());
-//            updateStatement.setString(2, instructorObj.getName().getLastName());
-//            updateStatement.setString(3, instructorObj.getEmail());
-//            updateStatement.setString(4, instructorObj.getPassword());
-//            updateStatement.setString(5, instructorObj.getId());
-//            updateStatement.executeUpdate();
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
-
-//    private static final String deleteInstructorStatement =
-//            "DELETE FROM oes.instructors i WHERE i.instructorID = ?";
-//    @Override
-//    public void delete(DomainObject object) {
-//        Instructor instructorObj = (Instructor) object;
-//        try {
-//            System.out.println("Warning: Instructor cannot be deleted!!!");
-//            PreparedStatement updateStatement = DBConnection.prepare(deleteInstructorStatement);
-//            updateStatement.setString(1, instructorObj.getId());
-//            updateStatement.execute();
-//        } catch (SQLException e) {
-//            System.out.println(e.getMessage());
-//        }
-//    }
-
 }

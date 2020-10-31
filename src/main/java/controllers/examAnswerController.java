@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 @WebServlet("/api/examAnswer-controller")
 public class examAnswerController extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private enum EXAMSTATUS {publish, close, update};
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -70,7 +69,6 @@ public class examAnswerController extends HttpServlet {
                     String questionId = (String) keys.next();
                     if(answersJsonObject.get(questionId) instanceof JSONObject){
                         JSONObject answerJson = (JSONObject) answersJsonObject.get(questionId);
-                        // String answer = answerJson.getString("answer");
                         int mark = answerJson.getInt("mark");
 
                         if(questionId.contains("Multiple")){
@@ -142,7 +140,6 @@ public class examAnswerController extends HttpServlet {
 
 
             Exam exam = ExamMapper.getSingletonInstance().findWithID(examId);
-            //System.out.println("Status1: "+exam.getStatus());
             if (exam.getStatus().equals("PUBLISHED") || exam.getStatus().equals("ONGOING")) {
                 exam.setStatus("ONGOING");
             }else{
@@ -156,7 +153,6 @@ public class examAnswerController extends HttpServlet {
 
             for(int i = 0; i< answers.length(); i++){
                 JSONObject examAnswerJson = (JSONObject) answers.get(i);
-                // System.out.println("this is your exam answer" + examAnswerJson.toString());
                 String questionId = examAnswerJson.getString("questionId");
                 String answer = "";
                 int newAnswer = -1;
@@ -194,8 +190,6 @@ public class examAnswerController extends HttpServlet {
                     multipleChoiceQuestionAnswer.setId(KeyGenerator.getSingletonInstance().getKey(multipleChoiceQuestionAnswer));
                     UnitOfWork.getCurrent().registerNew(multipleChoiceQuestionAnswer);
                 }
-
-    //            UnitOfWork.getCurrent().commit();
             }
 
             System.out.println("Status3: "+exam.getStatus());

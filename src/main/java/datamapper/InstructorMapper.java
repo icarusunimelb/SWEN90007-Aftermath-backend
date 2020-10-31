@@ -156,20 +156,14 @@ public class InstructorMapper extends DataMapper{
     }
 
     public List<Subject> getMarkingSubjects(String instructorId) throws RecordNotExistException {
-        //System.out.println("instructorId: "+instructorId);
         List<Subject> allSubjects = SubjectMapper.getSingletonInstance().findWithInstructorID(instructorId);
-        //System.out.println("subjectSize: "+allSubjects.size());
         for(int i = 0; i < allSubjects.size(); i++){
             List<Exam> examOfSubject = ExamMapper.getSingletonInstance().findWithSubjectCode(allSubjects.get(i).getId());
-            //System.out.println("subjectId: "+allSubjects.get(i).getId());
             List<Exam> validExams = new ArrayList<Exam>();
             for(int j = 0; j < examOfSubject.size(); j++){
-                //System.out.println("Status:"+ examOfSubject.get(j).getStatus());
                 if(examOfSubject.get(j).getStatus().equals("CLOSED") || examOfSubject.get(j).getStatus().equals("MARKED")){
-                    //System.out.println("##########################################################");
                     List<ExamAnswer> examAnswers = ExamAnswerMapper.getSingletonInstance().
                             findTableViewExamAnswer(examOfSubject.get(j).getId());
-                    //System.out.println("submissionSize:"+ examAnswers.size());
                     examOfSubject.get(j).setExamAnswers(examAnswers);
                     validExams.add(examOfSubject.get(j));
                 }
@@ -182,13 +176,10 @@ public class InstructorMapper extends DataMapper{
     public List<Subject> getManagingSubjects(String instructorId) {
 
         List<Subject> subjects = SubjectMapper.getSingletonInstance().findWithInstructorID(instructorId);
-        //System.out.println("this is subject in instructor mapper size = " + subjects.size());
         for(int i = 0; i < subjects.size(); i++){
             List<Exam> examOfSubject = ExamMapper.getSingletonInstance().findWithSubjectCode(subjects.get(i).getId());
             subjects.get(i).setExams(examOfSubject);
-            //System.out.println("this is in Instructor mapper !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
-        //System.out.println("end of getManagingSubjects in Instructor mapper !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         return subjects;
     }
 

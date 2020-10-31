@@ -52,7 +52,6 @@ public class AdminMapper extends DataMapper{
     private static final String authenticateStatement = "SELECT s.password, s.adminID FROM oes.admin s " +
             "WHERE s.email = ? limit 1";
     public String authenticate(String email, String password) {
-        boolean match = false;
         try {
             PreparedStatement findStatement = DBConnection.prepare(authenticateStatement);
             findStatement.setString(1, email);

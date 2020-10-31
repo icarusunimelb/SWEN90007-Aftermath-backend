@@ -38,7 +38,6 @@ public class loginController extends HttpServlet {
 
             String email = user.getEmail();
             String password = user.getPassword();
-//            System.out.println(email+password);
             PrintWriter out = response.getWriter();
 
             String userType = null;
@@ -69,7 +68,6 @@ public class loginController extends HttpServlet {
             System.out.println(dataID + userType);
             token = TokenVerification.createJWT(dataID, userType);
             System.out.println("this is ur token: "+ token);
-            //System.out.println(dataID+password+token);
             try {
                 TokenVerification.addToken(token);
                 JSONObject jsonObject = new JSONObject(String.format(
