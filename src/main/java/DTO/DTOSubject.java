@@ -26,13 +26,13 @@ public class DTOSubject {
         subjectName = subject.getSubjectName();
 
 
-        for (Exam exam : ExamMapper.getSingletonInstance().findWithSubjectCode(subject.getId())){
+        for (Exam exam : subject.getExams()){
             exams.add(new DTOExam(exam));
         }
-        for (Instructor instructor : InstructorMapper.getSingletonInstance().findWithSubjectID(subject.getId())){
+        for (Instructor instructor : subject.getInstructors()){
             lecturers.add(new DTOInstructor(instructor));
         }
-        for (Student student : StudentMapper.getSingletonInstance().findWithSubjectID(subject.getId())){
+        for (Student student : subject.getStudents()){
             students.add(new DTOStudent(student));
         }
     }

@@ -1,6 +1,8 @@
 package domain;
 
 import datamapper.ExamMapper;
+import datamapper.InstructorMapper;
+import datamapper.StudentMapper;
 import datamapper.SubjectMapper;
 import datasource.DBConnection;
 import exceptions.RecordNotExistException;
@@ -41,6 +43,14 @@ public class Subject extends DomainObject{
 			setExams(ExamMapper.getSingletonInstance().findWithSubjectCode(getId()));
 		}
 		return exams;
+	}
+
+	public List<Instructor> getInstructors() {
+		return InstructorMapper.getSingletonInstance().findWithSubjectID(getId());
+	}
+
+	public List<Student> getStudents() {
+		return StudentMapper.getSingletonInstance().findWithSubjectID(getId());
 	}
 
 	public void setExams(List<Exam> exams) {
