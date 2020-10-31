@@ -46,7 +46,11 @@ public class examAnswerController extends HttpServlet {
             String examId = jsonObject1.getString("examId");
             JSONArray examAnswerArray = jsonObject1.getJSONArray("markings");
 
-            LockManager.getInstance().acquireLock(examId, Thread.currentThread().getName());
+            String token = TokenVerification.getTokenFromHeader(request);
+            String userIdAndUserType = TokenVerification.getIdAndSubject(token);
+            String userId = userIdAndUserType.split(",", 2)[0];
+
+            LockManager.getInstance().acquireLock(examId, userId);
             UnitOfWork.newCurrent();
 
             for ( int i = 0; i < examAnswerArray.length(); i ++){
@@ -94,7 +98,7 @@ public class examAnswerController extends HttpServlet {
                 return;
             }
 
-            LockManager.getInstance().releaseLock(examId, Thread.currentThread().getName());
+            LockManager.getInstance().releaseLock(examId, userId);
 
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));

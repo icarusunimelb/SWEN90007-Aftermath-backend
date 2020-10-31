@@ -44,8 +44,12 @@ public class examController extends HttpServlet {
 
             PrintWriter out = response.getWriter();
 
+            String token = TokenVerification.getTokenFromHeader(request);
+            String userIdAndUserType = TokenVerification.getIdAndSubject(token);
+            String userId = userIdAndUserType.split(",", 2)[0];
+
             // get the lock of current exam
-            LockManager.getInstance().acquireLock(examId, Thread.currentThread().getName());
+            LockManager.getInstance().acquireLock(examId, userId);
 
             Exam exam = new Exam();
             exam.setId(examId);
@@ -184,7 +188,7 @@ public class examController extends HttpServlet {
             }
 
             // release the lock of current exam
-            LockManager.getInstance().releaseLock(examId, Thread.currentThread().getName());
+            LockManager.getInstance().releaseLock(examId, userId);
 
             JSONObject jsonObject = new JSONObject(String.format(
                     "{\"code\":\"%s\"}",HttpServletResponse.SC_OK));
@@ -254,8 +258,12 @@ public class examController extends HttpServlet {
 
             String examID =request.getParameter("dataId");
 
+            String token = TokenVerification.getTokenFromHeader(request);
+            String userIdAndUserType = TokenVerification.getIdAndSubject(token);
+            String userId = userIdAndUserType.split(",", 2)[0];
+
             // get the lock for the exam
-            LockManager.getInstance().acquireLock(examID, Thread.currentThread().getName());
+            LockManager.getInstance().acquireLock(examID, userId);
 
             Exam exam = new Exam();
             exam.setId(examID);
@@ -282,7 +290,7 @@ public class examController extends HttpServlet {
             }
 
             // release the lock for the exam
-            LockManager.getInstance().releaseLock(examID, Thread.currentThread().getName());
+            LockManager.getInstance().releaseLock(examID, userId);
 
 
             JSONObject jsonObject = new JSONObject(String.format(
